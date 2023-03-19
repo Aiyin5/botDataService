@@ -49,4 +49,4 @@ jobs:
           host: ${{ secrets.TENCENT_CLOUD_IP }}
           username: ${{ secrets.TENCENT_CLOUD_NAME }}
           password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-          script: cd ../usr/DataService && deployFile.sh
+          script: cd ../usr/DataService && sh deployFile.sh
