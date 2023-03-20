@@ -27,9 +27,8 @@ exports.create = (req, res) => {
             });
         else {
             const token = JWT.generate({
-                _id: data[0].id,
-                _botid:data[0].bot_id,
-                email: data[0].email,
+                _botid:user.bot_id,
+                email: user.email,
             }, "2d")
 
             res.header("Authorization", token)
@@ -105,9 +104,8 @@ exports.findByWhere = (req, res) => {
             } else {
                 //生成token
                 const token = JWT.generate({
-                    _id: data[0].id,
                     _botid:data[0].bot_id,
-                    email: data[0].email,
+                    email: data[0].email
                 }, "2d")
 
                 res.header("Authorization", token)

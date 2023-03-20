@@ -36,7 +36,6 @@ app.use((req,res,next)=>{
     // console.log(payload)
     if(payload){
       const newToken = JWT.generate({
-        _id: payload.id,
         _botid:payload.bot_id,
         email: payload.email,
       },"2d")
