@@ -26,6 +26,13 @@ exports.create = (req, res) => {
                     err.message || "Some error occurred while creating the User."
             });
         else {
+            const token = JWT.generate({
+                _id: data[0].id,
+                _botid:data[0].bot_id,
+                email: data[0].email,
+            }, "2d")
+
+            res.header("Authorization", token)
             res.send({
                 ActionType: "OK",
             });
@@ -33,6 +40,37 @@ exports.create = (req, res) => {
     });
 };
 
+exports.findByBot = (req, res) =>{
+    console.log("rv post findByBot")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    console.log(req.body)
+    const where = req.body;
+    if(!where.bot_id){
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    User.find(where, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        /*else res.send(data);*/
+        else {
+            res.send({
+                ActionType: "OK",
+                data: data
+            })
+        }
+    });
+}
 // Retrieve all Tutorials from the database (with condition).
 exports.findByWhere = (req, res) => {
     console.log("rv post login")
@@ -77,6 +115,7 @@ exports.findByWhere = (req, res) => {
                     ActionType: "OK",
                     data: {
                         name: data[0].name,
+                        email: data[0].email,
                         bot_id: data[0].bot_id,
                         level: data[0].level
                     }

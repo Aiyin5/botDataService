@@ -9,5 +9,7 @@ module.exports = app => {
     // Retrieve all Tutorials
     router.post("/login", users.findByWhere);
 
+    router.post("/botUser", users.findByBot);
+
     app.use('/app/user', router);
 };
