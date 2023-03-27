@@ -1,11 +1,12 @@
 const bots = require("../../controllers/app/botController");
-
 module.exports = app => {
     const bots = require("../../controllers/app/botController");
 
     var router = require("express").Router();
 
     // getBotInfo
+    //{input: string
+    // res:}
     router.post("/bot", bots.findById);
 
 
@@ -35,6 +36,10 @@ module.exports = app => {
 
     // updateUnstInfo
     router.post("/updateUnstInfo", bots.updateUnstInfo);
+
+    //for servertest
+    router.post("/botUnst", bots.getUnstInfo);
+    router.post("/botPre", bots.getPreInfo);
 
     app.use('/app/bot', router);
 };

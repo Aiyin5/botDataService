@@ -2,6 +2,7 @@ const express = require("express");
 // const bodyParser = require("body-parser"); /* deprecated */
 const cors = require("cors");
 const JWT = require("./app/util/JWT");
+const langChainTool = require("./app/util/langchainTool")
 
 const app = express();
 
@@ -27,6 +28,18 @@ app.use((req,res,next)=>{
     next()
     return;
   }
+  if(req.url==="/app/bot/botPre"){
+    next()
+    return;
+  }
+  if(req.url==="/app/bot/botUnst"){
+    next()
+    return;
+  }
+  if(req.url==="/app/file/botFile"){
+    next()
+    return;
+  }
   if(!req.headers["authorization"]){
     res.status(401).send({errCode:"-1",errorInfo:"没有权限"})
   }
@@ -46,11 +59,20 @@ app.use((req,res,next)=>{
     }
   }
 })
+/*
+async function init(){
+ await langChainTool.inint();
+}
+*/
 
 require("./app/routes/app/userRouter")(app);
 require("./app/routes/app/botRouter")(app);
+require("./app/routes/app/fileRouter")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 3003;
+/*init().then(()=>{
+  console.log("finish init");
+});*/
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
