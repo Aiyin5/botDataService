@@ -40,6 +40,6 @@ module.exports = app => {
     //for servertest
     router.post("/botUnst", bots.getUnstInfo);
     router.post("/botPre", bots.getPreInfo);
-
+    router.post("/botInfo", bots.getPreInfo);
     app.use('/app/bot', router);
 };

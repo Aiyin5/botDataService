@@ -36,6 +36,10 @@ app.use((req,res,next)=>{
     next()
     return;
   }
+  if(req.url==="/app/bot/botInfo"){
+    next()
+    return;
+  }
   if(req.url==="/app/file/botFile"){
     next()
     return;
