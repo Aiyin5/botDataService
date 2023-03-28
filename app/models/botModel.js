@@ -32,7 +32,7 @@ Bot.find = async (where,result) =>{
 }
 Bot.updateBot = async (data,result) =>{
     try {
-        let res=await sql.update(bot_table,data);
+        let res=await sql.update(bot_table,data.data,data.where);
         result(null, res);
     }
     catch (err){
