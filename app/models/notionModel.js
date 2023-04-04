@@ -1,18 +1,19 @@
 const sql = require("./db.js");
-const vectorIns = require("../util/vectorIns")
 // constructor
-const File = function(file) {
-    this.bot_id = file.bot_id;
-    this.doc_name = file.doc_name;
-    this.type = file.type;
-    this.content = file.content;
+const Notion = function(notion) {
+    this.bot_id = notion.bot_id;
+    this.doc_name = notion.doc_name;
+    this.type = notion.type;
+    this.content = notion.content;
+    this.page_id = notion.page_id;
+    this.doc_hash = notion.doc_hash;
 };
-const tablename="yuliao_text";
-const vectorName="vector_v0";
-File.create = async (newFile, result) => {
+const tablename="yuliao_notion";
+//const vectorName="vector_v0";
+Notion.create = async (NotionFile, result) => {
     try {
-        let res=await sql.insert(tablename,newFile);
-        /*console.log(res);
+        let res=await sql.insert(tablename,NotionFile);
+       /* console.log(res);
         //增加向量保存
         //1.文本拆分
         let texts= await vectorIns.getTextSplit().splitText(newFile.content);
@@ -39,7 +40,7 @@ File.create = async (newFile, result) => {
         console.log(err)
     }
 };
-File.find = async (where,result) =>{
+Notion.find = async (where,result) =>{
     try {
         let res=await sql.selectByWhere(tablename,where);
         result(null, res);
@@ -49,12 +50,12 @@ File.find = async (where,result) =>{
         result(null, err);
     }
 }
-File.deleteFileInfo = async (data,result)=>{
+Notion.deleteNotionInfo = async (data,result)=>{
     try {
         let doc_name = data.doc_name;
         let res = await sql.delete(tablename,data);
         //delete doc vector
-/*        let where={
+        /*let where={
             "doc_name":doc_name
         }
         res = await sql.delete(vectorName,where);*/
@@ -65,4 +66,4 @@ File.deleteFileInfo = async (data,result)=>{
         result(null, err);
     }
 }
-module.exports = File;
+module.exports = Notion;

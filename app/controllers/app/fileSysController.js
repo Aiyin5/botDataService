@@ -1,6 +1,4 @@
 const File = require("../../models/fileSysModel.js");
-const multer = require('multer')
-const Bot = require("../../models/botModel");
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
     console.log("rec file create")

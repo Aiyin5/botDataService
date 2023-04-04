@@ -7,8 +7,6 @@ module.exports = app => {
     // Create a new Tutorial
     router.post("/creat", files.create);
 
-    // Retrieve all Tutorials
-    //router.post("/file", users.findByWhere);
 
     router.post("/botfile", files.findByFile);
 

@@ -3,10 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const JWT = require("./app/util/JWT");
 const langChainTool = require("./app/util/langchainTool")
-
+const vectorIns = require("./app/util/vectorIns")
 const app = express();
 
-app.use(express.json()); /* bodyParser.json() is deprecated */
+app.use(express.json({ limit: '50mb' })); /* bodyParser.json() is deprecated */
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
@@ -72,8 +72,12 @@ async function init(){
 require("./app/routes/app/userRouter")(app);
 require("./app/routes/app/botRouter")(app);
 require("./app/routes/app/fileRouter")(app);
+require("./app/routes/app/notionRouter")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 3003;
+vectorIns.inint().then(()=>{
+  console.log("finish init");
+})
 /*init().then(()=>{
   console.log("finish init");
 });*/
