@@ -1,5 +1,5 @@
 
-exports.read_block = async function _read_block(block_id, token ,num_tabs = 0){
+exports.read_block = async function _read_block(block_id, token ,subNum,num_tabs = 0,){
     const BLOCK_CHILD_URL_TMPL = "https://api.notion.com/v1/blocks/{block_id}/children"
     const headers = {
         "Authorization": "Bearer " + token,
@@ -29,8 +29,15 @@ exports.read_block = async function _read_block(block_id, token ,num_tabs = 0){
                 for (const rich_text of result_obj.rich_text) {
                     if ("text" in rich_text) {
                         const text = rich_text.text.content;
-                        const prefix = "\t".repeat(num_tabs);
-                        cur_result_text_arr.push(prefix + text);
+                        if(num_tabs>1){
+                            const prefix = "\t".repeat(1);
+                            cur_result_text_arr.push(prefix + text);
+                        }
+                        else {
+                            const prefix = "\t".repeat(0);
+                            cur_result_text_arr.push(prefix + text);
+                        }
+
                     }
                 }
             }
@@ -40,8 +47,10 @@ exports.read_block = async function _read_block(block_id, token ,num_tabs = 0){
 
             if (has_children) {
                 console.log("start next")
-                const children_text = await _read_block(result_block_id, token,num_tabs + 1);
-                cur_result_text_arr.push(children_text);
+                if(num_tabs<subNum){
+                    const children_text = await _read_block(result_block_id, token,subNum,num_tabs + 1);
+                    cur_result_text_arr.push(children_text);
+                }
             }
 
             const cur_result_text = cur_result_text_arr.join("\n");

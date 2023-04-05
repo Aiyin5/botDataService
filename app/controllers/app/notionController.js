@@ -13,7 +13,8 @@ exports.create =async (req, res) => {
     try {
         console.log(req.body)
         console.log("start")
-        let content = await notionApi.read_block(req.body.page_id,req.body.token);
+        let content = await notionApi.read_block(req.body.page_id,req.body.token,req.body.subNum);
+        content =removeEmoji(content)
         console.log("start Hash")
         let hashcode = await notionApi.getHashFromArticle(content)
         console.log("hash end")
@@ -51,7 +52,19 @@ exports.create =async (req, res) => {
     //console.log(req.body.content)
 
 };
-
+function removeEmoji (content) {
+    let conByte = new TextEncoder("utf-8").encode(content);
+    for (let i = 0; i < conByte.length; i++) {
+        if ((conByte[i] & 0xF8) == 0xF0) {
+            for (let j = 0; j < 4; j++) {
+                conByte[i+j]=0x30;
+            }
+            i += 3;
+        }
+    }
+    content = new TextDecoder("utf-8").decode(conByte);
+    return content.replaceAll("0000", "");
+}
 exports.findNotionById = (req, res) =>{
     console.log("rv post findNotion")
     if (!req.body) {
