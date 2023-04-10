@@ -44,6 +44,18 @@ app.use((req,res,next)=>{
     next()
     return;
   }
+  if(req.url==="/app/notion/botnotion"){
+    next()
+    return;
+  }
+  if(req.url==="/app/log/create"){
+    next()
+    return;
+  }
+  if(req.url==="/app/log/botId"){
+    next()
+    return;
+  }
   if(!req.headers["authorization"]){
     res.status(401).send({errCode:"-1",errorInfo:"没有权限"})
   }
@@ -73,6 +85,7 @@ require("./app/routes/app/userRouter")(app);
 require("./app/routes/app/botRouter")(app);
 require("./app/routes/app/fileRouter")(app);
 require("./app/routes/app/notionRouter")(app);
+require("./app/routes/app/logRouter")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 3003;
 vectorIns.inint().then(()=>{
