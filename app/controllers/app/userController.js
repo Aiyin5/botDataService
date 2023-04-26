@@ -2,10 +2,7 @@ const User = require("../../models/userModel.js");
 const JWT = require("../../util/JWT");
 const random =require("string-random");
 const Email = require("../../util/sendmail");
-const sendMailobj = {
-    html: `<div class="container-box"><h1>尊敬的${usercodeinfo.mailnumber}欢迎使用艾因智能:</h1><p>验证码</p><h2 style="color: red;">${usercodeinfo.randomNumbers}</h2></div></div>`,
-    subject: "艾因智能验证码"//主题
-}
+
 
 exports.create = (req, res) => {
     // Validate request
@@ -180,6 +177,10 @@ exports.captcha =async (req, res) => {
         randomNumbers: random(5), //生成的验证码
         mailnumber: email,//用户邮箱
         time: Date.now()//生成验证码的时间
+    }
+    const sendMailobj = {
+        html: `<div class="container-box"><h1>尊敬的${usercodeinfo.mailnumber}欢迎使用艾因智能:</h1><p>验证码</p><h2 style="color: red;">${usercodeinfo.randomNumbers}</h2></div></div>`,
+        subject: "艾因智能验证码"//主题
     }
     try {
         await new Email("aiyin_bot@126.com",
