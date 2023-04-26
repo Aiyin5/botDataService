@@ -18,7 +18,6 @@ exports.read_block = async function _read_block(block_id, token ,subNum,num_tabs
             headers: headers
         });
         const data = await res.json();
-
         for (const result of data.results) {
             const result_type = result.type;
             const result_obj = result[result_type];

@@ -1,8 +1,50 @@
 const User = require("../../models/userModel.js");
 const JWT = require("../../util/JWT");
+const random =require("string-random");
+const Email = require("../../util/sendmail");
+const sendMailobj = {
+    html: `<div class="container-box"><h1>尊敬的${usercodeinfo.mailnumber}欢迎使用艾因智能:</h1><p>验证码</p><h2 style="color: red;">${usercodeinfo.randomNumbers}</h2></div></div>`,
+    subject: "艾因智能验证码"//主题
+}
 
-// Create and Save a new Tutorial
 exports.create = (req, res) => {
+    // Validate request
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+    }
+    // Create a Tutorial
+    const user = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        bot_id: req.body.bot_id,
+        level: req.body.level
+    });
+
+    // Save Tutorial in the database
+    User.create(user, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while creating the User."
+            });
+        else {
+            const token = JWT.generate({
+                _botid:user.bot_id,
+                email: user.email,
+            }, "2d")
+
+            res.header("Authorization", token)
+            res.send({
+                ActionType: "OK",
+            });
+        }
+    });
+};
+
+exports.createNew = (req, res) => {
     // Validate request
     if (!req.body) {
         res.status(400).send({
@@ -122,3 +164,32 @@ exports.findByWhere = (req, res) => {
         }
     });
 };
+
+
+exports.captcha =async (req, res) => {
+    console.log("rv post captcha")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Email can not be empty!"
+        });
+        return;
+    }
+    console.log(req.body)
+    const email = req.body.email;
+    const usercodeinfo = {
+        randomNumbers: random(5), //生成的验证码
+        mailnumber: email,//用户邮箱
+        time: Date.now()//生成验证码的时间
+    }
+    try {
+        await new Email("aiyin_bot@126.com",
+            "PJQQBJOGPCTNYEDO",
+            usercodeinfo.mailnumber,
+            sendMailobj).sendMail()
+        console.log("sucess")
+    }
+    catch (err){
+        console.log(err)
+    }
+
+}

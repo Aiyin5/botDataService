@@ -12,7 +12,7 @@ const vectorName="vector_v0";
 File.create = async (newFile, result) => {
     try {
         let res=await sql.insert(tablename,newFile);
-        /*console.log(res);
+        console.log(res);
         //增加向量保存
         //1.文本拆分
         let texts= await vectorIns.getTextSplit().splitText(newFile.content);
@@ -32,7 +32,7 @@ File.create = async (newFile, result) => {
             }
             res=await sql.insert(vectorName,data);
         }
-        console.log("end")*/
+        console.log("end")
         result(null, res);
     }
     catch (err){
@@ -54,10 +54,10 @@ File.deleteFileInfo = async (data,result)=>{
         let doc_name = data.doc_name;
         let res = await sql.delete(tablename,data);
         //delete doc vector
-/*        let where={
+        let where={
             "doc_name":doc_name
         }
-        res = await sql.delete(vectorName,where);*/
+        res = await sql.delete(vectorName,where);
         result(null, res);
     }
     catch (err){

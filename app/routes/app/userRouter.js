@@ -1,3 +1,4 @@
+const users = require("../../controllers/app/userController");
 module.exports = app => {
     const users = require("../../controllers/app/userController");
 
@@ -9,6 +10,8 @@ module.exports = app => {
     router.post("/login", users.findByWhere);
 
     router.post("/botUser", users.findByBot);
+
+    router.post("/captcha", users.captcha);
 
     app.use('/app/user', router);
 };
