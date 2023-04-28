@@ -6,6 +6,7 @@ const User = function(user) {
     this.email = user.email;
     this.password = user.password;
     this.bot_id = user.bot_id;
+    this.org_id = user.org_id;
     this.level = user.level;
 };
 const tablename="user_info";
@@ -26,6 +27,16 @@ User.find = async (where,result) =>{
     catch (err){
         console.log(err)
         result(null, err);
+    }
+}
+User.findEmail= async (where)=>{
+    try {
+        let res=await sql.selectByWhere(tablename,where);
+        return res;
+    }
+    catch (err){
+        console.log(err)
+        return err;
     }
 }
 module.exports = User;

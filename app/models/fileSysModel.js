@@ -52,13 +52,14 @@ File.find = async (where,result) =>{
 File.deleteFileInfo = async (data,result)=>{
     try {
         let doc_name = data.doc_name;
-        let res = await sql.delete(tablename,data);
+        let res1 = await sql.delete(tablename,data);
         //delete doc vector
         let where={
+            "bot_id":data.bot_id,
             "doc_name":doc_name
         }
-        res = await sql.delete(vectorName,where);
-        result(null, res);
+        let res2 = await sql.delete(vectorName,where);
+        result(null, res2);
     }
     catch (err){
         console.log(err)

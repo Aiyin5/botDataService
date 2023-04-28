@@ -5,8 +5,28 @@ const JWT = require("./app/util/JWT");
 const langChainTool = require("./app/util/langchainTool")
 const vectorIns = require("./app/util/vectorIns")
 const app = express();
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerOpt = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "amabot backend API",
+      version: "1.0.0",
+      description: "amabot backend API"
+    },
+    servers:[
+      {
+        url:'http://127.0.0.1:3003'
+      }
+    ],
+  },
+  apis:['./app/routes/*/*.js',' ./app/routes/*.js']
+};
 
-app.use(express.json({ limit: '50mb' })); /* bodyParser.json() is deprecated */
+const specs = swaggerJsdoc(swaggerOpt)
+app.use("/api-docs/",swaggerUi.serve,swaggerUi.setup(specs))
+app.use(express.json({ limit: '50mb' }))/* bodyParser.json() is deprecated */
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
@@ -19,12 +39,30 @@ app.get("/", (req, res) => {
 app.use((req,res,next)=>{
   // 如果token有效 ,next()
   // 如果token过期了, 返回401错误
+  if(req.url==="/api-docs"){
+    console.log("rv /api-docs")
+    next()
+    return;
+  }
+  if(req.url==="/app/user/captcha"){
+    console.log("rv /app/user/captcha")
+    next()
+    return;
+  }
   if(req.url==="/app/user/login"){
     console.log("rv /app/user/login")
     next()
     return;
   }
   if(req.url==="/app/user/register"){
+    next()
+    return;
+  }
+  if(req.url==="/app/user/registerNew"){
+    next()
+    return;
+  }
+  if(req.url==="/app/user/ai"){
     next()
     return;
   }

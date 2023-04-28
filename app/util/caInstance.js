@@ -3,29 +3,21 @@ class Singleton {
     constructor() {
         if (!Singleton.instance) {
             Singleton.instance = this;
-            this.array = [];
+            this.map = new Map();
         }
         return Singleton.instance;
     }
-
-    getArray() {
-        return this.array;
+    getMap() {
+        return this.map;
     }
-    addItem(item) {
-        this.array.push(item);
+    addItem(key,value) {
+        this.map.set(key,value);
     }
-    updateItem() {
-        let copy=[];
-        let now=Date.now();
-        for(let each of this.array){
-            if(now-each.time<600){
-                copy.push(each);
-            }
-        }
-        this.array=copy;
-    }
+   deleteItem(key){
+       this.map.delete(key)
+   }
     cleanItem(){
-        this.array = [];
+        this.map.clear();
     }
 }
 
