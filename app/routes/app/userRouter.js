@@ -134,6 +134,8 @@ module.exports = app => {
      *                   type: string
      *                 password:
      *                   type: string
+     *                email_check:
+     *                   type: string
      *      responses:
      *        200:
      *          description: successful operation

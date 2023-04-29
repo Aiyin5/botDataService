@@ -174,6 +174,7 @@ exports.findByWhere = (req, res) => {
             });
         }
         else {
+            instance.deleteItem(where.email);
             let condition={
                 password:where.password,
                 email:where.email
@@ -285,25 +286,31 @@ exports.aicheck =async (req, res) => {
         return;
     }
     console.log(req.body)
-    const org_id = req.body.org_id;
-    let where={
-        org_id:org_id
-    }
-    try {
-        let dataRes =await User.findEmail(where)
-        if(dataRes.length > 0){
-            res.status(401).send({
-                Error: "域名重复"
-            })
-        }
-    }
-    catch (err){
-        res.status(500).send({
-            Error: "Internal Error"
+    if(!req.body.org_id){
+        res.status(401).send({
+            Error: "域名不能为空"
         })
     }
-    res.send({
-        ActionType: "OK"
-    })
-
+    else {
+        const org_id = req.body.org_id;
+        let where={
+            org_id:org_id
+        }
+        try {
+            let dataRes =await User.findEmail(where)
+            if(dataRes.length > 0){
+                res.status(401).send({
+                    Error: "域名重复"
+                })
+            }
+        }
+        catch (err){
+            res.status(500).send({
+                Error: "Internal Error"
+            })
+        }
+        res.send({
+            ActionType: "OK"
+        })
+    }
 }
