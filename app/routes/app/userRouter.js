@@ -183,7 +183,7 @@ module.exports = app => {
      *      - userApi
      *      summary: 验证码
      *      requestBody:
-     *         description: 邮箱
+     *         description: register为1时表示注册
      *         required: true
      *         content:
      *           application/json:
@@ -192,6 +192,8 @@ module.exports = app => {
      *               properties:
      *                 email:
      *                   type: string
+     *                 register:
+     *                   type: number
      *      responses:
      *        200:
      *          description: successful operation

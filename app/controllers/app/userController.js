@@ -168,7 +168,7 @@ exports.findByWhere = (req, res) => {
         let curTime = Date.now();
         console.log(curTime)
         let arr = instance.getMap();
-        if(arr.get(where.email).randomNumbers!=emailCode || (curTime-arr.get(where.email).time>600000)){
+        if(!arr.has(where.email) || arr.get(where.email).randomNumbers!=emailCode || (curTime-arr.get(where.email).time>600000)){
             res.status(401).send({
                 ERROR: "验证码错误",
             });
@@ -229,12 +229,13 @@ exports.captcha =async (req, res) => {
     }
     console.log(req.body)
     const email = req.body.email;
+    const register = req.body.register;
     let where={
         email:email
     }
     try {
         let dataRes =await User.findEmail(where)
-        if(dataRes.length > 0){
+        if(dataRes.length > 0 && register===1){
             res.status(400).send({
                 Error: "邮箱重复"
             })
