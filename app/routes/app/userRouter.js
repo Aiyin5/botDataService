@@ -13,7 +13,7 @@ module.exports = app => {
      *      - userApi
      *      summary: 用户注册的新接口
      *      requestBody:
-     *         description: 用户信息 机器人id 默认为"0" 用户的权限 默认为2
+     *         description: 用户信息 机器人id 默认为"0" 用户的权限level 默认为2
      *         required: true
      *         content:
      *           application/json:
@@ -68,7 +68,7 @@ module.exports = app => {
      *      - userApi
      *      summary: 用户注册的老接口
      *      requestBody:
-     *         description: 用户信息 机器人id 默认为"0" 用户的权限 默认为2
+     *         description: 用户信息 机器人id 默认为"0" 用户的权限level 默认为2
      *         required: true
      *         content:
      *           application/json:
@@ -123,13 +123,15 @@ module.exports = app => {
      *      - userApi
      *      summary: 用户登录
      *      requestBody:
-     *         description: 用户信息
+     *         description: 用户信息 checkType登录方式为Password时代表账号密码登录，Captcha为验证码登录
      *         required: true
      *         content:
      *           application/json:
      *             schema:
      *               type: object
      *               properties:
+     *                 checkType:
+     *                   type: string
      *                 email:
      *                   type: string
      *                 password:

@@ -143,7 +143,7 @@ exports.findByBot = (req, res) =>{
 // Retrieve all Tutorials from the database (with condition).
 exports.findByWhere = (req, res) => {
     console.log("rv post login")
-    if (!req.body) {
+    if (!req.body || !req.body.checkType) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
@@ -151,7 +151,8 @@ exports.findByWhere = (req, res) => {
     }
     console.log(req.body)
     const where = req.body;
-    if(!where.email_check || !where.password || !where.email){
+
+    if(where.checkType ==="Captcha" && (!where.email_check ||!where.email) ){
         if(!where.email_check){
             res.status(400).send({
                 message: "验证码不能为空!"
@@ -162,6 +163,58 @@ exports.findByWhere = (req, res) => {
                 message: "用户信息不能为空!"
             });
         }
+    }
+    else if(where.checkType ==="Password"&& ( !where.password || !where.email)){
+        if(!where.email_check){
+            res.status(400).send({
+                message: "验证码不能为空!"
+            });
+        }
+        else {
+            res.status(400).send({
+                message: "用户信息不能为空!"
+            });
+        }
+    }
+    else if(where.checkType ==="Password"){
+        let condition={
+            password:where.password,
+            email:where.email
+        }
+        User.find(condition, (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while login."
+                });
+            /*else res.send(data);*/
+            else {
+                if (data.length === 0) {
+                    res.status(400).send({
+                        code: "-1",
+                        error: "用户名密码不匹配"
+                    })
+                } else {
+                    //生成token
+                    const token = JWT.generate({
+                        _botid:data[0].bot_id,
+                        email: data[0].email
+                    }, "2d")
+
+                    res.header("Authorization", token)
+                    res.send({
+                        ActionType: "OK",
+                        data: {
+                            name: data[0].name,
+                            email: data[0].email,
+                            bot_id: data[0].bot_id,
+                            org_id: data[0].org_id,
+                            level: data[0].level
+                        }
+                    })
+                }
+            }
+        });
     }
     else {
         let emailCode=where.email_check;
@@ -176,7 +229,6 @@ exports.findByWhere = (req, res) => {
         else {
             instance.deleteItem(where.email);
             let condition={
-                password:where.password,
                 email:where.email
             }
             User.find(condition, (err, data) => {
