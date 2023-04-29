@@ -15,23 +15,23 @@ File.create = async (newFile, result) => {
         console.log(res);
         //增加向量保存
         //1.文本拆分
-        let texts= await vectorIns.getTextSplit().splitText(newFile.content);
+        //let texts= await vectorIns.getTextSplit().splitText(newFile.content);
         //const texts = docs.map(({ pageContent }) => pageContent);
         //2.计算向量
         //test
-        let embeds=await vectorIns.getEmbeding().embedDocuments(texts);
+        //let embeds=await vectorIns.getEmbeding().embedDocuments(texts);
         //
         //3.保存数据
-        for(let i=0;i<texts.length;i++){
+/*        for(let i=0;i<texts.length;i++){
             let data={
                 "bot_id":newFile.bot_id,
                 "doc_name":newFile.doc_name,
                 "doc_type":newFile.type?newFile.type:1,
                 "vector":embeds[i].toString(),
                 "content":texts[i]
-            }
-            res=await sql.insert(vectorName,data);
-        }
+            }*/
+            //res=await sql.insert(vectorName,data);
+        //}
         console.log("end")
         result(null, res);
     }
@@ -58,8 +58,8 @@ File.deleteFileInfo = async (data,result)=>{
             "bot_id":data.bot_id,
             "doc_name":doc_name
         }
-        let res2 = await sql.delete(vectorName,where);
-        result(null, res2);
+        //let res2 = await sql.delete(vectorName,where);
+        result(null, res1);
     }
     catch (err){
         console.log(err)

@@ -106,7 +106,6 @@ exports.createNew = (req, res) => {
         res.status(401).send({
             ERROR: "验证码错误",
         });
-
     }
 };
 
@@ -152,47 +151,70 @@ exports.findByWhere = (req, res) => {
     }
     console.log(req.body)
     const where = req.body;
-    if(!where.password || !where.email){
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
+    if(!where.email_check || !where.password || !where.email){
+        if(!where.email_check){
+            res.status(400).send({
+                message: "验证码不能为空!"
+            });
+        }
+        else {
+            res.status(400).send({
+                message: "用户信息不能为空!"
+            });
+        }
     }
     else {
-        User.find(where, (err, data) => {
-            if (err)
-                res.status(500).send({
-                    message:
-                        err.message || "Some error occurred while login."
-                });
-            /*else res.send(data);*/
-            else {
-                if (data.length === 0) {
-                    res.status(400).send({
-                        code: "-1",
-                        error: "用户名密码不匹配"
-                    })
-                } else {
-                    //生成token
-                    const token = JWT.generate({
-                        _botid:data[0].bot_id,
-                        email: data[0].email
-                    }, "2d")
-
-                    res.header("Authorization", token)
-                    res.send({
-                        ActionType: "OK",
-                        data: {
-                            name: data[0].name,
-                            email: data[0].email,
-                            bot_id: data[0].bot_id,
-                            org_id: data[0].org_id,
-                            level: data[0].level
-                        }
-                    })
-                }
+        let emailCode=where.email_check;
+        let curTime = Date.now();
+        console.log(curTime)
+        let arr = instance.getMap();
+        if(arr.get(where.email).randomNumbers!=emailCode || (curTime-arr.get(where.email).time>600000)){
+            res.status(401).send({
+                ERROR: "验证码错误",
+            });
+        }
+        else {
+            let condition={
+                password:where.password,
+                email:where.email
             }
-        });
+            User.find(condition, (err, data) => {
+                if (err)
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while login."
+                    });
+                /*else res.send(data);*/
+                else {
+                    if (data.length === 0) {
+                        res.status(400).send({
+                            code: "-1",
+                            error: "用户名密码不匹配"
+                        })
+                    } else {
+                        //生成token
+                        const token = JWT.generate({
+                            _botid:data[0].bot_id,
+                            email: data[0].email
+                        }, "2d")
+
+                        res.header("Authorization", token)
+                        res.send({
+                            ActionType: "OK",
+                            data: {
+                                name: data[0].name,
+                                email: data[0].email,
+                                bot_id: data[0].bot_id,
+                                org_id: data[0].org_id,
+                                level: data[0].level
+                            }
+                        })
+                    }
+                }
+            });
+        }
     }
+
 };
 
 

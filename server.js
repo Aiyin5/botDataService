@@ -7,6 +7,7 @@ const vectorIns = require("./app/util/vectorIns")
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require('swagger-jsdoc');
+const {localSer} = require("./app/config/config.json")
 const swaggerOpt = {
   definition: {
     openapi: "3.0.0",
@@ -17,7 +18,7 @@ const swaggerOpt = {
     },
     servers:[
       {
-        url:'http://127.0.0.1:3003'
+        url:localSer
       }
     ],
   },
@@ -46,6 +47,7 @@ app.use((req,res,next)=>{
   }
   if(req.url==="/app/user/captcha"){
     console.log("rv /app/user/captcha")
+    console.log(req.body)
     next()
     return;
   }
