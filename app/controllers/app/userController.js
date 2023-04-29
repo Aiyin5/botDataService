@@ -304,14 +304,16 @@ exports.aicheck =async (req, res) => {
                     Error: "域名重复"
                 })
             }
+            else{
+                res.send({
+                    ActionType: "OK"
+                })
+            }
         }
         catch (err){
             res.status(500).send({
                 Error: "Internal Error"
             })
         }
-        res.send({
-            ActionType: "OK"
-        })
     }
 }
