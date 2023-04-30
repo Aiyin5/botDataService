@@ -99,7 +99,14 @@ app.use((req,res,next)=>{
   if(!req.headers["authorization"]){
     res.status(401).send({errCode:"-1",errorInfo:"没有权限"})
   }
-  const token = req.headers["authorization"].split(" ")[1]
+  let alltoken = req.headers["authorization"];
+  let token="";
+  if(alltoken.includes(" ")){
+    token = req.headers["authorization"].split(" ")[1]
+  }
+  else {
+    token=req.headers["authorization"];
+  }
   if(token){
     var payload = JWT.verify(token)
     // console.log(payload)
