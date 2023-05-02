@@ -94,6 +94,24 @@ Bot.getPreInfo = async (where,result)=>{
         result(null, err);
     }
 }
+
+Bot.getPreInfoByPage = async (Item,result)=>{
+    let where ={
+        "bot_id":Item.bot_id
+    };
+    let page = Item.page;
+    let number = Item.pageNumber;
+    try {
+
+        let res = await sql.selectByPage(pre_table,where,page,number);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
+
 Bot.addUnstInfo = async (data,result)=>{
     try {
         let res=await sql.insert(unst_table,data);

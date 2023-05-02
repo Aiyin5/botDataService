@@ -129,7 +129,7 @@ module.exports = app => {
      *         required: true
      *         content:
      *           application/json:
-     *            schema:
+     *             schema:
      *               type: object
      *               properties:
      *                 id:
@@ -177,7 +177,7 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 机器人信息
+     *         description: 机器人信息  page代表第几页，从1开始，pageNumber代表每页的数量
      *         required: true
      *         content:
      *           application/json:
@@ -186,6 +186,10 @@ module.exports = app => {
      *               properties:
      *                 bot_id:
      *                   type: string
+     *                 page:
+     *                   type: number
+     *                 pageNumber:
+     *                   type: number
      *      responses:
      *        200:
      *          description: successful operation
@@ -194,16 +198,21 @@ module.exports = app => {
      *              schema:
      *                type: object
      *                properties:
-     *                  data:
-     *                    type: array[{id:number//编号  bot_id:string //机器人id prompt:string //问题  completion:string //回答  org_prompt:string//原始问题  date:number//创建时间}}]
      *                  ActionType:
      *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id prompt:string //问题  completion:string //回答  org_prompt:string//原始问题  date:number//创建时间}}]
      *        500:
      *          description: Internal Error
      *        401:
      *          description: 没有权限
      * */
-    router.post("/standardInfo", bots.getPreInfo);
+    router.post("/standardInfo", bots.getPreInfoByPage);
 
     // getUnstInfo
     router.post("/getUnstInfo", bots.getUnstInfo);
@@ -220,5 +229,7 @@ module.exports = app => {
     router.post("/botUnst", bots.getUnstInfo);
     router.post("/botPre", bots.getPreInfo);
     router.post("/botInfo", bots.findById);
+
+    router.post("/botPrebyPage", bots.getPreInfoByPage);
     app.use('/app/bot', router);
 };

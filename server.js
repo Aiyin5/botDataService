@@ -76,6 +76,10 @@ app.use((req,res,next)=>{
     next()
     return;
   }
+  if(req.url==="/app/bot/botPrebyPage"){
+    next()
+    return;
+  }
   if(req.url==="/app/bot/botInfo"){
     next()
     return;

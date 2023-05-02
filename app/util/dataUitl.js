@@ -44,6 +44,21 @@ class MysqlPool {
         return await this.query(sql);
     }
 
+    async selectByPage(tableName,where,page,number) {
+        let start = (page - 1) * number;
+        const whereConditions = Object.entries(where)
+            .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+            .join(' AND ');
+        const sql1=`SELECT COUNT(1) FROM ${tableName} WHERE ${whereConditions}`;
+        const sql2 = `SELECT * FROM ${tableName} WHERE ${whereConditions} limit ${start},${number}`;
+        let data={};
+        let co=await this.query(sql1);
+        data.count = co[0]['COUNT(1)'];
+        console.log(data.count)
+        data.content= await this.query(sql2);
+        return data;
+    }
+
     async insert(tableName, data) {
         const keys = Object.keys(data).join(', ');
         const values = Object.values(data).map(value => mysql.escape(value)).join(', ');

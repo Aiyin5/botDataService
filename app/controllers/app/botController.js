@@ -184,6 +184,28 @@ exports.getPreInfo = (req, res) => {
         }
     });
 }
+exports.getPreInfoByPage = (req, res) => {
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+    }
+    const where = req.body;
+    Bot.getPreInfoByPage(where, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        else {
+            res.send({
+                ActionType: "OK",
+                data: data
+            })
+        }
+    });
+}
+
 exports.getUnstInfo = (req, res) => {
     if (!req.body) {
         res.status(400).send({
