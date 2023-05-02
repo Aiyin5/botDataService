@@ -149,6 +149,7 @@ exports.updatePreInfo = (req, res) => {
         });
     }
     const botData = req.body;
+    console.log(botData)
     Bot.updatePreInfo(botData, (err, data) => {
         if (err)
             res.status(500).send({

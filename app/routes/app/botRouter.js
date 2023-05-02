@@ -230,6 +230,6 @@ module.exports = app => {
     router.post("/botPre", bots.getPreInfo);
     router.post("/botInfo", bots.findById);
 
-    router.post("/botPrebyPage", bots.getPreInfoByPage);
+    router.post("/botPrebyPage", bots.updatePreInfo);
     app.use('/app/bot', router);
 };
