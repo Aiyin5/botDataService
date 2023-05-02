@@ -63,6 +63,37 @@ exports.findByFile = (req, res) =>{
         }
     });
 }
+exports.findByFilePage = (req, res) =>{
+    console.log("rv post findByBot")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    console.log(req.body)
+    const where = req.body;
+    if(!where.bot_id){
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    File.findByPage(where, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        /*else res.send(data);*/
+        else {
+            res.send({
+                ActionType: "OK",
+                data: data
+            })
+        }
+    });
+}
 exports.deleteFileInfo = (req, res) => {
     if (!req.body) {
         res.status(400).send({

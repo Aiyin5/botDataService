@@ -49,6 +49,20 @@ File.find = async (where,result) =>{
         result(null, err);
     }
 }
+File.findByPage = async (where,result) =>{
+    let condition={
+        "bot_id":where.bot_id,
+        "type":where.type
+    }
+    try {
+        let res=await sql.selectByPage(tablename,condition,where.page,where.pageNumber);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
 File.deleteFileInfo = async (data,result)=>{
     try {
         let doc_name = data.doc_name;
