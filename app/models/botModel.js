@@ -76,7 +76,7 @@ Bot.deletPreInfo = async (data,result)=>{
 }
 Bot.updatePreInfo = async (data,result)=>{
     try {
-        let res = await sql.update(pre_table,data.data,data.where);
+        let res = await sql.update(pre_table,data,data.id);
         result(null, res);
     }
     catch (err){
