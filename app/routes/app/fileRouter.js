@@ -149,7 +149,7 @@ module.exports = app => {
     router.post("/deleteFile", files.deleteFileInfo);
 
     //for server test
-    //router.post("/botFile", files.findByFile);
-    router.post("/botFile", files.create);
+    router.post("/botFile", files.findByFile);
+    //router.post("/botFile", files.create);
     app.use('/app/file', router);
 };
