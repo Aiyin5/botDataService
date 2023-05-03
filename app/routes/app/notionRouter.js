@@ -74,7 +74,7 @@ module.exports = app => {
     router.post("/deleteNotion", notions.deleteNotionInfo);
 
     //for server test
-    //router.post("/botNotion", notions.findNotionById);
+    router.post("/botnotion", notions.findNotionById);
     //router.post("/botnotion", notions.create);
 
     app.use('/app/notion', router);

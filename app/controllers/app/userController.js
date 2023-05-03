@@ -151,7 +151,9 @@ exports.findByWhere = (req, res) => {
     }
     console.log(req.body)
     const where = req.body;
-
+    if(!where.checkType){
+        where.checkType="Password";
+    }
     if(where.checkType ==="Captcha" && (!where.email_check ||!where.email) ){
         if(!where.email_check){
             res.status(400).send({

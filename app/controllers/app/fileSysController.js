@@ -75,7 +75,7 @@ exports.findByFilePage = (req, res) =>{
     const where = req.body;
     if(!where.bot_id){
         res.status(400).send({
-            message: "Content can not be empty!"
+            message: "bot_id can not be empty!"
         });
         return;
     }
