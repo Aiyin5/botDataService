@@ -5,52 +5,57 @@ const File = require("../../models/fileSysModel");
 exports.create =async (req, res) => {
     console.log("rec notion create")
     // Validate request
-    if (!req.body) {
+    if (!req.body.bot_id || !req.body.token) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
     }
-    try {
-        console.log(req.body)
-        console.log("start")
-        let content = await notionApi.read_block(req.body.page_id,req.body.token,req.body.subNum);
-        content =removeEmoji(content)
-        console.log("start Hash")
-        let hashcode = await notionApi.getHashFromArticle(content)
-        console.log("hash end")
-        const notion = new Notion({
-            bot_id: req.body.bot_id,
-            doc_name: req.body.doc_name,
-            type: 2,
-            content: content,
-            page_id: req.body.page_id,
-            doc_hash: hashcode
-        });
-        // Save Tutorial in the database
-        Notion.create(notion, (err, data) => {
-            if (err)
-                res.status(500).send({
-                    message:
-                        err.message || "Some error occurred while creating the File."
-                });
-            else {
-                res.send({
-                    ActionType: "OK",
-                    data:notion
-                });
-            }
-        });
+    console.log(req.body)
+    console.log("start")
+    let subNum=2;
+    if(req.body.subPage){
+        subNum=10;
     }
-     catch (err){
-        console.log(err);
-         res.status(500).send({
-             message:
-                 err.message || "Some error occurred while creating the File."
-         });
-     }
-
-    //console.log(req.body.content)
-
+    let pageId=req.body.pagelink;
+    pageId=pageId.replaceAll(" ","")
+    pageId=pageId.slice(-32);
+        try {
+            let content = ""
+            content = await notionApi.read_block(pageId, req.body.token, subNum);
+            content = removeEmoji(content)
+            console.log("start Hash")
+            let hashcode = await notionApi.getHashFromArticle(content)
+            console.log("hash end")
+            const notion = new Notion({
+                bot_id: req.body.bot_id,
+                doc_name: req.body.doc_name,
+                type: 2,
+                content: content,
+                page_id: pageId,
+                doc_hash: hashcode
+            });
+            // Save Tutorial in the database
+            Notion.create(notion, (err, data) => {
+                if (err)
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while creating the File."
+                    });
+                else {
+                    res.send({
+                        ActionType: "OK",
+                        data: notion
+                    });
+                }
+            });
+        }
+        catch (err){
+            console.log(err);
+            res.status(400).send({
+                message:
+                     "请确认链接或者页面授权token."
+            });
+        }
 };
 function removeEmoji (content) {
     let conByte = new TextEncoder("utf-8").encode(content);
