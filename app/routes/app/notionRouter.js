@@ -66,7 +66,7 @@ module.exports = app => {
      *        401:
      *          description: 没有权限
      * */
-    router.post("/creat", notions.create);
+    router.post("/create", notions.create);
 
 
     //router.post("/botNotion", notions.findNotionById);
