@@ -232,7 +232,7 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 查询信息 content为搜索的文字内容
+     *         description: 查询信息 searchWord为搜索的文字内容
      *         required: true
      *         content:
      *           application/json:
@@ -241,8 +241,12 @@ module.exports = app => {
      *               properties:
      *                 bot_id:
      *                   type: string
-     *                 content:
+     *                 searchWord:
      *                   type: string
+     *                 page:
+     *                   type: number
+     *                 pageNumber:
+     *                   type: number
      *      responses:
      *        200:
      *          description: successful operation
@@ -265,7 +269,7 @@ module.exports = app => {
      *        401:
      *          description: 没有权限
      * */
-    router.post("/searchStandardInfo", bots.searchStandardInfo);
+    router.post("/searchStandardInfo", bots.getPreInfoByPage);
 
     // addUnstInfo
     router.post("/addUnstInfo", bots.addUnstInfo);
@@ -278,6 +282,6 @@ module.exports = app => {
     router.post("/botPre", bots.getPreInfo);
     router.post("/botInfo", bots.findById);
 
-    router.post("/botPrebyPage", bots.searchStandardInfo);
+    router.post("/botPrebyPage", bots.getPreInfoByPage);
     app.use('/app/bot', router);
 };

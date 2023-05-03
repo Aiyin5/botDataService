@@ -102,11 +102,22 @@ Bot.getPreInfoByPage = async (Item,result)=>{
     let where ={
         "bot_id":Item.bot_id
     };
+    let searchCondition={
+        "flag":false,
+        "word":""
+    };
+    if(!Item.searchWord){
+        searchCondition.flag=false;
+    }
+    else {
+        searchCondition.flag=true;
+        searchCondition.word=Item.searchWord;
+    }
     let page = Item.page;
     let number = Item.pageNumber;
     try {
 
-        let res = await sql.selectByPage(pre_table,where,page,number);
+        let res = await sql.selectByPage(pre_table,where,page,number,searchCondition);
         result(null, res);
     }
     catch (err){

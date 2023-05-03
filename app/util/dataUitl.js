@@ -44,13 +44,21 @@ class MysqlPool {
         return await this.query(sql);
     }
 
-    async selectByPage(tableName,where,page,number) {
+    async selectByPage(tableName,where,page,number,searchCondition) {
         let start = (page - 1) * number;
-        const whereConditions = Object.entries(where)
+        let whereConditions = Object.entries(where)
             .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
             .join(' AND ');
+        let search="";
+        if(searchCondition.flag){
+            search = searchCondition.word;
+            console.log(search)
+            whereConditions="("+whereConditions+")"
+            whereConditions+=" AND (prompt LIKE '%"+search+"%' OR completion LIKE '%"+search+"%')"
+        }
         const sql1=`SELECT COUNT(1) FROM ${tableName} WHERE ${whereConditions}`;
         const sql2 = `SELECT * FROM ${tableName} WHERE ${whereConditions} limit ${start},${number}`;
+        console.log(sql2)
         let data={};
         let co=await this.query(sql1);
         data.count = co[0]['COUNT(1)'];
