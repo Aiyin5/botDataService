@@ -205,7 +205,7 @@ module.exports = app => {
      * */
     router.post("/searchFileInfo", files.findByFilePage);
 
-    router.post("/botfile", files.findByFile);
+    //router.post("/botfile", files.findByFile);
 
 
     /**,
@@ -252,6 +252,6 @@ module.exports = app => {
 
     //for server test
     router.post("/botFile", files.findByFile);
-    //router.post("/botFile", files.create);
+    //router.post("/botFile", files.update);
     app.use('/app/file', router);
 };

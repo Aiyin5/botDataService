@@ -32,6 +32,7 @@ exports.create = (req, res) => {
     });
 };
 exports.update= (req, res) =>{
+    let where=req.body
     if(!where.id){
         res.status(400).send({
             message: "id can not be empty!"
@@ -61,7 +62,7 @@ exports.findByFile = (req, res) =>{
         });
         return;
     }
-//    const where = req.body;
+    const where = req.body;
     if(!where.bot_id){
         res.status(400).send({
             message: "Content can not be empty!"
