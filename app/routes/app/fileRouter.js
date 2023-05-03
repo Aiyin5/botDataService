@@ -48,7 +48,7 @@ module.exports = app => {
      *        401:
      *          description: 没有权限
      * */
-    router.post("/creat", files.create);
+    router.post("/create", files.create);
 
     /**,
      * @swagger
@@ -149,7 +149,7 @@ module.exports = app => {
     router.post("/deleteFile", files.deleteFileInfo);
 
     //for server test
-    router.post("/botFile", files.findByFile);
-
+    //router.post("/botFile", files.findByFile);
+    router.post("/botFile", files.create);
     app.use('/app/file', router);
 };

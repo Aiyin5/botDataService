@@ -33,15 +33,14 @@ exports.create = (req, res) => {
 };
 
 exports.findByFile = (req, res) =>{
-    console.log("rv post findByBot")
+    console.log("rv post findByFile")
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
         return;
     }
-    console.log(req.body)
-    const where = req.body;
+//    const where = req.body;
     if(!where.bot_id){
         res.status(400).send({
             message: "Content can not be empty!"
