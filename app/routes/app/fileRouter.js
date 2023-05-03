@@ -64,7 +64,7 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 机器人信息  page代表第几页，从1开始，pageNumber代表每页的数量 type代表文件类型1为pdf 2为txt
+     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量 type代表文件类型1为pdf 2为txt
      *         required: true
      *         content:
      *           application/json:
@@ -77,7 +77,7 @@ module.exports = app => {
      *                   type: number
      *                 page:
      *                   type: number
-     *                 pageNumber:
+     *                 pageSize:
      *                   type: number
      *      responses:
      *        200:

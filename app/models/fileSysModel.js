@@ -55,7 +55,7 @@ File.findByPage = async (where,result) =>{
         "type":where.type
     }
     try {
-        let res=await sql.selectByPage(tablename,condition,where.page,where.pageNumber);
+        let res=await sql.selectByPage(tablename,condition,where.page,where.pageSize);
         result(null, res);
     }
     catch (err){

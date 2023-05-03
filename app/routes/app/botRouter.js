@@ -177,7 +177,7 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 机器人信息  page代表第几页，从1开始，pageNumber代表每页的数量
+     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量
      *         required: true
      *         content:
      *           application/json:
@@ -188,7 +188,7 @@ module.exports = app => {
      *                   type: string
      *                 page:
      *                   type: number
-     *                 pageNumber:
+     *                 pageSize:
      *                   type: number
      *      responses:
      *        200:
@@ -245,7 +245,7 @@ module.exports = app => {
      *                   type: string
      *                 page:
      *                   type: number
-     *                 pageNumber:
+     *                 pageSize:
      *                   type: number
      *      responses:
      *        200:

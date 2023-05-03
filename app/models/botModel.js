@@ -114,7 +114,7 @@ Bot.getPreInfoByPage = async (Item,result)=>{
         searchCondition.word=Item.searchWord;
     }
     let page = Item.page;
-    let number = Item.pageNumber;
+    let number = Item.pageSize;
     try {
 
         let res = await sql.selectByPage(pre_table,where,page,number,searchCondition);
