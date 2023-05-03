@@ -50,6 +50,51 @@ module.exports = app => {
      * */
     router.post("/create", files.create);
 
+
+    /**,
+     * @swagger
+     * /app/file/update:
+     *    post:
+     *      tags:
+     *      - fileApi
+     *      summary: 手动更新接口
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 手动更新信息 id//主题id doc_name //主题  content//内容
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 id:
+     *                   type: number
+     *                 doc_name:
+     *                   type: string
+     *                 content:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/update", files.update);
+
     /**,
      * @swagger
      * /app/file/fileInfo:
@@ -64,7 +109,7 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量 type代表文件类型1为pdf 2为txt
+     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量 type代表文件类型1为pdf 2为txt 3代表手动更新
      *         required: true
      *         content:
      *           application/json:
@@ -81,7 +126,7 @@ module.exports = app => {
      *                   type: number
      *      responses:
      *        200:
-     *          description: successful operation   文件类型type1代表pdf 2代表txt
+     *          description: successful operation   文件类型type1代表pdf 2代表txt 3代表手动更新
      *          content:
      *            application/json:
      *              schema:
@@ -102,6 +147,61 @@ module.exports = app => {
      *          description: 没有权限
      * */
     router.post("/fileInfo", files.findByFilePage);
+
+    /**,
+     * @swagger
+     * /app/file/searchFileInfo:
+     *    post:
+     *      tags:
+     *      - fileApi
+     *      summary: 文件和手动更新语料查询接口
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量 type代表文件类型1为pdf 2为txt 3代表手动更新 searchWord为搜索的文字内容
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 type:
+     *                   type: number
+     *                 searchWord:
+     *                   type: string
+     *                 page:
+     *                   type: number
+     *                 pageSize:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation   文件类型type1代表pdf 2代表txt 3代表手动更新
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id doc_name:string //文件名称  type:number //文件类型  content:string//文件内容  date:number//创建时间}}]
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/searchFileInfo", files.findByFilePage);
 
     router.post("/botfile", files.findByFile);
 

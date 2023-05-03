@@ -50,6 +50,31 @@ Notion.find = async (where,result) =>{
         result(null, err);
     }
 }
+Notion.findByPage = async (Item,result) =>{
+    let where={
+        "bot_id":Item.bot_id
+    }
+    let searchCondition={
+        "flag":false,
+        "word":""
+    }
+    if(!Item.searchWord){
+        searchCondition.flag=false;
+    }
+    else {
+        searchCondition.flag=true;
+        searchCondition.word=Item.searchWord;
+    }
+    try {
+        let res=await sql.selectByPage(tablename,where,Item.page,Item.pageSize,searchCondition);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
+
 Notion.deleteNotionInfo = async (data,result)=>{
     try {
         let doc_name = data.doc_name;

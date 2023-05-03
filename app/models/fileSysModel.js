@@ -49,13 +49,35 @@ File.find = async (where,result) =>{
         result(null, err);
     }
 }
+File.update = async (where,result) =>{
+    let condition={
+        "id":where.id
+    }
+    try {
+        let res=await sql.update(tablename,where,condition);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
+
 File.findByPage = async (where,result) =>{
     let condition={
         "bot_id":where.bot_id,
         "type":where.type
     }
     let searchCondition={
-        "flag":false
+        "flag":false,
+        "word":""
+    }
+    if(!where.searchWord){
+        searchCondition.flag=false;
+    }
+    else {
+        searchCondition.flag=true;
+        searchCondition.word=where.searchWord;
     }
     try {
         let res=await sql.selectByPage(tablename,condition,where.page,where.pageSize,searchCondition);

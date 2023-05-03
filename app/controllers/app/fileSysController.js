@@ -31,7 +31,28 @@ exports.create = (req, res) => {
         }
     });
 };
-
+exports.update= (req, res) =>{
+    if(!where.id){
+        res.status(400).send({
+            message: "id can not be empty!"
+        });
+    }
+    else {
+        File.update(where, (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while retrieving tutorials."
+                });
+            /*else res.send(data);*/
+            else {
+                res.send({
+                    ActionType: "OK"
+                })
+            }
+        });
+    }
+}
 exports.findByFile = (req, res) =>{
     console.log("rv post findByFile")
     if (!req.body) {

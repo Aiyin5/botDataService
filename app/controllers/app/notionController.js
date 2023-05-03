@@ -72,34 +72,53 @@ function removeEmoji (content) {
 }
 exports.findNotionById = (req, res) =>{
     console.log("rv post findNotion")
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-    console.log(req.body)
     const where = req.body;
     if(!where.bot_id){
         res.status(400).send({
-            message: "Content can not be empty!"
+            message: "bot_id can not be empty!"
         });
-        return;
     }
-    Notion.find(where, (err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving tutorials."
-            });
-        /*else res.send(data);*/
-        else {
-            res.send({
-                ActionType: "OK",
-                data: data
-            })
-        }
-    });
+    else {
+        Notion.find(where, (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while retrieving tutorials."
+                });
+            /*else res.send(data);*/
+            else {
+                res.send({
+                    ActionType: "OK",
+                    data: data
+                })
+            }
+        });
+    }
+}
+exports.getNotionPage = (req, res) =>{
+    console.log("rv post getNotionPage")
+    const where = req.body;
+    if(!where.bot_id){
+        res.status(400).send({
+            message: "bot_id can not be empty!"
+        });
+    }
+    else {
+        Notion.findByPage(where, (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while retrieving tutorials."
+                });
+            /*else res.send(data);*/
+            else {
+                res.send({
+                    ActionType: "OK",
+                    data: data
+                })
+            }
+        });
+    }
 }
 exports.deleteNotionInfo = (req, res) => {
     if (!req.body) {

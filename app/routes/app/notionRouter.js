@@ -1,3 +1,4 @@
+const notions = require("../../controllers/app/notionController");
 module.exports = app => {
     const notions = require("../../controllers/app/notionController");
 
@@ -69,7 +70,110 @@ module.exports = app => {
     router.post("/create", notions.create);
 
 
+    /**,
+     * @swagger
+     * /app/notion/notions:
+     *    post:
+     *      tags:
+     *      - notionApi
+     *      summary: 根据机器人id获取notion相关的语料数据
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 page:
+     *                   type: number
+     *                 pageSize:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id doc_name:string //文件名称  type:number //文件类型  content:string//文件内容 page_id:string doc_hash:string//文件哈希  date:number//创建时间}}]
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/notions", notions.getNotionPage);
     //router.post("/botNotion", notions.findNotionById);
+
+    /**,
+     * @swagger
+     * /app/notion/searchNotion:
+     *    post:
+     *      tags:
+     *      - notionApi
+     *      summary: 根据关键字查询notion语料
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量 searchWord为搜索的文字内容
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 searchWord:
+     *                   type: string
+     *                 page:
+     *                   type: number
+     *                 pageSize:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id doc_name:string //文件名称  type:number //文件类型  content:string//文件内容 page_id:string doc_hash:string//文件哈希  date:number//创建时间}}]
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/searchNotion", notions.getNotionPage);
 
     router.post("/deleteNotion", notions.deleteNotionInfo);
 
