@@ -57,7 +57,7 @@ class MysqlPool {
             whereConditions+=" AND (prompt LIKE '%"+search+"%' OR completion LIKE '%"+search+"%')"
         }
         const sql1=`SELECT COUNT(1) FROM ${tableName} WHERE ${whereConditions}`;
-        const sql2 = `SELECT * FROM ${tableName} WHERE ${whereConditions} limit ${start},${number}`;
+        const sql2 = `SELECT * FROM ${tableName} WHERE ${whereConditions} ORDER BY id DESC limit ${start},${number}`;
         console.log(sql2)
         let data={};
         let co=await this.query(sql1);
