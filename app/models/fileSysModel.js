@@ -54,8 +54,11 @@ File.findByPage = async (where,result) =>{
         "bot_id":where.bot_id,
         "type":where.type
     }
+    let searchCondition={
+        "flag":false
+    }
     try {
-        let res=await sql.selectByPage(tablename,condition,where.page,where.pageSize);
+        let res=await sql.selectByPage(tablename,condition,where.page,where.pageSize,searchCondition);
         result(null, res);
     }
     catch (err){

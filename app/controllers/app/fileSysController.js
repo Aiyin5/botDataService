@@ -64,7 +64,7 @@ exports.findByFile = (req, res) =>{
     });
 }
 exports.findByFilePage = (req, res) =>{
-    console.log("rv post findByBot")
+    console.log("rv post findByFilePage")
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
