@@ -88,6 +88,8 @@ module.exports = app => {
      *                properties:
      *                  ActionType:
      *                    type: string
+     *        400:
+     *          description: 请求信息不全
      *        500:
      *          description: Internal Error
      *        401:
