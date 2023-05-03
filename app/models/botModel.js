@@ -114,6 +114,43 @@ Bot.getPreInfoByPage = async (Item,result)=>{
         result(null, err);
     }
 }
+Bot.searchStandardInfo= async (Item,result)=>{
+    let where ={
+        "bot_id":Item.bot_id
+    };
+    let content = Item.content
+    console.log(content)
+    try {
+        let res = await sql.selectByWhere(pre_table,where);
+        if(res.length===0){
+            let ret={
+                "content":0,
+                "data":[]
+            }
+            result(null, ret);
+        }
+        else {
+            let ret={
+
+            }
+            let co=0;
+            let arr=[];
+            for(let item of res){
+                if(item.prompt.includes(content) || item.completion.includes(content)){
+                    arr.push(item);
+                    co++;
+                }
+            }
+            ret.count=co;
+            ret.content=arr;
+            result(null, ret);
+        }
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
 
 Bot.addUnstInfo = async (data,result)=>{
     try {

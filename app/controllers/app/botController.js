@@ -206,6 +206,29 @@ exports.getPreInfoByPage = (req, res) => {
         }
     });
 }
+exports.searchStandardInfo = (req, res) => {
+    if(!req.body.bot_id || !req.body.content) {
+        res.status(400).send({
+            message: "Content and bot_id can not be empty!"
+        });
+    }
+    else {
+        const where = req.body;
+        Bot.searchStandardInfo(where, (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while retrieving tutorials."
+                });
+            else {
+                res.send({
+                    ActionType: "OK",
+                    data: data
+                })
+            }
+        });
+    }
+}
 
 exports.getUnstInfo = (req, res) => {
     if (!req.body) {

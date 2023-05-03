@@ -218,6 +218,54 @@ module.exports = app => {
     router.post("/getUnstInfo", bots.getUnstInfo);
 
 
+    /**,
+     * @swagger
+     * /app/bot/searchStandardInfo:
+     *    post:
+     *      tags:
+     *      - botApi
+     *      summary: 搜索机器人的标准问答
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 查询信息 content为搜索的文字内容
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 content:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id prompt:string //问题  completion:string //回答  org_prompt:string//原始问题  date:number//创建时间}}]
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/searchStandardInfo", bots.searchStandardInfo);
 
     // addUnstInfo
     router.post("/addUnstInfo", bots.addUnstInfo);
@@ -230,6 +278,6 @@ module.exports = app => {
     router.post("/botPre", bots.getPreInfo);
     router.post("/botInfo", bots.findById);
 
-    router.post("/botPrebyPage", bots.updatePreInfo);
+    router.post("/botPrebyPage", bots.searchStandardInfo);
     app.use('/app/bot', router);
 };
