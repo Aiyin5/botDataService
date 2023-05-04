@@ -17,7 +17,7 @@ exports.create = (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        bot_id: req.body.bot_id,
+        bot_id: req.body.email,
         level: req.body.level,
         org_id: req.body.org_id
     });
@@ -76,7 +76,8 @@ exports.createNew = (req, res) => {
                 name: req.body.name,
                 email: req.body.email,
                 password: req.body.password,
-                bot_id: "0",
+                bot_id: req.body.email,
+
                 org_id: req.body.org_id,
                 level: 2
             });
@@ -356,6 +357,45 @@ exports.aicheck =async (req, res) => {
             if(dataRes.length > 0){
                 res.status(401).send({
                     Error: "域名重复"
+                })
+            }
+            else{
+                res.send({
+                    ActionType: "OK"
+                })
+            }
+        }
+        catch (err){
+            res.status(500).send({
+                Error: "Internal Error"
+            })
+        }
+    }
+}
+exports.emailCheck =async (req, res) => {
+    console.log("rv post emailCheck")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Email can not be empty!"
+        });
+        return;
+    }
+    console.log(req.body)
+    if(!req.body.email){
+        res.status(400).send({
+            Error: "邮箱不能为空"
+        })
+    }
+    else {
+        const email_num = req.body.email;
+        let where={
+            email:email_num
+        }
+        try {
+            let dataRes =await User.findEmail(where)
+            if(dataRes.length > 0){
+                res.status(401).send({
+                    Error: "邮箱重复"
                 })
             }
             else{

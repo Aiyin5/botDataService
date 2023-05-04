@@ -60,6 +60,10 @@ app.use((req,res,next)=>{
     next()
     return;
   }
+  if(req.url==="/app/user/emailCheck"){
+    next()
+    return;
+  }
   if(req.url==="/app/user/registerNew"){
     next()
     return;

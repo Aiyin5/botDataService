@@ -255,5 +255,43 @@ module.exports = app => {
      * */
     router.post("/ai", users.aicheck);
 
+    /**,
+     * @swagger
+     * /app/user/emailCheck:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: email域名检测
+     *      requestBody:
+     *         description: email域名信息
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 email:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                    example: OK
+     *                    description: OK证明域名可用.
+     *        500:
+     *          description: InternalError
+     *        400:
+     *          description: 请求信息不全
+     *        401:
+     *          description: 邮箱重复
+     * */
+    router.post("/emailCheck", users.emailCheck);
+
     app.use('/app/user', router);
 };
