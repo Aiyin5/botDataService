@@ -80,7 +80,7 @@ File.findByPage = async (where,result) =>{
         searchCondition.word=where.searchWord;
     }
     try {
-        let res=await sql.selectByPage(tablename,condition,where.page,where.pageSize,searchCondition);
+        let res=await sql.fileByPage(tablename,condition,where.page,where.pageSize,searchCondition);
         result(null, res);
     }
     catch (err){

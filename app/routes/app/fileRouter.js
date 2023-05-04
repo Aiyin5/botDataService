@@ -252,6 +252,6 @@ module.exports = app => {
 
     //for server test
     router.post("/botFile", files.findByFile);
-    //router.post("/botFile", files.update);
+    //router.post("/botFile", files.findByFilePage);
     app.use('/app/file', router);
 };
