@@ -175,6 +175,46 @@ module.exports = app => {
      * */
     router.post("/searchNotion", notions.getNotionPage);
 
+    /**,
+     * @swagger
+     * /app/notion/deleteNotion:
+     *    post:
+     *      tags:
+     *      - notionApi
+     *      summary: 根据条件删除notion
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 文件信息 bot_id //机器人id  id//notion id
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 id:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
     router.post("/deleteNotion", notions.deleteNotionInfo);
 
     //for server test

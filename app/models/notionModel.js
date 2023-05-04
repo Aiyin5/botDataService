@@ -66,7 +66,7 @@ Notion.findByPage = async (Item,result) =>{
         searchCondition.word=Item.searchWord;
     }
     try {
-        let res=await sql.selectByPage(tablename,where,Item.page,Item.pageSize,searchCondition);
+        let res=await sql.fileByPage(tablename,where,Item.page,Item.pageSize,searchCondition);
         result(null, res);
     }
     catch (err){
