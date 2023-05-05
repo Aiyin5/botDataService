@@ -144,7 +144,7 @@ exports.findByBot = (req, res) =>{
 // Retrieve all Tutorials from the database (with condition).
 exports.findByWhere = (req, res) => {
     console.log("rv post login")
-    if (!req.body || !req.body.checkType) {
+    if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
