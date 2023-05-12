@@ -76,6 +76,10 @@ app.use((req,res,next)=>{
     next()
     return;
   }
+  if(req.url==="/app/bot/botPreAll"){
+    next()
+    return;
+  }
   if(req.url==="/app/bot/botUnst"){
     next()
     return;

@@ -64,6 +64,24 @@ Bot.addMultPreInfo = async (data,result)=>{
         result(null, err);
     }
 }
+Bot.addMultPreInfo2 = async (data)=>{
+    try {
+        let res;
+        for(let item of data){
+            try {
+                res = await sql.insert(pre_table, item);
+            }
+            catch (err){
+                console.log(err)
+            }
+        }
+        return res
+    }
+    catch (err){
+        console.log(err)
+        return err
+    }
+}
 Bot.deletPreInfo = async (data,result)=>{
     try {
         let res = await sql.delete(pre_table,data);
@@ -87,6 +105,17 @@ Bot.updatePreInfo = async (data,result)=>{
         result(null, err);
     }
 }
+Bot.getPreInfoAll = async (result)=>{
+    try {
+        let res = await sql.select(pre_table);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
+
 Bot.getPreInfo = async (where,result)=>{
     try {
         let res = await sql.selectByWhere(pre_table,where);

@@ -280,6 +280,7 @@ module.exports = app => {
     //for servertest
     router.post("/botUnst", bots.getUnstInfo);
     router.post("/botPre", bots.getPreInfo);
+    router.post("/botPreAll", bots.getPreInfoAll);
     router.post("/botInfo", bots.findById);
 
     router.post("/botPrebyPage", bots.getPreInfoByPage);

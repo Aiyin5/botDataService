@@ -185,6 +185,22 @@ exports.getPreInfo = (req, res) => {
         }
     });
 }
+
+exports.getPreInfoAll = (req, res) => {
+    Bot.getPreInfoAll((err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        else {
+            res.send({
+                ActionType: "OK",
+                data: data
+            })
+        }
+    });
+}
 exports.getPreInfoByPage = (req, res) => {
     if (!req.body) {
         res.status(400).send({
