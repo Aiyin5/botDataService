@@ -39,6 +39,16 @@ File.create = async (newFile, result) => {
         console.log(err)
     }
 };
+File.findAll= async(result) =>{
+    try {
+        let res=await sql.select(tablename);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
 File.find = async (where,result) =>{
     try {
         let res=await sql.selectByWhere(tablename,where);

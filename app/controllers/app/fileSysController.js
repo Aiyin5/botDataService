@@ -84,6 +84,29 @@ exports.findByFile = (req, res) =>{
         }
     });
 }
+exports.allFile = (req, res) =>{
+    console.log("rv post findByFile")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    File.findAll( (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        /*else res.send(data);*/
+        else {
+            res.send({
+                ActionType: "OK",
+                data: data
+            })
+        }
+    });
+}
 exports.findByFilePage = (req, res) =>{
     console.log("rv post findByFilePage")
     if (!req.body) {

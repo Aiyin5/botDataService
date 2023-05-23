@@ -1,4 +1,3 @@
-const files = require("../../controllers/app/fileSysController");
 module.exports = app => {
     const files = require("../../controllers/app/fileSysController");
 
@@ -252,6 +251,7 @@ module.exports = app => {
 
     //for server test
     router.post("/botFile", files.findByFile);
+    router.post("/allFile", files.allFile);
     //router.post("/botFile", files.findByFilePage);
     app.use('/app/file', router);
 };

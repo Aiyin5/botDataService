@@ -80,6 +80,10 @@ app.use((req,res,next)=>{
     next()
     return;
   }
+  if(req.url==="/app/file/allFile"){
+    next()
+    return;
+  }
   if(req.url==="/app/bot/botUnst"){
     next()
     return;
