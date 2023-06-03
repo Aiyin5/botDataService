@@ -1,0 +1,21 @@
+{
+  "noAuthorList": [
+    "/api-docs",
+    "/app/user/captcha",
+    "/app/user/login",
+    "/app/user/register",
+    "/app/user/emailCheck",
+    "/app/user/registerNew",
+    "/app/user/ai",
+    "/app/bot/botPre",
+    "/app/bot/botPreAll",
+    "/app/file/allFile",
+    "/app/bot/botUnst",
+    "/app/bot/botPrebyPage",
+    "/app/bot/botInfo",
+    "/app/file/botFile",
+    "/app/notion/botnotion",
+    "/app/log/create",
+    "/app/log/botId"
+  ]
+}

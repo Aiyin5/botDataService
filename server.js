@@ -1,5 +1,4 @@
 const express = require("express");
-// const bodyParser = require("body-parser"); /* deprecated */
 const cors = require("cors");
 const JWT = require("./app/util/JWT");
 const langChainTool = require("./app/util/langchainTool")
@@ -36,84 +35,20 @@ app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is d
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
-
+const {noAuthorList}= require("./app/config/noAuthReq.json")
 app.use((req,res,next)=>{
   // 如果token有效 ,next()
   // 如果token过期了, 返回401错误
-  if(req.url==="/api-docs"){
-    console.log("rv /api-docs")
-    next()
-    return;
-  }
-  if(req.url==="/app/user/captcha"){
-    console.log("rv /app/user/captcha")
-    console.log(req.body)
-    next()
-    return;
-  }
-  if(req.url==="/app/user/login"){
-    console.log("rv /app/user/login")
-    next()
-    return;
-  }
-  if(req.url==="/app/user/register"){
-    next()
-    return;
-  }
-  if(req.url==="/app/user/emailCheck"){
-    next()
-    return;
-  }
-  if(req.url==="/app/user/registerNew"){
-    next()
-    return;
-  }
-  if(req.url==="/app/user/ai"){
-    next()
-    return;
-  }
-  if(req.url==="/app/bot/botPre"){
-    next()
-    return;
-  }
-  if(req.url==="/app/bot/botPreAll"){
-    next()
-    return;
-  }
-  if(req.url==="/app/file/allFile"){
-    next()
-    return;
-  }
-  if(req.url==="/app/bot/botUnst"){
-    next()
-    return;
-  }
-  if(req.url==="/app/bot/botPrebyPage"){
-    next()
-    return;
-  }
-  if(req.url==="/app/bot/botInfo"){
-    next()
-    return;
-  }
-  if(req.url==="/app/file/botFile"){
-    next()
-    return;
-  }
-  if(req.url==="/app/notion/botnotion"){
-    next()
-    return;
-  }
-  if(req.url==="/app/log/create"){
-    next()
-    return;
-  }
-  if(req.url==="/app/log/botId"){
-    next()
-    return;
+  for(let item of noAuthorList){
+    if(req.url===item){
+      console.log("rv request"+item)
+      next()
+      return;
+    }
   }
   if(!req.headers["authorization"]){
     res.status(401).send({errCode:"-1",errorInfo:"没有权限"})
+    return;
   }
   let alltoken = req.headers["authorization"];
   let token="";
@@ -138,11 +73,7 @@ app.use((req,res,next)=>{
     }
   }
 })
-/*
-async function init(){
- await langChainTool.inint();
-}
-*/
+
 
 require("./app/routes/app/userRouter")(app);
 require("./app/routes/app/botRouter")(app);

@@ -1,6 +1,13 @@
+const files = require("../../controllers/app/fileSysController");
+const newfile = require("../../controllers/app/fileController");
+const multer = require("multer");
 module.exports = app => {
     const files = require("../../controllers/app/fileSysController");
-
+    const newfile = require("../../controllers/app/fileController");
+    const multer = require('multer');
+    const upload = multer({
+        dest: 'uploads/' // 指定上传文件的目录
+    });
     var router = require("express").Router();
 
     /**,
@@ -248,6 +255,246 @@ module.exports = app => {
      *          description: 没有权限
      * */
     router.post("/deleteFile", files.deleteFileInfo);
+
+
+
+    /**,
+     * @swagger
+     * /app/file/searchDocsInfo:
+     *    post:
+     *      tags:
+     *      - docFileApi
+     *      summary: DOCS文件查询接口
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量  searchWord为搜索的文字内容
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 type:
+     *                   type: number
+     *                 searchWord:
+     *                   type: string
+     *                 page:
+     *                   type: number
+     *                 pageSize:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id file_name:string //文件名称    content:string//文件内容  date:number//创建时间}}]
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/searchDocsInfo", newfile.docsInfo);
+    /**,
+     * @swagger
+     * /app/file/docsInfo:
+     *    post:
+     *      tags:
+     *      - docFileApi
+     *      summary: 根据机器人id获取docs相关的语料数据
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 机器人信息  page代表第几页，从1开始，pageSize代表每页的数量
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 page:
+     *                   type: number
+     *                 pageSize:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id file_name:string //文件名称  content:string//文件内容  date:number//创建时间}}]
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/docsInfo", newfile.docsInfo);
+
+    /**,
+     * @swagger
+     * /app/file/docCreate:
+     *    post:
+     *      tags:
+     *      - docFileApi
+     *      summary: 根据文件创建
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 文件信息 bot_id //机器人id  id//文件id
+     *         required: true
+     *         content:
+     *           multipart/form-data:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 file_name:
+     *                   type: string
+     *                 file:
+     *                   format: binary
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/docCreate",upload.single('file'), newfile.create);
+
+    /**,
+     * @swagger
+     * /app/file/docDelelte:
+     *    post:
+     *      tags:
+     *      - docFileApi
+     *      summary: 根据条件删除
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 文件信息 bot_id //机器人id  id//文件id  file_name//文件名称
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 id:
+     *                   type: number
+     *                 file_name:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/docDelete", newfile.docDelete);
+
+
+    /**,
+     * @swagger
+     * /app/file/docDownload:
+     *    post:
+     *      tags:
+     *      - docFileApi
+     *      summary: 根据文件信息下载文件
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 文件信息 bot_id //机器人id  id//文件id  file_name//文件名称
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 id:
+     *                   type: number
+     *                 file_name:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            multipart/form-data:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  file:
+     *                    format: binary
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/docDownload", newfile.download);
 
     //for server test
     router.post("/botFile", files.findByFile);
