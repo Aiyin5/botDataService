@@ -25,6 +25,7 @@ exports.create =async (req, res) => {
         res.status(400).send({
             message: "Content can not be empty!"
         });
+        return
     }
     let bot_file_name=req.body.bot_id+req.body.file_name;
     try{

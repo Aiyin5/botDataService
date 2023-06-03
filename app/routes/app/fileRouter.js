@@ -407,7 +407,7 @@ module.exports = app => {
 
     /**,
      * @swagger
-     * /app/file/docDelelte:
+     * /app/file/docDelete:
      *    post:
      *      tags:
      *      - docFileApi
