@@ -281,8 +281,6 @@ module.exports = app => {
      *               properties:
      *                 bot_id:
      *                   type: string
-     *                 type:
-     *                   type: number
      *                 searchWord:
      *                   type: string
      *                 page:
