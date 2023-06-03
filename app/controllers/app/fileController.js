@@ -4,7 +4,19 @@ const {SecretId,SecretKey}= require("../../config/config.json");
 const cosInstance = require("../../util/cosFunction");
 let cos = new cosInstance(SecretId,SecretKey);
 const AdmZip = require('adm-zip'); //引入查看zip文件的包
-
+function removeEmoji (content) {
+    let conByte = new TextEncoder("utf-8").encode(content);
+    for (let i = 0; i < conByte.length; i++) {
+        if ((conByte[i] & 0xF8) == 0xF0) {
+            for (let j = 0; j < 4; j++) {
+                conByte[i+j]=0x30;
+            }
+            i += 3;
+        }
+    }
+    content = new TextDecoder("utf-8").decode(conByte);
+    return content.replaceAll("0000", "");
+}
 function doc2text(path){
     const zip = new AdmZip(path); //filePath为文件路径
     let contentXml = zip.readAsText("word/document.xml");//将document.xml读取为text内容；
@@ -31,6 +43,7 @@ exports.create =async (req, res) => {
     try{
         await cos.upload(req.file.path,bot_file_name)
         let textContent = doc2text(req.file.path)
+        textContent = removeEmoji(textContent)
         //console.log(req.body.content)
         const file = new File({
             bot_id: req.body.bot_id,
