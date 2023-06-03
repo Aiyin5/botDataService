@@ -137,7 +137,6 @@ exports.docsInfo = (req, res) =>{
                 message:
                     err.message || "Some error occurred while retrieving tutorials."
             });
-        /*else res.send(data);*/
         else {
             res.send({
                 ActionType: "OK",

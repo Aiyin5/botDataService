@@ -292,5 +292,9 @@ module.exports = app => {
      * */
     router.post("/emailCheck", users.emailCheck);
 
+
+
+
+
     app.use('/app/user', router);
 };
