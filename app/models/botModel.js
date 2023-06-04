@@ -1,4 +1,5 @@
 const sql = require("./db.js");
+const {removeEmoji} = require("../util/dataTransform");
 
 // constructor
 const Bot = function(bot) {
@@ -55,6 +56,8 @@ Bot.addMultPreInfo = async (data,result)=>{
     try {
         let res;
         for(let item of data){
+             item.prompt = removeEmoji(item.prompt);
+            item.completion = removeEmoji(item.completion);
              res=await sql.insert(pre_table,item);
         }
         result(null, res);

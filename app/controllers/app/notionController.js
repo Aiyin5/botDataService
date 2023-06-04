@@ -17,6 +17,10 @@ exports.create =async (req, res) => {
         subNum=10;
     }
     let pageId=req.body.pagelink;
+    if(pageId.includes("?pvs="))
+    {
+        pageId=pageId.slice(0,pageId.length-6);
+    }
     pageId=pageId.replaceAll(" ","")
     pageId=pageId.slice(-32);
         try {
