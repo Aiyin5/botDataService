@@ -160,10 +160,12 @@ exports.docsInfo = (req, res) =>{
     });
 }
 exports.docDelete = async (req, res) => {
+    console.log("rv post docDelete")
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
+        return
     }
     const where = req.body;
     let bot_file_name =  req.body.bot_id+req.body.file_name;
@@ -191,10 +193,12 @@ exports.docDelete = async (req, res) => {
 }
 
 exports.download = async (req, res) => {
+    console.log("rv post download")
     if (!req.body || !req.body.bot_id || !req.body.file_name) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
+        return
     }
     const where = req.body;
     let bot_file_name=req.body.bot_id+req.body.file_name;
