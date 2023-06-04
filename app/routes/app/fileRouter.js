@@ -481,7 +481,7 @@ module.exports = app => {
      *        200:
      *          description: successful operation
      *          content:
-     *            multipart/form-data:
+     *            application/vnd.openxmlformats-officedocument.wordprocessingml.document:
      *              schema:
      *                type: object
      *                properties:

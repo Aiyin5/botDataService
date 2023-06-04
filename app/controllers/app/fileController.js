@@ -3,7 +3,9 @@ const File = require("../../models/fileModel.js");
 const {SecretId,SecretKey}= require("../../config/config.json");
 const cosInstance = require("../../util/cosFunction");
 let cos = new cosInstance(SecretId,SecretKey);
-const AdmZip = require('adm-zip'); //引入查看zip文件的包
+const AdmZip = require('adm-zip');
+const path = require("path");
+const fs = require("fs"); //引入查看zip文件的包
 function removeEmoji (content) {
     let conByte = new TextEncoder("utf-8").encode(content);
     for (let i = 0; i < conByte.length; i++) {
@@ -200,17 +202,19 @@ exports.download = async (req, res) => {
         });
         return
     }
-    const where = req.body;
     let bot_file_name=req.body.bot_id+req.body.file_name;
-    let file_path=__dirname+"/file/"+req.body.file_name
-
+    console.log(req.body.file_name)
+    const filePath = path.join(__dirname, 'file', req.body.file_name);
     try {
-        let flag = await cos.getItem(file_path,bot_file_name)
+        let flag = await cos.getItem(filePath,bot_file_name)
         console.log(flag)
         if(flag.statusCode===200){
-            res.sendFile(
-                file_path
-            )
+            const stat = fs.statSync(filePath);
+            res.setHeader('Content-Disposition', 'attachment; filename=' + req.body.file_name);
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            res.setHeader('Content-Length',stat.size)
+            const fileStream = fs.createReadStream(filePath);
+            fileStream.pipe(res);
         }
         else {
             res.status(500).send({

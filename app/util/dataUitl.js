@@ -89,6 +89,30 @@ class MysqlPool {
         return data;
     }
 
+
+    async fileInfoByPage(tableName,where,page,number,searchCondition) {
+        let start = (page - 1) * number;
+        let whereConditions = Object.entries(where)
+            .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+            .join(' AND ');
+        let search="";
+        if(searchCondition.flag){
+            search = searchCondition.word;
+            console.log(search)
+            whereConditions="("+whereConditions+")"
+            whereConditions+=" AND (file_name LIKE '%"+search+"%' OR file_content LIKE '%"+search+"%')"
+        }
+        const sql1=`SELECT COUNT(1) FROM ${tableName} WHERE ${whereConditions}`;
+        const sql2 = `SELECT * FROM ${tableName} WHERE ${whereConditions} ORDER BY id DESC limit ${start},${number}`;
+        console.log(sql2)
+        let data={};
+        let co=await this.query(sql1);
+        data.count = co[0]['COUNT(1)'];
+        console.log(data.count)
+        data.content= await this.query(sql2);
+        return data;
+    }
+
     async insert(tableName, data) {
         const keys = Object.keys(data).join(', ');
         const values = Object.values(data).map(value => mysql.escape(value)).join(', ');
