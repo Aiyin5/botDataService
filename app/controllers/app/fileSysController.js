@@ -84,8 +84,9 @@ exports.findByFile = (req, res) =>{
         }
     });
 }
+
 exports.allFile = (req, res) =>{
-    console.log("rv post findByFile")
+    console.log("rv post allFile")
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"

@@ -85,4 +85,5 @@ newFile.deleteFileInfo = async (data,result)=>{
         result(null, err);
     }
 }
+
 module.exports = newFile;
