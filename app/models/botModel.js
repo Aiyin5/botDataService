@@ -1,5 +1,5 @@
 const sql = require("./db.js");
-const {removeEmoji} = require("../util/dataTransform");
+const removeEmoji = require("../util/dataTransform");
 
 // constructor
 const Bot = function(bot) {
