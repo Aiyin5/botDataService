@@ -29,7 +29,7 @@ class Email {
    return new Promise((resolve, reject) => {
       var transporter = nodemailer.createTransport({
         // 邮箱服务的host: qq: smtp.qq.com; 163: smtp.163.com
-        host: 'smtp.126.com',
+        host: 'smtp.exmail.qq.com',
         // 开启安全连接，这个开不开都可以，对安全性有要求的话，最好开启
         secureConnection: true,
         // SMTP协议端口号
