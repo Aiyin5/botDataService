@@ -60,3 +60,33 @@ exports.findByBotId = (req, res) =>{
         }
     });
 };
+exports.findByPage = (req, res) =>{
+    console.log("rv post logInfo findByBot")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    const where = req.body;
+    if(!where.bot_id){
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    Log.findByPage(where, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        /*else res.send(data);*/
+        else {
+            res.send({
+                ActionType: "OK",
+                data: data
+            })
+        }
+    });
+};

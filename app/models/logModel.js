@@ -27,4 +27,24 @@ LogInfo.find = async (where,result) =>{
         result(null, err);
     }
 }
+
+LogInfo.findByPage = async (Item,result)=>{
+    let where ={
+        "bot_id":Item.bot_id
+    };
+    let page = Item.page;
+    let number = Item.pageSize;
+    let searchCondition={
+        "flag":false,
+        "word":""
+    };
+    try {
+        let res = await sql.selectByPage(tablename,where,page,number,searchCondition);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
 module.exports = LogInfo;
