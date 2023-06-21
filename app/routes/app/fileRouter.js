@@ -2,11 +2,9 @@ const files = require("../../controllers/app/fileSysController");
 const newfile = require("../../controllers/app/fileController");
 const multer = require("multer");
 module.exports = app => {
-    const files = require("../../controllers/app/fileSysController");
-    const newfile = require("../../controllers/app/fileController");
-    const multer = require('multer');
     const upload = multer({
-        dest: 'uploads/' // 指定上传文件的目录
+        dest: 'uploads/', // 指定上传文件的目录
+        limits: { fileSize: 10 * 1024 * 1024 }
     });
     var router = require("express").Router();
 
