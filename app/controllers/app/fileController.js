@@ -79,7 +79,7 @@ exports.create =async (req, res) => {
             console.log(err.message || err)
             res.status(500).send({
                 message:
-                    "文件上传失败，请稍后再尝试"
+                    "暂不支持word2007及之前前的doc文件解析"
             });
         }
     }
