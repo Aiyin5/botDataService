@@ -1,11 +1,12 @@
 const File = require("../../models/fileModel.js");
-
+const {DocxLoader} = require ("langchain/document_loaders/fs/docx");
 const {SecretId,SecretKey}= require("../../config/config.json");
 const cosInstance = require("../../util/cosFunction");
 let cos = new cosInstance(SecretId,SecretKey);
 const AdmZip = require('adm-zip');
 const path = require("path");
-const fs = require("fs"); //引入查看zip文件的包
+const fs = require("fs");
+const {PDFLoader} = require("langchain/document_loaders/fs/pdf"); //引入查看zip文件的包
 function removeEmoji (content) {
     let conByte = new TextEncoder("utf-8").encode(content);
     for (let i = 0; i < conByte.length; i++) {
@@ -31,7 +32,7 @@ function doc2text(path){
     return str;
 }
 
-// Create and Save a new Tutorial
+// Create and Save new file
 exports.create =async (req, res) => {
     console.log("rec new file create")
     // Validate request
@@ -41,41 +42,89 @@ exports.create =async (req, res) => {
         });
         return
     }
-    let bot_file_name=req.body.bot_id+req.body.file_name;
-    try{
-        await cos.upload(req.file.path,bot_file_name)
-        let textContent = doc2text(req.file.path)
-        textContent = removeEmoji(textContent)
-        //console.log(req.body.content)
-        const file = new File({
-            bot_id: req.body.bot_id,
-            file_name: req.body.file_name,
-            type: 0,
-            content: textContent,
-        });
-
-        // Save Tutorial in the database
-        await File.create(file, (err, data) => {
-            if (err)
-                res.status(500).send({
-                    message:
-                        err.message || "Some error occurred while creating the File."
-                });
-            else {
-                res.send({
-                    ActionType: "OK"
-                });
-            }
-        });
+    //docx
+    if(!req.body.file_type || req.body.file_type=="docx"){
+        let bot_file_name=req.body.bot_id+req.body.file_name;
+        try{
+            const loader = new DocxLoader(
+                req.file.path
+            );
+            let textContent =  await loader.load();
+            textContent = removeEmoji(textContent)
+            await cos.upload(req.file.path,bot_file_name)
+            //console.log(req.body.content)
+            const file = new File({
+                bot_id: req.body.bot_id,
+                file_name: req.body.file_name,
+                type: 0,
+                content: textContent,
+            });
+            // Save Tutorial in the database
+            await File.create(file, (err, data) => {
+                if (err){
+                    console.log(err.message || err)
+                    res.status(500).send({
+                        message:
+                            "文件上传失败，请稍后再尝试"
+                    });
+                }
+                else {
+                    res.send({
+                        ActionType: "OK"
+                    });
+                }
+            });
+        }
+        catch (err){
+            console.log(err.message || err)
+            res.status(500).send({
+                message:
+                    "文件上传失败，请稍后再尝试"
+            });
+        }
     }
-    catch (err){
-        res.status(500).send({
-            message:
-                err.message || "Some error occurred while creating the File."
-        });
+    //pdf
+    else {
+        let bot_file_name=req.body.bot_id+req.body.file_name;
+        try{
+            const loader = new PDFLoader(
+                req.file.path,{
+                    splitPages: false,
+                });
+            let textContent =  await pdfloader.load();
+            textContent = removeEmoji(textContent)
+            await cos.upload(req.file.path,bot_file_name)
+            //console.log(req.body.content)
+            const file = new File({
+                bot_id: req.body.bot_id,
+                file_name: req.body.file_name,
+                type: 0,
+                content: textContent,
+            });
+            await File.create(file, (err, data) => {
+                if (err){
+                    console.log(err.message || err)
+                    res.status(500).send({
+                        message:
+                            "文件上传失败，请稍后再尝试"
+                    });
+                }
+
+                else {
+                    res.send({
+                        ActionType: "OK"
+                    });
+                }
+            });
+        }
+        catch (err){
+            console.log(err.message || err)
+            res.status(500).send({
+                message:
+                    "文件上传失败，请稍后再尝试"
+            });
+        }
     }
-
-
 };
 
 exports.findByFile = (req, res) =>{
@@ -205,29 +254,18 @@ exports.download = async (req, res) => {
     }
     let bot_file_name=req.body.bot_id+req.body.file_name;
     console.log(req.body.file_name)
-    const filePath = path.join(__dirname, 'file', req.body.file_name);
     try {
-        let flag = await cos.getItem(filePath,bot_file_name)
+        let flag = await cos.getObjectUrl(bot_file_name)
         console.log(flag)
-        if(flag.statusCode===200){
-            const stat = fs.statSync(filePath);
-            res.setHeader('Content-Disposition', 'attachment; filename=' + req.body.file_name);
-            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-            res.setHeader('Content-Length',stat.size)
-            const fileStream = fs.createReadStream(filePath);
-            fileStream.pipe(res);
-        }
-        else {
-            res.status(500).send({
-                message:
-                    "Some error occurred while download File."
-            });
-        }
+        res.send({
+            ActionType: "OK",
+            downloadUrl:flag
+        })
     }
     catch (err){
         res.status(500).send({
             message:
-                err.message || "Some error occurred while download File."
+                "下载出错，请稍后再试"
         });
     }
 

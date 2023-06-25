@@ -62,5 +62,18 @@ class cosInstance {
             return err
         }
     }
+    async getObjectUrl(name){
+        try {
+            let data = await this.CosItem.getObjectUrl({
+                Bucket: 'douyin-1316443200', /* 必须 */
+                Region: 'ap-shanghai',    /* 必须 */
+                Key: name,              /* 必须 */
+                Sign: true,
+            });
+            return data;
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }
 module.exports = cosInstance;

@@ -373,13 +373,15 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 文件信息 bot_id //机器人id  id//文件id
+     *         description: 文件信息 bot_id //机器人id file_type:docx/pdf  file_name //文件名称   file:文件
      *         required: true
      *         content:
      *           multipart/form-data:
      *             schema:
      *               type: object
      *               properties:
+     *                 file_type:
+     *                   type: string
      *                 bot_id:
      *                   type: string
      *                 file_name:
