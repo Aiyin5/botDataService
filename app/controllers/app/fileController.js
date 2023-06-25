@@ -98,7 +98,7 @@ exports.create =async (req, res) => {
             const file = new File({
                 bot_id: req.body.bot_id,
                 file_name: req.body.file_name,
-                type: 0,
+                type: 1,
                 content: textContent,
             });
             await File.create(file, (err, data) => {
@@ -109,7 +109,6 @@ exports.create =async (req, res) => {
                             "文件上传失败，请稍后再尝试"
                     });
                 }
-
                 else {
                     res.send({
                         ActionType: "OK"

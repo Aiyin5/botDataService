@@ -481,12 +481,14 @@ module.exports = app => {
      *        200:
      *          description: successful operation
      *          content:
-     *            application/vnd.openxmlformats-officedocument.wordprocessingml.document:
+     *            application/json:
      *              schema:
      *                type: object
      *                properties:
-     *                  file:
-     *                    format: binary
+     *                  ActionType:
+     *                    type: string
+     *                  downloadUrl:
+     *                    type: string
      *        500:
      *          description: Internal Error
      *        401:
