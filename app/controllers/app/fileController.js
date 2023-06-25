@@ -92,6 +92,7 @@ exports.create =async (req, res) => {
                     splitPages: false,
                 });
             let textContent =  await loader.load();
+            console.log(textContent)
             textContent = removeEmoji(textContent[0].pageContent)
             await cos.upload(req.file.path,bot_file_name)
             //console.log(req.body.content)
@@ -120,7 +121,7 @@ exports.create =async (req, res) => {
             console.log(err.message || err)
             res.status(500).send({
                 message:
-                    "文件上传失败，请稍后再尝试"
+                    "暂不支持解析图片格式的pdf"
             });
         }
     }
