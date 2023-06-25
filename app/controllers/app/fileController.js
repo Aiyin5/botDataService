@@ -50,7 +50,7 @@ exports.create =async (req, res) => {
                 req.file.path
             );
             let textContent =  await loader.load();
-            textContent = removeEmoji(textContent)
+            textContent = removeEmoji(textContent[0].pageContent)
             await cos.upload(req.file.path,bot_file_name)
             //console.log(req.body.content)
             const file = new File({
@@ -92,7 +92,7 @@ exports.create =async (req, res) => {
                     splitPages: false,
                 });
             let textContent =  await pdfloader.load();
-            textContent = removeEmoji(textContent)
+            textContent = removeEmoji(textContent[0].pageContent)
             await cos.upload(req.file.path,bot_file_name)
             //console.log(req.body.content)
             const file = new File({

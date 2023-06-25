@@ -6,15 +6,15 @@ async function test(){
     const loader = new DocxLoader(
         "../config/刃长和刃部跳动测量规范.docx"
     );
-    const pdfloader = new PDFLoader("../config/2023-6-17会议.pdf",{
+/*    const pdfloader = new PDFLoader("../config/2023-6-17会议.pdf",{
         splitPages: false,
     });
-    const pdf = await pdfloader.load();
-    //const docs = await loader.load();
-    //console.log(docs)
-    console.log(pdf)
+    const pdf = await pdfloader.load();*/
+    const docs = await loader.load();
+    console.log(docs)
+    //console.log(pdf)
 }
-//test()
+test()
  async function test02(){
      let cos = new cosInstance(SecretId,SecretKey);
      let flag = await cos.getObjectUrl("0victor.doc")
@@ -29,4 +29,4 @@ async function test(){
          console.log(downloadUrl)
      }
  }
- test02()
+// test02()
