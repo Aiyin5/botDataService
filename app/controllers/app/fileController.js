@@ -92,7 +92,6 @@ exports.create =async (req, res) => {
                     splitPages: false,
                 });
             let textContent =  await loader.load();
-            console.log(textContent)
             textContent = removeEmoji(textContent[0].pageContent)
             await cos.upload(req.file.path,bot_file_name)
             //console.log(req.body.content)
