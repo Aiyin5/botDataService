@@ -91,7 +91,7 @@ exports.create =async (req, res) => {
                 req.file.path,{
                     splitPages: false,
                 });
-            let textContent =  await pdfloader.load();
+            let textContent =  await loader.load();
             textContent = removeEmoji(textContent[0].pageContent)
             await cos.upload(req.file.path,bot_file_name)
             //console.log(req.body.content)
