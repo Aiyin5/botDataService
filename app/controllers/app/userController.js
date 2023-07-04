@@ -25,7 +25,7 @@ exports.create = (req, res) => {
     // Save Tutorial in the database
     User.create(user, (err, data) => {
         if (err)
-            res.status(401).send({
+            res.status(500).send({
                 message:
                     err.message || "Some error occurred while creating the User."
             });
@@ -63,7 +63,8 @@ exports.createNew = (req, res) => {
         console.log(arr.get(mail).randomNumbers)
         console.log(arr.get(mail).time)
         if(arr.get(mail).randomNumbers!=emailCode || (curTime-arr.get(mail).time>600000)){
-            res.status(401).send({
+            res.status(200).send({
+                ActionType: "False",
                 ERROR: "验证码错误",
             });
         }
@@ -104,7 +105,8 @@ exports.createNew = (req, res) => {
 
     }
     else {
-        res.status(401).send({
+        res.status(200).send({
+            ActionType: "False",
             ERROR: "验证码错误",
         });
     }
@@ -350,7 +352,8 @@ exports.aicheck =async (req, res) => {
     try {
         let dataRes =await User.findEmail(where)
         if(dataRes.length > 0){
-            res.status(400).send({
+            res.status(200).send({
+                ActionType: "False",
                 Error: "域名重复"
             })
         }
@@ -388,7 +391,8 @@ exports.emailCheck =async (req, res) => {
         try {
             let dataRes =await User.findEmail(where)
             if(dataRes.length > 0){
-                res.status(401).send({
+                res.status(200).send({
+                    ActionType: "False",
                     Error: "邮箱重复"
                 })
             }
