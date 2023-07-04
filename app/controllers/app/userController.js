@@ -291,7 +291,8 @@ exports.captcha =async (req, res) => {
     try {
         let dataRes =await User.findEmail(where)
         if(dataRes.length > 0 && register===1){
-            res.status(400).send({
+            res.status(200).send({
+                ActionType: "False",
                 Error: "邮箱重复"
             })
         }
