@@ -349,7 +349,7 @@ exports.aicheck =async (req, res) => {
     try {
         let dataRes =await User.findEmail(where)
         if(dataRes.length > 0){
-            res.status(401).send({
+            res.status(400).send({
                 Error: "域名重复"
             })
         }
