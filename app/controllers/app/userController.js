@@ -38,6 +38,7 @@ exports.create = (req, res) => {
             res.header("Authorization", token)
             res.send({
                 ActionType: "OK",
+                message:"success"
             });
         }
     });
@@ -52,12 +53,8 @@ exports.createNew = (req, res) => {
     }
     let mail=req.body.email;
     let emailCode=req.body.email_check;
-
     let curTime = Date.now();
-    console.log(curTime)
     let arr = instance.getMap();
-    console.log(mail)
-    console.log(emailCode)
 
     if(arr.has(mail)){
         console.log(arr.get(mail).randomNumbers)
@@ -65,7 +62,7 @@ exports.createNew = (req, res) => {
         if(arr.get(mail).randomNumbers!=emailCode || (curTime-arr.get(mail).time>600000)){
             res.status(200).send({
                 ActionType: "False",
-                ERROR: "验证码错误",
+                message: "验证码错误",
             });
         }
         else {
@@ -78,7 +75,6 @@ exports.createNew = (req, res) => {
                 email: req.body.email,
                 password: req.body.password,
                 bot_id: req.body.email,
-
                 org_id: req.body.org_id,
                 level: 2
             });
@@ -98,6 +94,7 @@ exports.createNew = (req, res) => {
                     res.header("Authorization", token)
                     res.send({
                         ActionType: "OK",
+                        message:"success"
                     });
                 }
             });
@@ -107,7 +104,7 @@ exports.createNew = (req, res) => {
     else {
         res.status(200).send({
             ActionType: "False",
-            ERROR: "验证码错误",
+            message: "验证码错误",
         });
     }
 };
@@ -138,6 +135,7 @@ exports.findByBot = (req, res) =>{
         else {
             res.send({
                 ActionType: "OK",
+                message: "success",
                 data: data
             })
         }
@@ -159,24 +157,24 @@ exports.findByWhere = (req, res) => {
     }
     if(where.checkType ==="Captcha" && (!where.email_check ||!where.email) ){
         if(!where.email_check){
-            res.status(400).send({
+            res.status(200).send({
                 message: "验证码不能为空!"
             });
         }
         else {
-            res.status(400).send({
+            res.status(200).send({
                 message: "用户信息不能为空!"
             });
         }
     }
     else if(where.checkType ==="Password"&& ( !where.password || !where.email)){
         if(!where.email_check){
-            res.status(400).send({
+            res.status(200).send({
                 message: "验证码不能为空!"
             });
         }
         else {
-            res.status(400).send({
+            res.status(200).send({
                 message: "用户信息不能为空!"
             });
         }
@@ -195,9 +193,9 @@ exports.findByWhere = (req, res) => {
             /*else res.send(data);*/
             else {
                 if (data.length === 0) {
-                    res.status(400).send({
+                    res.status(200).send({
                         code: "-1",
-                        error: "用户名密码不匹配"
+                        message: "用户名密码不匹配"
                     })
                 } else {
                     //生成token
@@ -209,6 +207,7 @@ exports.findByWhere = (req, res) => {
                     res.header("Authorization", token)
                     res.send({
                         ActionType: "OK",
+                        message: "success",
                         data: {
                             name: data[0].name,
                             email: data[0].email,
@@ -227,8 +226,9 @@ exports.findByWhere = (req, res) => {
         console.log(curTime)
         let arr = instance.getMap();
         if(!arr.has(where.email) || arr.get(where.email).randomNumbers!=emailCode || (curTime-arr.get(where.email).time>600000)){
-            res.status(401).send({
-                ERROR: "验证码错误",
+            res.status(200).send({
+                ActionType: "False",
+                message: "验证码错误",
             });
         }
         else {
@@ -245,7 +245,7 @@ exports.findByWhere = (req, res) => {
                 /*else res.send(data);*/
                 else {
                     if (data.length === 0) {
-                        res.status(400).send({
+                        res.status(200).send({
                             code: "-1",
                             error: "用户名密码不匹配"
                         })
@@ -255,10 +255,10 @@ exports.findByWhere = (req, res) => {
                             _botid:data[0].bot_id,
                             email: data[0].email
                         }, "2d")
-
                         res.header("Authorization", token)
                         res.send({
                             ActionType: "OK",
+                            message: "success",
                             data: {
                                 name: data[0].name,
                                 email: data[0].email,
@@ -295,7 +295,7 @@ exports.captcha =async (req, res) => {
         if(dataRes.length > 0 && register===1){
             res.status(200).send({
                 ActionType: "False",
-                Error: "邮箱重复"
+                message: "邮箱重复"
             })
         }
         else {
@@ -317,7 +317,8 @@ exports.captcha =async (req, res) => {
                 console.log("sucess")
                 instance.addItem(email,usercodeinfo)
                 res.send({
-                    ActionType: "OK"
+                    ActionType: "OK",
+                    message: "success"
                 })
             }
             catch (err){
@@ -354,12 +355,13 @@ exports.aicheck =async (req, res) => {
         if(dataRes.length > 0){
             res.status(200).send({
                 ActionType: "False",
-                Error: "域名重复"
+                message: "域名重复"
             })
         }
         else{
             res.send({
-                ActionType: "OK"
+                ActionType: "OK",
+                message: "success"
             })
         }
     }
@@ -393,12 +395,13 @@ exports.emailCheck =async (req, res) => {
             if(dataRes.length > 0){
                 res.status(200).send({
                     ActionType: "False",
-                    Error: "邮箱重复"
+                    message: "邮箱重复"
                 })
             }
             else{
                 res.send({
-                    ActionType: "OK"
+                    ActionType: "OK",
+                    message: "success"
                 })
             }
         }
