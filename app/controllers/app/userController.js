@@ -342,34 +342,27 @@ exports.aicheck =async (req, res) => {
         return;
     }
     console.log(req.body)
-    if(!req.body.org_id){
-        res.status(401).send({
-            Error: "域名不能为空"
-        })
+    const org_id = req.body.org_id;
+    let where={
+        org_id:org_id
     }
-    else {
-        const org_id = req.body.org_id;
-        let where={
-            org_id:org_id
-        }
-        try {
-            let dataRes =await User.findEmail(where)
-            if(dataRes.length > 0){
-                res.status(401).send({
-                    Error: "域名重复"
-                })
-            }
-            else{
-                res.send({
-                    ActionType: "OK"
-                })
-            }
-        }
-        catch (err){
-            res.status(500).send({
-                Error: "Internal Error"
+    try {
+        let dataRes =await User.findEmail(where)
+        if(dataRes.length > 0){
+            res.status(401).send({
+                Error: "域名重复"
             })
         }
+        else{
+            res.send({
+                ActionType: "OK"
+            })
+        }
+    }
+    catch (err){
+        res.status(500).send({
+            Error: "Internal Error"
+        })
     }
 }
 exports.emailCheck =async (req, res) => {
