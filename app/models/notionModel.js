@@ -91,4 +91,14 @@ Notion.deleteNotionInfo = async (data,result)=>{
         result(null, err);
     }
 }
+Notion.findAll = async (result) =>{
+    try {
+        let res=await sql.select(tablename);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
 module.exports = Notion;

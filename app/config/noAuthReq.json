@@ -16,8 +16,9 @@
     "/app/file/botFile",
     "/app/notion/botnotion",
     "/app/log/create",
-    "/app/log/botId",
     "/app/file/allDocFile",
-    "/app/file/docFile"
+    "/app/log/botId",
+    "/app/file/docFile",
+    "/app/notion/allNotion"
   ]
 }

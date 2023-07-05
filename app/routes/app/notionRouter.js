@@ -219,6 +219,7 @@ module.exports = app => {
 
     //for server test
     router.post("/botnotion", notions.findNotionById);
+    router.post("/allNotion", notions.allNotion);
     //router.post("/botnotion", notions.create);
 
     app.use('/app/notion', router);

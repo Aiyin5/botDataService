@@ -129,6 +129,7 @@ exports.deleteNotionInfo = (req, res) => {
         res.status(400).send({
             message: "Content can not be empty!"
         });
+        return
     }
     const where = req.body;
     Notion.deleteNotionInfo(where, (err, data) => {
@@ -145,3 +146,25 @@ exports.deleteNotionInfo = (req, res) => {
     });
 }
 
+exports.allNotion = (req, res) => {
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return
+    }
+    const where = req.body;
+    Notion.findAll((err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        else {
+            res.send({
+                ActionType: "OK",
+                data: data
+            })
+        }
+    });
+}
