@@ -1,5 +1,22 @@
 const File = require("../../models/fileSysModel.js");
+const {VdURL} = require('../../config/config.json')
+const AxiosTool = require("../../util/axiosTool");
+const axiosIns=new AxiosTool(VdURL);
 // Create and Save a new Tutorial
+function removeEmoji (content) {
+    let conByte = new TextEncoder("utf-8").encode(content);
+    for (let i = 0; i < conByte.length; i++) {
+        if ((conByte[i] & 0xF8) == 0xF0) {
+            for (let j = 0; j < 4; j++) {
+                conByte[i+j]=0x30;
+            }
+            i += 3;
+        }
+    }
+    content = new TextDecoder("utf-8").decode(conByte);
+    return content.replaceAll("0000", "");
+}
+
 exports.create = (req, res) => {
     console.log("rec file create")
     // Validate request
@@ -8,28 +25,52 @@ exports.create = (req, res) => {
             message: "Content can not be empty!"
         });
     }
-
+    let content = removeEmoji(req.body.content)
     //console.log(req.body.content)
     const file = new File({
         bot_id: req.body.bot_id,
         doc_name: req.body.doc_name,
         type: req.body.type,
-        content: req.body.content,
+        content: content
     });
-
     // Save Tutorial in the database
-    File.create(file, (err, data) => {
+    File.create(file, async (err, data) => {
         if (err)
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while creating the File."
             });
         else {
-            res.send({
-                ActionType: "OK",
-            });
+            try {
+               let vdRes= await axiosIns.post("/addVector",
+                    {
+                        "bot_id": req.body.bot_id,
+                        "doc_name":req.body.doc_name,
+                        "doc_data": content
+                    });
+
+                if(vdRes.ActionType=="OK"){
+                    res.send({
+                        ActionType: "OK",
+                    });
+                }
+                else {
+                    res.send({
+                        ActionType: "False",
+                        message:"数据更新出错"
+                    });
+                }
+            }
+            catch (err){
+                res.send({
+                    ActionType: "False",
+                    message:"数据更新出错"
+                });
+            }
         }
     });
+
+
 };
 exports.update= (req, res) =>{
     let where=req.body
@@ -146,16 +187,59 @@ exports.deleteFileInfo = (req, res) => {
         });
     }
     const where = req.body;
-    File.deleteFileInfo(where, (err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving tutorials."
-            });
-        else {
-            res.send({
-                ActionType: "OK",
-            })
-        }
-    });
+    //console.log(where)
+    try {
+        File.find(where, async (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while retrieving tutorials."
+                });
+            /*else res.send(data);*/
+            else {
+                if(data.length<1){
+                    res.send({
+                        ActionType: "False",
+                        message:"未找到需要删除的内容"
+                    });
+                    return
+                }
+                else {
+                    let vdRes= await axiosIns.post("/deleteVector",
+                        {
+                            "bot_id": data[0].bot_id,
+                            "doc_name":data[0].doc_name,
+                            "doc_data": data[0].content
+                        });
+
+                    if(vdRes.ActionType=="OK"){
+                        File.deleteFileInfo(where, (err, data) => {
+                            if (err)
+                                res.status(500).send({
+                                    message:
+                                        err.message || "Some error occurred while retrieving tutorials."
+                                });
+                            else {
+                                res.send({
+                                    ActionType: "OK",
+                                })
+                            }
+                        });
+                    }
+                    else {
+                        res.send({
+                            ActionType: "False",
+                            message:"删除失败"
+                        })
+                    }
+                }
+            }
+        });
+    }
+    catch (err){
+        res.send({
+            ActionType: "False",
+            message:"删除失败"
+        });
+    }
 }
