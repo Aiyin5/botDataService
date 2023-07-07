@@ -1,12 +1,14 @@
 const File = require("../../models/fileModel.js");
 const {DocxLoader} = require ("langchain/document_loaders/fs/docx");
-const {SecretId,SecretKey}= require("../../config/config.json");
+const {SecretId,SecretKey,VdURL}= require("../../config/config.json");
 const cosInstance = require("../../util/cosFunction");
 let cos = new cosInstance(SecretId,SecretKey);
 const AdmZip = require('adm-zip');
 const path = require("path");
 const fs = require("fs");
 const {PDFLoader} = require("langchain/document_loaders/fs/pdf"); //引入查看zip文件的包
+const AxiosTool = require("../../util/axiosTool");
+const axiosIns=new AxiosTool(VdURL);
 function removeEmoji (content) {
     let conByte = new TextEncoder("utf-8").encode(content);
     for (let i = 0; i < conByte.length; i++) {
@@ -60,7 +62,7 @@ exports.create =async (req, res) => {
                 content: textContent,
             });
             // Save Tutorial in the database
-            await File.create(file, (err, data) => {
+            await File.create(file, async (err, data) => {
                 if (err){
                     console.log(err.message || err)
                     res.status(500).send({
@@ -69,9 +71,32 @@ exports.create =async (req, res) => {
                     });
                 }
                 else {
-                    res.send({
-                        ActionType: "OK"
-                    });
+                    try {
+                        let vdRes= await axiosIns.post("/addVector",
+                            {
+                                "bot_id": req.body.bot_id,
+                                "doc_name":req.body.file_name,
+                                "doc_data": textContent
+                            });
+
+                        if(vdRes.ActionType=="OK"){
+                            res.send({
+                                ActionType: "OK",
+                            });
+                        }
+                        else {
+                            res.send({
+                                ActionType: "False",
+                                message:"数据更新出错"
+                            });
+                        }
+                    }
+                    catch (err){
+                        res.send({
+                            ActionType: "False",
+                            message:"数据更新出错"
+                        });
+                    }
                 }
             });
         }
@@ -101,7 +126,7 @@ exports.create =async (req, res) => {
                 type: 1,
                 content: textContent,
             });
-            await File.create(file, (err, data) => {
+            await File.create(file, async (err, data) => {
                 if (err){
                     console.log(err.message || err)
                     res.status(500).send({
@@ -110,9 +135,33 @@ exports.create =async (req, res) => {
                     });
                 }
                 else {
-                    res.send({
-                        ActionType: "OK"
-                    });
+                    try {
+                        let vdRes= await axiosIns.post("/addVector",
+                            {
+                                "bot_id": req.body.bot_id,
+                                "doc_name":req.body.file_name,
+                                "doc_data": textContent
+                            });
+
+                        if(vdRes.ActionType=="OK"){
+                            res.send({
+                                ActionType: "OK",
+                            });
+                        }
+                        else {
+                            res.send({
+                                ActionType: "False",
+                                message:"数据更新出错"
+                                //
+                            });
+                        }
+                    }
+                    catch (err){
+                        res.send({
+                            ActionType: "False",
+                            message:"数据更新出错"
+                        });
+                    }
                 }
             });
         }
@@ -219,28 +268,62 @@ exports.docDelete = async (req, res) => {
         return
     }
     const where = req.body;
-    let bot_file_name =  req.body.bot_id+req.body.file_name;
-    try{
-        await cos.deleteObject(bot_file_name)
-        await File.deleteFileInfo(where, (err, data) => {
-            if (err)
-                res.status(500).send({
-                    message:
-                        err.message || "Some error occurred while delete File."
-                });
-            else {
+    File.find(where, async (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "删除失败，内部服务器错误."
+            });
+        /*else res.send(data);*/
+        else {
+            if(data.length<1){
                 res.send({
-                    ActionType: "OK"
-                })
+                    ActionType: "False",
+                    message:"未找到需要删除的内容"
+                });
+                return
             }
-        });
-    }
-    catch (err) {
-        res.status(500).send({
-            message:
-                err.message || "Some error occurred while delete File."
-        });
-    }
+            else {
+                try {
+                    let vdRes= await axiosIns.post("/deleteVector",
+                        {
+                            "bot_id": data[0].bot_id,
+                            "doc_name":data[0].file_name,
+                            "doc_data": data[0].file_content
+                        });
+                    if(vdRes.ActionType=="OK"){
+                        let bot_file_name =  req.body.bot_id+data[0].file_name;
+                        await cos.deleteObject(bot_file_name)
+                        File.deleteFileInfo(where, (err, data) => {
+                            if (err)
+                                res.status(500).send({
+                                    message:
+                                        err.message || "删除失败，内部服务器错误"
+                                });
+                            else {
+                                res.send({
+                                    ActionType: "OK",
+                                })
+                            }
+                        });
+                    }
+                    else {
+                        res.send({
+                            ActionType: "False",
+                            message:"删除失败"
+                        })
+                    }
+                }
+                catch (err){
+                    console.log(err)
+                    res.send({
+                        ActionType: "False",
+                        message:"删除失败"
+                    })
+                }
+            }
+        }
+    });
 }
 
 exports.download = async (req, res) => {
