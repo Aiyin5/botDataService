@@ -412,3 +412,44 @@ exports.emailCheck =async (req, res) => {
         }
     }
 }
+
+exports.idCheck =async (req, res) => {
+    console.log("rv post idCheck")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Email can not be empty!"
+        });
+        return;
+    }
+    if(!req.body.id){
+        res.status(400).send({
+            Error: "id不能为空"
+        })
+    }
+    else {
+        const id = req.body.id;
+        let where={
+            bot_id:id
+        }
+        try {
+            let dataRes =await User.findEmail(where)
+            if(dataRes.length > 0){
+                res.send({
+                    ActionType: "OK",
+                    message: "id存在"
+                })
+            }
+            else{
+                res.send({
+                    ActionType: "False",
+                    message: "id不存在"
+                })
+            }
+        }
+        catch (err){
+            res.status(500).send({
+                Error: "Internal Error"
+            })
+        }
+    }
+}

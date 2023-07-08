@@ -19,6 +19,7 @@
     "/app/file/allDocFile",
     "/app/log/botId",
     "/app/file/docFile",
+    "/app/user/idCheck",
     "/app/notion/allNotion"
   ]
 }

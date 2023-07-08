@@ -1,9 +1,6 @@
+const users = require("../../controllers/app/userController");
 module.exports = app => {
-    const users = require("../../controllers/app/userController");
-
     var router = require("express").Router();
-
-
     /**,
      * @swagger
      * /app/user/registerNew:
@@ -287,14 +284,45 @@ module.exports = app => {
      *          description: InternalError
      *        400:
      *          description: 请求信息不全
-     *        401:
-     *          description: 邮箱重复
      * */
     router.post("/emailCheck", users.emailCheck);
 
 
-
-
+    /**,
+     * @swagger
+     * /app/user/idCheck:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: id重复性性检测检测
+     *      requestBody:
+     *         description: id信息
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 id:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                    example: OK
+     *                    description: OK证明id存在,False代表id不存在.
+     *        500:
+     *          description: InternalError
+     *        400:
+     *          description: 请求信息不全
+     * */
+    router.post("/idCheck", users.idCheck);
 
     app.use('/app/user', router);
 };
