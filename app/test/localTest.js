@@ -3,16 +3,18 @@
  const cosInstance = require("../util/cosFunction")
  const {SecretId,SecretKey}= require("../config/config.json");
 async function test(){
-    const loader = new DocxLoader(
-        "../config/刃长和刃部跳动测量规范.docx"
-    );
-/*    const pdfloader = new PDFLoader("../config/2023-6-17会议.pdf",{
-        splitPages: false,
-    });
-    const pdf = await pdfloader.load();*/
-    const docs = await loader.load();
-    console.log(docs)
-    //console.log(pdf)
+//     const loader = new DocxLoader(
+//         "../config/刃长和刃部跳动测量规范.docx"
+//     );
+// /*    const pdfloader = new PDFLoader("../config/2023-6-17会议.pdf",{
+//         splitPages: false,
+//     });
+//     const pdf = await pdfloader.load();*/
+//     const docs = await loader.load();
+//     console.log(docs)
+//     //console.log(pdf)
+    let str="d1af5a6f4a63f"
+    console.log(str.length)
 }
 test()
  async function test02(){

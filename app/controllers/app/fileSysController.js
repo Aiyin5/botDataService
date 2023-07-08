@@ -80,21 +80,73 @@ exports.update= (req, res) =>{
         });
     }
     else {
-        File.update(where, (err, data) => {
-            if (err)
+        File.update(where, async (err, data) => {
+            if (err){
                 res.status(500).send({
                     message:
                         err.message || "Some error occurred while retrieving tutorials."
                 });
-            /*else res.send(data);*/
+            }
             else {
-                res.send({
-                    ActionType: "OK"
-                })
+                try {
+                    let codition={
+                        "id":where.id
+                    }
+                    File.find(codition, async (err, redata) => {
+                        if (err){
+                            res.status(500).send({
+                                message:
+                                    err.message || "Some error occurred while retrieving tutorials."
+                            });
+                            return
+                        }
+                        try {
+                            let vdRes= await axiosIns.post("/updateVector",
+                                {
+                                    "bot_id": redata[0].bot_id,
+                                    "doc_name":req.body.doc_name,
+                                    "doc_data":req.body.content
+                                });
+                            if(vdRes.ActionType=="OK"){
+                                res.send({
+                                    ActionType: "OK",
+                                });
+                            }
+                            else {
+                                res.send({
+                                    ActionType: "False",
+                                    message:"数据更新出错"
+                                });
+                            }
+                        }
+                        catch (err){
+                            if(req.body.content.length >8000){
+                                res.send({
+                                    ActionType: "OK",
+                                    message:"文字太长，后台处理中"
+                                });
+                            }
+                            else {
+                                res.send({
+                                    ActionType: "False",
+                                    message:"数据更新出错"
+                                });
+                            }
+                        }
+
+                    })
+                }
+                catch (err){
+                    res.send({
+                        ActionType: "False",
+                        message:"数据更新出错"
+                    });
+                }
             }
         });
     }
 }
+
 exports.findByFile = (req, res) =>{
     console.log("rv post findByFile")
     if (!req.body) {
