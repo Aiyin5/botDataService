@@ -2,6 +2,9 @@ const Bot = require("../../models/botModel")
 const User = require("../../models/userModel");
 const JWT = require("../../util/JWT");
 const sql = require("../../models/db");
+const {VdURL} = require('../../config/config.json')
+const AxiosTool = require("../../util/axiosTool");
+const axiosIns=new AxiosTool(VdURL);
 
 exports.findById = (req, res) => {
     if (!req.body) {
@@ -106,16 +109,40 @@ exports.addMultPreInfo = (req, res) => {
         });
         return;
     }
-    Bot.addMultPreInfo(botData, (err, data) => {
+    Bot.addMultPreInfo(botData, async (err, data) => {
         if (err)
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while retrieving tutorials."
             });
         else {
-            res.send({
-                ActionType: "OK",
-            })
+            try {
+
+                let vdRes= await axiosIns.post("/addSt",
+                    {
+                        "id":data.insertId.toString(),
+                        "bot_id": botData[0].bot_id,
+                        "question":botData[0].prompt,
+                        "answer": botData[0].completion
+                    });
+                if(vdRes.ActionType=="OK"){
+                    res.send({
+                        ActionType: "OK",
+                    });
+                }
+                else {
+                    res.send({
+                        ActionType: "False",
+                        message:"数据更新出错"
+                    });
+                }
+            }
+            catch (err){
+                res.send({
+                    ActionType: "False",
+                    message:"数据更新出错"
+                });
+            }
         }
     });
 }
@@ -128,16 +155,40 @@ exports.deletPreInfo = (req, res) => {
         });
     }
     const where = req.body;
-    Bot.deletPreInfo(where, (err, data) => {
+    Bot.deletPreInfo(where, async (err, data) => {
         if (err)
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while retrieving tutorials."
             });
         else {
-            res.send({
-                ActionType: "OK",
-            })
+            try {
+                let vdRes= await axiosIns.post("/deleteSt",
+                    {
+                        "id":req.body.id.toString(),
+                        "bot_id": req.body.bot_id,
+                        "question":"",
+                        "answer": ""
+                    });
+
+                if(vdRes.ActionType=="OK"){
+                    res.send({
+                        ActionType: "OK",
+                    });
+                }
+                else {
+                    res.send({
+                        ActionType: "False",
+                        message:"数据更新出错"
+                    });
+                }
+            }
+            catch (err){
+                res.send({
+                    ActionType: "False",
+                    message:"数据更新出错"
+                });
+            }
         }
     });
 }
@@ -150,16 +201,40 @@ exports.updatePreInfo = (req, res) => {
     }
     const botData = req.body;
     console.log(botData)
-    Bot.updatePreInfo(botData, (err, data) => {
+    Bot.updatePreInfo(botData, async (err, data) => {
         if (err)
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while retrieving tutorials."
             });
         else {
-            res.send({
-                ActionType: "OK",
-            })
+            try {
+                let vdRes= await axiosIns.post("/updateSt",
+                    {
+                        "id":req.body.id.toString(),
+                        "bot_id": req.body.bot_id,
+                        "question":req.body.prompt,
+                        "answer": req.body.completion
+                    });
+
+                if(vdRes.ActionType=="OK"){
+                    res.send({
+                        ActionType: "OK",
+                    });
+                }
+                else {
+                    res.send({
+                        ActionType: "False",
+                        message:"数据更新出错"
+                    });
+                }
+            }
+            catch (err){
+                res.send({
+                    ActionType: "False",
+                    message:"数据更新出错"
+                });
+            }
         }
     });
 }

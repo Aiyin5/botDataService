@@ -2,6 +2,9 @@
  const { PDFLoader }= require ("langchain/document_loaders/fs/pdf");
  const cosInstance = require("../util/cosFunction")
  const {SecretId,SecretKey}= require("../config/config.json");
+ const removeEmoji = require("../util/dataTransform");
+ const sql = require("../models/db");
+ const Bot = require("../models/botModel")
 async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
@@ -16,7 +19,7 @@ async function test(){
     let str="d1af5a6f4a63f"
     console.log(str.length)
 }
-test()
+//test()
  async function test02(){
      let cos = new cosInstance(SecretId,SecretKey);
      let flag = await cos.getObjectUrl("0victor.doc")
@@ -32,3 +35,15 @@ test()
      }
  }
 // test02()
+ async function sdqlTest(){
+     Bot.addMultPreInfo ([{"bot_id":"suosuo1221@126.com","prompt":"测试","completion":"测试"}], (err, data) => {
+         if (err){
+             console.log(err)
+         }
+         else {
+             console.log(data.insertId)
+             console.log(data)
+         }
+     });
+ }
+ //sdqlTest()
