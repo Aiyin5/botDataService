@@ -1,5 +1,10 @@
 const users = require("../../controllers/app/userController");
+const multer = require("multer");
 module.exports = app => {
+    const upload = multer({
+        dest: 'uploads/', // 指定上传文件的目录
+        limits: { fileSize: 1 * 1024 * 1024 }
+    });
     var router = require("express").Router();
     /**,
      * @swagger
@@ -29,6 +34,8 @@ module.exports = app => {
      *                 org_id:
      *                   type: string
      *                 email_check:
+     *                   type: string
+     *                 image_url:
      *                   type: string
      *      responses:
      *        200:
@@ -84,6 +91,8 @@ module.exports = app => {
      *                 org_id:
      *                   type: string
      *                 email_check:
+     *                   type: string
+     *                 image_url:
      *                   type: string
      *      responses:
      *        200:
@@ -157,6 +166,8 @@ module.exports = app => {
      *                      bot_id:
      *                        type: string
      *                      level:
+     *                        type: string
+     *                      image_url:
      *                        type: string
      *          headers:
      *            Authorization:
@@ -323,6 +334,84 @@ module.exports = app => {
      *          description: 请求信息不全
      * */
     router.post("/idCheck", users.idCheck);
+
+
+
+    /**,
+     * @swagger
+     * /app/user/image:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 接收图片文件上传并返回url
+     *      requestBody:
+     *         description: 图片信息  file_name //文件名称 采用ai域名信息   file:文件
+     *         required: true
+     *         content:
+     *           multipart/form-data:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 file_name:
+     *                   type: string
+     *                 file:
+     *                   format: binary
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  image_url:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 请求参数出错
+     * */
+    router.post("/image",upload.single('file'), users.imageUpload);
+
+    /**,
+     * @swagger
+     * /app/user/imageUpdate:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 接收图片文件和链接更新图像内容
+     *      requestBody:
+     *         description: 图片信息  image_url //文件链接   file:文件
+     *         required: true
+     *         content:
+     *           multipart/form-data:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 image_url:
+     *                   type: string
+     *                 file:
+     *                   format: binary
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  image_url:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 请求参数出错
+     * */
+    router.post("/imageUpdate",upload.single('file'), users.imageUpdate);
 
     app.use('/app/user', router);
 };

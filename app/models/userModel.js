@@ -8,6 +8,7 @@ const User = function(user) {
     this.bot_id = user.bot_id;
     this.org_id = user.org_id;
     this.level = user.level;
+    this.image_url = user.image_url
 };
 const tablename="user_info";
 User.create = async (newUser, result) => {

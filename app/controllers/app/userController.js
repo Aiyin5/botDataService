@@ -4,6 +4,9 @@ const random =require("string-random");
 const Email = require("../../util/sendmail");
 const {emailItem,pass} =require("../../config/config.json");
 const instance = require("../../util/caInstance")
+const {SecretId,SecretKey,VdURL}= require("../../config/config.json");
+const avatorCos = require("../../util/avatorCos");
+let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
 
 exports.create = (req, res) => {
     // Validate request
@@ -19,7 +22,8 @@ exports.create = (req, res) => {
         password: req.body.password,
         bot_id: req.body.email,
         level: req.body.level,
-        org_id: req.body.org_id
+        org_id: req.body.org_id,
+        image_url:req.body.image_url
     });
 
     // Save Tutorial in the database
@@ -76,7 +80,8 @@ exports.createNew = (req, res) => {
                 password: req.body.password,
                 bot_id: req.body.email,
                 org_id: req.body.org_id,
-                level: 2
+                level: 2,
+                image_url:req.body.image_url
             });
             // Save Tutorial in the database
             User.create(user, (err, data) => {
@@ -213,7 +218,8 @@ exports.findByWhere = (req, res) => {
                             email: data[0].email,
                             bot_id: data[0].bot_id,
                             org_id: data[0].org_id,
-                            level: data[0].level
+                            level: data[0].level,
+                            image_url:data[0].image_url
                         }
                     })
                 }
@@ -264,7 +270,8 @@ exports.findByWhere = (req, res) => {
                                 email: data[0].email,
                                 bot_id: data[0].bot_id,
                                 org_id: data[0].org_id,
-                                level: data[0].level
+                                level: data[0].level,
+                                image_url:data[0].image_url
                             }
                         })
                     }
@@ -408,6 +415,75 @@ exports.emailCheck =async (req, res) => {
         catch (err){
             res.status(500).send({
                 Error: "Internal Error"
+            })
+        }
+    }
+}
+
+exports.imageUpload=async (req, res) => {
+    console.log("rec new imageUpload")
+    if (!req.body || !req.body.file_name) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return
+    }
+    else {
+        try {
+            let timeStap=Date.now()
+            //console.log(encodeURIComponent(req.body.file_name))
+            let filename = encodeURIComponent(req.body.file_name)+timeStap.toString()
+            filename = filename.replace(/[^\w\s]|_/g, "")
+            console.log("rvc file name:"+filename)
+            let imageRes = await cos.upload(req.file.path,filename)
+            let image_url="https://"+imageRes.Location
+            res.send({
+                ActionType: "OK",
+                message: "success",
+                image_url:image_url
+            })
+        }
+        catch (err){
+            res.status(200).send({
+                ActionType: "False",
+                message: "上传失败"
+            })
+        }
+    }
+}
+
+exports.imageUpdate=async (req, res) => {
+    console.log("rec new imageUpdate")
+    if (!req.body || !req.body.image_url) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return
+    }
+    else {
+        try {
+            let image_url=req.body.image_url
+            if(!image_url.includes('https://aiyin-avator-1316443200.cos.ap-shanghai.myqcloud.com/'))
+            {
+                res.status(200).send({
+                    ActionType: "False",
+                    message: "更新失败，请联系管理员"
+                })
+                return
+            }
+            filename=image_url.replace("https://aiyin-avator-1316443200.cos.ap-shanghai.myqcloud.com/","")
+            let imageRes = await cos.upload(req.file.path,filename)
+            ret_url="https://"+imageRes.Location
+            res.send({
+                ActionType: "OK",
+                message: "success",
+                image_url:ret_url
+            })
+        }
+        catch (err){
+            res.status(200).send({
+                ActionType: "False",
+                message: "更新失败"
             })
         }
     }

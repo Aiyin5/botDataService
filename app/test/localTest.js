@@ -5,6 +5,8 @@
  const removeEmoji = require("../util/dataTransform");
  const sql = require("../models/db");
  const Bot = require("../models/botModel")
+ const avatorCos = require("../util/avatorCos");
+ let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
 async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
@@ -47,3 +49,12 @@ async function test(){
      });
  }
  //sdqlTest()
+
+ async function testavator(){
+     let sttr="E889BEE59BA0E6B58BE8AF95412E889BEE59BA0251689492347385"
+     let imageRes = await cos.getItem("../config/222222.jpeg",sttr)
+     //let imageRes = await cos.upload("../config/126.jpeg","test123.png")
+     console.log(imageRes)
+     console.log("https://"+imageRes.Location)
+ }
+ testavator()
