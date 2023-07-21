@@ -40,4 +40,14 @@ User.findEmail= async (where)=>{
         return err;
     }
 }
+User.updateByEmail= async (userData,where)=>{
+    try {
+        let res=await sql.update(tablename,userData,where);
+        return res;
+    }
+    catch (err){
+        console.log(err)
+        return err;
+    }
+}
 module.exports = User;

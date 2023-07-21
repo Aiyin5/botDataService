@@ -11,17 +11,16 @@ async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
 //     );
-// /*    const pdfloader = new PDFLoader("../config/2023-6-17会议.pdf",{
-//         splitPages: false,
-//     });
-//     const pdf = await pdfloader.load();*/
-//     const docs = await loader.load();
-//     console.log(docs)
-//     //console.log(pdf)
-    let str="d1af5a6f4a63f"
-    console.log(str.length)
+    const pdfloader = new PDFLoader("../config/2020-01-17__江苏安靠智能输电工程科技股份有限公司__300617__安靠智电__2019年__年度报告.pdf",{
+        splitPages: false,
+    });
+    const pdf = await pdfloader.load();
+    //const docs = await loader.load();
+    console.log(pdf)
+    //console.log(pdf)
+    console.log(pdf[0].pageContent.length)
 }
-//test()
+test()
  async function test02(){
      let cos = new cosInstance(SecretId,SecretKey);
      let flag = await cos.getObjectUrl("0victor.doc")
@@ -57,4 +56,4 @@ async function test(){
      console.log(imageRes)
      console.log("https://"+imageRes.Location)
  }
- testavator()
+ //testavator()

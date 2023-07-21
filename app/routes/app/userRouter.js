@@ -382,6 +382,12 @@ module.exports = app => {
      *      tags:
      *      - userApi
      *      summary: 接收图片文件和链接更新图像内容
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
      *      requestBody:
      *         description: 图片信息  image_url //文件链接   file:文件
      *         required: true
@@ -412,6 +418,110 @@ module.exports = app => {
      *          description: 请求参数出错
      * */
     router.post("/imageUpdate",upload.single('file'), users.imageUpdate);
+
+    /**,
+     * @swagger
+     * /app/user/botInfo:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 获取机器人的基本信息
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 用户基本信息  email //用户邮箱   bot_id //机器人id
+     *         required: true
+     *         content:
+     *           application/json::
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 email:
+     *                   type: string
+     *                 bot_id:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  image_url:
+     *                    type: string
+     *                  name:
+     *                    type: string
+     *                  bgImg_url:
+     *                    type: string
+     *                  contact:
+     *                    type: string
+     *                  faq_contents:
+     *                    type: string
+     *                  welcomes:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 请求参数出错
+     * */
+    router.post("/botInfo", users.botInfo);
+
+    /**,
+     * @swagger
+     * /app/user/botInfoUpdate:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 更新机器人的基本信息
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 用户基本信息和机器人基本信息 email //用户邮箱   bot_id //机器人id  image_url //头像链接 name //昵称 bgImg_url//背景图像  contact//二维码链接  faq_contents//常见问题  welcomes//欢迎语
+     *         required: true
+     *         content:
+     *           application/json::
+     *             schema:
+     *               type: object
+     *               properties:
+     *                  image_url:
+     *                    type: string
+     *                  name:
+     *                    type: string
+     *                  bgImg_url:
+     *                    type: string
+     *                  contact:
+     *                    type: string
+     *                  faq_contents:
+     *                    type: string
+     *                  welcomes:
+     *                    type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 请求参数出错
+     * */
+    router.post("/botInfoUpdate", users.botInfoUpdate);
 
     app.use('/app/user', router);
 };

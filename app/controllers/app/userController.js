@@ -529,3 +529,79 @@ exports.idCheck =async (req, res) => {
         }
     }
 }
+
+exports.botInfo=async (req, res) => {
+    console.log("rv post user botInfo")
+    if (!req.body.email) {
+        res.status(400).send({
+            message: "Email can not be empty!"
+        });
+        return;
+    }
+    let email = req.body.email
+    let bot_id = req.body.bot_id
+    let where={
+        email:email,
+        bot_id:bot_id
+    }
+    try {
+        let dataRes =await User.findEmail(where)
+        if(dataRes.length > 0){
+            res.send({
+                ActionType: "OK",
+                name:dataRes[0].name,
+                welcomes:dataRes[0].welcomes,
+                image_url:dataRes[0].image_url,
+                faq_contents:dataRes[0].faq_contents,
+                contact:dataRes[0].contact,
+                bgImg_url:dataRes[0].bgImg_url
+            })
+        }
+        else{
+            res.send({
+                ActionType: "False",
+                message: "email不存在或者bot_id不存在"
+            })
+        }
+    }
+    catch (err){
+        res.status(500).send({
+            Error: "Internal Error"
+        })
+    }
+}
+
+exports.botInfoUpdate=async (req, res) => {
+    console.log("rv post user botInfoUpdate")
+    if (!req.body.email) {
+        res.status(400).send({
+            message: "Email can not be empty!"
+        });
+        return;
+    }
+    let email = req.body.email
+    let bot_id = req.body.bot_id
+    let upData={
+        name:req.body.name,
+        welcomes:req.body.welcomes,
+        image_url:req.body.image_url,
+        faq_contents:req.body.faq_contents,
+        contact:req.body.contact,
+        bgImg_url:req.body.bgImg_url
+    }
+    let where={
+        email:email,
+        bot_id:bot_id
+    }
+    try {
+            let dataRes =await User.updateByEmail(upData,where)
+            res.send({
+                ActionType: "OK"
+            })
+    }
+    catch (err){
+        res.status(500).send({
+            Error: "Internal Error"
+        })
+    }
+}
