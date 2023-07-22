@@ -434,8 +434,6 @@ module.exports = app => {
      *             schema:
      *               type: object
      *               properties:
-     *                 email:
-     *                   type: string
      *                 bot_id:
      *                   type: string
      *      responses:
