@@ -21,6 +21,7 @@
     "/app/file/docFile",
     "/app/user/idCheck",
     "/app/notion/allNotion",
-    "/app/user/image"
+    "/app/user/image",
+    "/app/user/botInfo"
   ]
 }

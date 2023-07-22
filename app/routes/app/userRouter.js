@@ -426,12 +426,6 @@ module.exports = app => {
      *      tags:
      *      - userApi
      *      summary: 获取机器人的基本信息
-     *      parameters:
-     *      - in: header
-     *        name: Authorization
-     *        schema:
-     *          type: string
-     *        required: true
      *      requestBody:
      *         description: 用户基本信息  email //用户邮箱   bot_id //机器人id
      *         required: true
