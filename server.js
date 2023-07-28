@@ -11,9 +11,9 @@ const swaggerOpt = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "amabot backend API",
+      title: "askio backend API",
       version: "1.0.0",
-      description: "amabot backend API"
+      description: "askio backend API"
     },
     servers:[
       {

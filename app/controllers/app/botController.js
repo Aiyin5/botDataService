@@ -96,7 +96,7 @@ exports.addPreInfo = (req, res) => {
     });
 }
 
-exports.addMultPreInfo = (req, res) => {
+exports.addMultPreInfo =async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -109,42 +109,59 @@ exports.addMultPreInfo = (req, res) => {
         });
         return;
     }
-    Bot.addMultPreInfo(botData, async (err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving tutorials."
-            });
-        else {
-            try {
-
-                let vdRes= await axiosIns.post("/addSt",
-                    {
-                        "id":data.insertId.toString(),
-                        "bot_id": botData[0].bot_id,
-                        "question":botData[0].prompt,
-                        "answer": botData[0].completion
-                    });
-                if(vdRes.ActionType=="OK"){
-                    res.send({
-                        ActionType: "OK",
-                    });
-                }
-                else {
+    let condWhere = {
+        "bot_id":botData[0].bot_id,
+        "prompt":botData[0].prompt
+    }
+    let conRes = await  Bot.newfind(condWhere)
+    if(!condWhere){
+        res.status(200).send({
+            ActionType: "False",
+            message:"内部查询错误"
+        });
+        return
+    }
+    if (conRes.length === 0) {
+       await Bot.addMultPreInfo(botData, async (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while retrieving tutorials."
+                });
+            else {
+                try {
+                    let vdRes = await axiosIns.post("/addSt",
+                        {
+                            "id": data.insertId.toString(),
+                            "bot_id": botData[0].bot_id,
+                            "question": botData[0].prompt,
+                            "answer": botData[0].completion
+                        });
+                    if (vdRes.ActionType == "OK") {
+                        res.send({
+                            ActionType: "OK",
+                        });
+                    } else {
+                        res.send({
+                            ActionType: "False",
+                            message: "数据更新出错"
+                        });
+                    }
+                } catch (err) {
                     res.send({
                         ActionType: "False",
-                        message:"数据更新出错"
+                        message: "数据更新出错"
                     });
                 }
             }
-            catch (err){
-                res.send({
-                    ActionType: "False",
-                    message:"数据更新出错"
-                });
-            }
-        }
-    });
+        });
+    }
+    else {
+        res.send({
+            ActionType: "False",
+            message: "问题重复"
+        });
+    }
 }
 
 

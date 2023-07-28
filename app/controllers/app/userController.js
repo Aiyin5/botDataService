@@ -146,7 +146,85 @@ exports.findByBot = (req, res) =>{
         }
     });
 }
-// Retrieve all Tutorials from the database (with condition).
+
+
+exports.updateUrl =async (req, res) => {
+    console.log("rv post updateUrl")
+    if (!req.body || !req.body.bot_id || !req.body.html_url) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    let conWhere={
+        "html_url":req.body.html_url
+    }
+    let dataRes =await User.findEmail(conWhere)
+    if(!dataRes){
+        res.status(500).send({
+            message: "内部查询错误!"
+        });
+        return;
+    }
+    if(dataRes.length > 0 ) {
+        res.status(200).send({
+            ActionType: "False",
+            message: "域名重复,请换一个"
+        })
+        return
+    }
+    let upData={
+        "html_url":req.body.html_url
+    }
+    let where={
+        "bot_id":req.body.bot_id
+    }
+    let updatRes =await User.updateByEmail(upData,where)
+    if(!updatRes){
+        res.status(500).send({
+            message: "内部更新错误!"
+        });
+        return;
+    }
+    res.send({
+        ActionType: "OK",
+        message: "success"
+    })
+}
+
+
+exports.botIdByUrl =async (req, res) => {
+    console.log("rv post botIdByUrl")
+    if (!req.body || !req.body.html_url) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    let conWhere={
+        "html_url":req.body.html_url
+    }
+    let dataRes =await User.findEmail(conWhere)
+    if(!dataRes){
+        res.status(500).send({
+            message: "内部查询错误!"
+        });
+        return;
+    }
+    if(dataRes.length < 1 ) {
+        res.status(200).send({
+            ActionType: "False",
+            message: "没有该域名"
+        })
+        return
+    }
+    res.send({
+        bot_id:dataRes[0].bot_id,
+        ActionType: "OK",
+        message: "success"
+    })
+}
+
 exports.findByWhere = (req, res) => {
     console.log("rv post login")
     if (!req.body) {
@@ -219,7 +297,8 @@ exports.findByWhere = (req, res) => {
                             bot_id: data[0].bot_id,
                             org_id: data[0].org_id,
                             level: data[0].level,
-                            image_url:data[0].image_url
+                            image_url:data[0].image_url,
+                            html_url:data[0].html_url,
                         }
                     })
                 }

@@ -8,6 +8,7 @@ const path = require("path");
 const fs = require("fs");
 const {PDFLoader} = require("langchain/document_loaders/fs/pdf"); //引入查看zip文件的包
 const AxiosTool = require("../../util/axiosTool");
+const sql = require("../../models/db");
 const axiosIns=new AxiosTool(VdURL);
 function removeEmoji (content) {
     let conByte = new TextEncoder("utf-8").encode(content);
@@ -44,6 +45,35 @@ exports.create =async (req, res) => {
         });
         return
     }
+    if(!req.body.bot_id || !req.body.file_name){
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return
+    }
+    else {
+        let conWhere={
+            "bot_id":req.body.bot_id,
+            "file_name":req.body.file_name
+        }
+        let conRes = await File.newfind(conWhere);
+        if(!conRes){
+            res.send({
+                ActionType: "FALSE",
+                message: "数据查询错误"
+            })
+            return
+        }
+        else {
+            if(conRes.length > 0){
+                res.send({
+                    ActionType: "FALSE",
+                    message: "文件名重复"
+                })
+                return
+            }
+        }
+    }
     //docx
     if(!req.body.file_type || req.body.file_type=="docx"){
         let bot_file_name=req.body.bot_id+req.body.file_name;
@@ -53,6 +83,13 @@ exports.create =async (req, res) => {
             );
             let textContent =  await loader.load();
             textContent = removeEmoji(textContent[0].pageContent)
+            if(textContent.length>100000){
+                res.send({
+                    ActionType: "False",
+                    message:"当前文件内容字数太多，请联系管理员上传"
+                });
+                return
+            }
             await cos.upload(req.file.path,bot_file_name)
             //console.log(req.body.content)
             const file = new File({
@@ -118,6 +155,13 @@ exports.create =async (req, res) => {
                 });
             let textContent =  await loader.load();
             textContent = removeEmoji(textContent[0].pageContent)
+            if(textContent.length>100000){
+                res.send({
+                    ActionType: "False",
+                    message:"当前文件内容字数太多，请联系管理员上传"
+                });
+                return
+            }
             await cos.upload(req.file.path,bot_file_name)
             //console.log(req.body.content)
             const file = new File({

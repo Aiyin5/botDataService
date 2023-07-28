@@ -169,6 +169,8 @@ module.exports = app => {
      *                        type: string
      *                      image_url:
      *                        type: string
+     *                      html_url:
+     *                        type: string
      *          headers:
      *            Authorization:
      *              type: string
@@ -514,6 +516,89 @@ module.exports = app => {
      *          description: 请求参数出错
      * */
     router.post("/botInfoUpdate", users.botInfoUpdate);
+
+    /**,
+     * @swagger
+     * /app/user/updateUrl:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 更新机器人的html链接
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description:   bot_id //机器人id
+     *         required: true
+     *         content:
+     *           application/json::
+     *             schema:
+     *               type: object
+     *               properties:
+     *                  bot_id:
+     *                    type: string
+     *                  html_url:
+     *                    type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  message:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 请求参数出错
+     * */
+    router.post("/updateUrl", users.updateUrl);
+
+
+    /**,
+     * @swagger
+     * /app/user/updateUrl:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 根据html_url获取bot_id
+     *      requestBody:
+     *         description:     html_url//子域名地址
+     *         required: true
+     *         content:
+     *           application/json::
+     *             schema:
+     *               type: object
+     *               properties:
+     *                  html_url:
+     *                    type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  message:
+     *                    type: string
+     *                  bot_id:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 请求参数出错
+     * */
+    router.post("/botIdByUrl", users.botIdByUrl);
 
     app.use('/app/user', router);
 };

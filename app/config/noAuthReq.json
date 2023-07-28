@@ -22,6 +22,7 @@
     "/app/user/idCheck",
     "/app/notion/allNotion",
     "/app/user/image",
-    "/app/user/botInfo"
+    "/app/user/botInfo",
+    "/app/user/botIdByUrl"
   ]
 }

@@ -8,7 +8,8 @@ const User = function(user) {
     this.bot_id = user.bot_id;
     this.org_id = user.org_id;
     this.level = user.level;
-    this.image_url = user.image_url
+    this.image_url = user.image_url,
+    this.html_url=user.org_id
 };
 const tablename="user_info";
 User.create = async (newUser, result) => {
@@ -37,7 +38,7 @@ User.findEmail= async (where)=>{
     }
     catch (err){
         console.log(err)
-        return err;
+        return null;
     }
 }
 User.updateByEmail= async (userData,where)=>{
@@ -47,7 +48,7 @@ User.updateByEmail= async (userData,where)=>{
     }
     catch (err){
         console.log(err)
-        return err;
+        return null;
     }
 }
 module.exports = User;

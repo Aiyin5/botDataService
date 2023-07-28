@@ -17,13 +17,42 @@ function removeEmoji (content) {
     return content.replaceAll("0000", "");
 }
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     console.log("rec file create")
     // Validate request
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
+    }
+    if(!req.body.bot_id || !req.body.doc_name){
+        res.status(400).send({
+            message: "doc_name can not be empty!"
+        });
+        return
+    }
+    else {
+        let conWhere={
+            "bot_id":req.body.bot_id,
+            "doc_name":req.body.doc_name
+        }
+        let conRes = await File.newfind(conWhere);
+        if(!conRes){
+            res.send({
+                ActionType: "FALSE",
+                message: "数据查询错误"
+            })
+            return
+        }
+        else {
+            if(conRes.length > 0){
+                res.send({
+                    ActionType: "FALSE",
+                    message: "文章重复"
+                })
+                return
+            }
+        }
     }
     let content = removeEmoji(req.body.content)
     //console.log(req.body.content)
@@ -33,8 +62,9 @@ exports.create = (req, res) => {
         type: req.body.type,
         content: content
     });
+
     // Save Tutorial in the database
-    File.create(file, async (err, data) => {
+    await File.create(file, async (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -72,7 +102,7 @@ exports.create = (req, res) => {
 
 
 };
-exports.update= (req, res) =>{
+exports.update= async (req, res) =>{
     let where=req.body
     if(!where.id){
         res.status(400).send({
@@ -80,7 +110,7 @@ exports.update= (req, res) =>{
         });
     }
     else {
-        File.update(where, async (err, data) => {
+        await File.update(where, async (err, data) => {
             if (err){
                 res.status(500).send({
                     message:

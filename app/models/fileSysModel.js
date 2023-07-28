@@ -49,6 +49,7 @@ File.findAll= async(result) =>{
         result(null, err);
     }
 }
+
 File.find = async (where,result) =>{
     try {
         let res=await sql.selectByWhere(tablename,where);
@@ -57,6 +58,16 @@ File.find = async (where,result) =>{
     catch (err){
         console.log(err)
         result(null, err);
+    }
+}
+File.newfind =async function (where){
+    try {
+        let res=await sql.selectByWhere(tablename,where);
+        return  res;
+    }
+    catch (err){
+        console.log(err)
+        return null;
     }
 }
 File.update = async (where,result) =>{

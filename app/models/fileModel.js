@@ -27,6 +27,16 @@ newFile.findAll= async(result) =>{
         result(null, err);
     }
 }
+newFile.newfind =async function (where) {
+    try {
+        let res=await sql.selectByWhere(tablename,where);
+        return res;
+    }
+    catch (err){
+        return null;
+    }
+
+}
 newFile.find = async (where,result) =>{
     try {
         let res=await sql.selectByWhere(tablename,where);

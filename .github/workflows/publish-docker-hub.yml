@@ -4,7 +4,7 @@ on:
   #pub with dev tag
   push:
     branches:
-      - main
+      - dev
   release:
     types: [published]
 
@@ -46,7 +46,7 @@ jobs:
       - name: ssh docker login
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.TENCENT_CLOUD_IP }}
+          host: ${{ secrets.TENCENT_CLOUD_IP_ASKIO }}
           username: ${{ secrets.TENCENT_CLOUD_NAME }}
           password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
           script: cd ../usr/DataService && sh deployFile.sh

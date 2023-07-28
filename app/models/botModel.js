@@ -31,6 +31,16 @@ Bot.find = async (where,result) =>{
         result(null, err);
     }
 }
+Bot.newfind = async function(where){
+    try {
+        let res=await sql.selectByWhere(pre_table,where);
+        return res
+    }
+    catch (err){
+        console.log(err)
+    }
+}
+
 Bot.updateBot = async (data,result) =>{
     try {
         let res=await sql.update(bot_table,data.data,data.where);
