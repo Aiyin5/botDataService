@@ -7,6 +7,7 @@
  const Bot = require("../models/botModel")
  const avatorCos = require("../util/avatorCos");
  let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
+ const crypto = require('crypto');
 async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
@@ -20,7 +21,7 @@ async function test(){
     //console.log(pdf)
     console.log(pdf[0].pageContent.length)
 }
-test()
+//test()
  async function test02(){
      let cos = new cosInstance(SecretId,SecretKey);
      let flag = await cos.getObjectUrl("0victor.doc")
@@ -57,3 +58,12 @@ test()
      console.log("https://"+imageRes.Location)
  }
  //testavator()
+
+ async function test233(){
+    for(let i=0;i<50;i++){
+        let key = crypto.randomBytes(4).toString('hex');
+        console.log(key)
+    }
+
+ }
+ test233()

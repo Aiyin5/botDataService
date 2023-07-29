@@ -6,6 +6,7 @@ const {emailItem,pass} =require("../../config/config.json");
 const instance = require("../../util/caInstance")
 const {SecretId,SecretKey,VdURL}= require("../../config/config.json");
 const avatorCos = require("../../util/avatorCos");
+const crypto = require("crypto");
 let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
 
 exports.create = (req, res) => {
@@ -16,6 +17,9 @@ exports.create = (req, res) => {
         });
     }
     // Create a User
+
+    const key = crypto.randomBytes(4).toString('hex');
+    let html_url=(req.body.email.split("@")[0]+key).toLowerCase();
     const user = new User({
         name: req.body.name,
         email: req.body.email,
@@ -23,7 +27,8 @@ exports.create = (req, res) => {
         bot_id: req.body.email,
         level: req.body.level,
         org_id: req.body.org_id,
-        image_url:req.body.image_url
+        image_url:req.body.image_url,
+        html_url:html_url
     });
 
     // Save Tutorial in the database
@@ -156,8 +161,9 @@ exports.updateUrl =async (req, res) => {
         });
         return;
     }
+    let constring = req.body.html_url.toLowerCase()
     let conWhere={
-        "html_url":req.body.html_url
+        "html_url":constring
     }
     let dataRes =await User.findEmail(conWhere)
     if(!dataRes){
@@ -174,7 +180,7 @@ exports.updateUrl =async (req, res) => {
         return
     }
     let upData={
-        "html_url":req.body.html_url
+        "html_url":constring
     }
     let where={
         "bot_id":req.body.bot_id

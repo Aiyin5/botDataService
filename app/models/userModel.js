@@ -9,7 +9,7 @@ const User = function(user) {
     this.org_id = user.org_id;
     this.level = user.level;
     this.image_url = user.image_url,
-    this.html_url=user.org_id
+    this.html_url=user.html_url;
 };
 const tablename="user_info";
 User.create = async (newUser, result) => {
