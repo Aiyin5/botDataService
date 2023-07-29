@@ -172,7 +172,7 @@ exports.updateUrl =async (req, res) => {
         });
         return;
     }
-    if(dataRes.length > 0 ) {
+    if(dataRes.length > 0 && dataRes[0].bot_id!=req.body.bot_id) {
         res.status(200).send({
             ActionType: "False",
             message: "域名重复,请换一个"
