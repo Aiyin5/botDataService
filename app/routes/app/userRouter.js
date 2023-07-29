@@ -564,7 +564,7 @@ module.exports = app => {
 
     /**,
      * @swagger
-     * /app/user/updateUrl:
+     * /app/user/botIdByUrl:
      *    post:
      *      tags:
      *      - userApi
