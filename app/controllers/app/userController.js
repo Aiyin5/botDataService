@@ -79,6 +79,8 @@ exports.createNew = (req, res) => {
             if(arr.size>100){
                 instance.cleanItem()
             }
+            const key = crypto.randomBytes(4).toString('hex');
+            let html_url=(req.body.email.split("@")[0]+key).toLowerCase();
             const user = new User({
                 name: req.body.name,
                 email: req.body.email,
@@ -86,7 +88,8 @@ exports.createNew = (req, res) => {
                 bot_id: req.body.email,
                 org_id: req.body.org_id,
                 level: 2,
-                image_url:req.body.image_url
+                image_url:req.body.image_url,
+                html_url:html_url
             });
             // Save Tutorial in the database
             User.create(user, (err, data) => {
@@ -664,6 +667,9 @@ exports.botInfoUpdate=async (req, res) => {
     }
     let email = req.body.email
     let bot_id = req.body.bot_id
+    if(!req.body.welcomes){
+
+    }
     let upData={
         name:req.body.name,
         welcomes:req.body.welcomes,

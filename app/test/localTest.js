@@ -60,10 +60,9 @@ async function test(){
  //testavator()
 
  async function test233(){
-    for(let i=0;i<50;i++){
-        let key = crypto.randomBytes(4).toString('hex');
-        console.log(key)
-    }
+     let ans=null
+     const utf8Bytes = Buffer.from(ans, "utf8");
+     console.log(utf8Bytes)
 
  }
  test233()
