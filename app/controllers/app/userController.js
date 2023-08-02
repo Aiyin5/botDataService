@@ -664,11 +664,13 @@ exports.botInfoUpdate=async (req, res) => {
     }
     let email = req.body.email
     let bot_id = req.body.bot_id
+    const utf8Bytes_welcome = Buffer.from(req.body.welcomes, "utf8");
+    const utf8Bytes_faq = Buffer.from(req.body.faq_contents, "utf8");
     let upData={
         name:req.body.name,
-        welcomes:req.body.welcomes,
+        welcomes:utf8Bytes_welcome,
         image_url:req.body.image_url,
-        faq_contents:req.body.faq_contents,
+        faq_contents:utf8Bytes_faq,
         contact:req.body.contact,
         bgImg_url:req.body.bgImg_url
     }
