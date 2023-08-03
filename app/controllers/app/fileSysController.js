@@ -86,14 +86,14 @@ exports.create = async (req, res) => {
                 }
                 else {
                     res.send({
-                        ActionType: "False",
+                        ActionType: "FALSE",
                         message:"数据更新出错"
                     });
                 }
             }
             catch (err){
                 res.send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message:"数据更新出错"
                 });
             }
@@ -144,7 +144,7 @@ exports.update= async (req, res) =>{
                             }
                             else {
                                 res.send({
-                                    ActionType: "False",
+                                    ActionType: "FALSE",
                                     message:"数据更新出错"
                                 });
                             }
@@ -158,7 +158,7 @@ exports.update= async (req, res) =>{
                             }
                             else {
                                 res.send({
-                                    ActionType: "False",
+                                    ActionType: "FALSE",
                                     message:"数据更新出错"
                                 });
                             }
@@ -168,7 +168,7 @@ exports.update= async (req, res) =>{
                 }
                 catch (err){
                     res.send({
-                        ActionType: "False",
+                        ActionType: "FALSE",
                         message:"数据更新出错"
                     });
                 }
@@ -281,7 +281,7 @@ exports.deleteFileInfo = (req, res) => {
             else {
                 if(data.length<1){
                     res.send({
-                        ActionType: "False",
+                        ActionType: "FALSE",
                         message:"未找到需要删除的内容"
                     });
                     return
@@ -310,7 +310,7 @@ exports.deleteFileInfo = (req, res) => {
                     }
                     else {
                         res.send({
-                            ActionType: "False",
+                            ActionType: "FALSE",
                             message:"删除失败"
                         })
                     }
@@ -320,7 +320,7 @@ exports.deleteFileInfo = (req, res) => {
     }
     catch (err){
         res.send({
-            ActionType: "False",
+            ActionType: "FALSE",
             message:"删除失败"
         });
     }

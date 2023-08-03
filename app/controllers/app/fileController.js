@@ -85,7 +85,7 @@ exports.create =async (req, res) => {
             textContent = removeEmoji(textContent[0].pageContent)
             if(textContent.length>100000){
                 res.send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message:"当前文件内容字数太多，请联系管理员上传"
                 });
                 return
@@ -123,14 +123,14 @@ exports.create =async (req, res) => {
                         }
                         else {
                             res.send({
-                                ActionType: "False",
+                                ActionType: "FALSE",
                                 message:"数据更新出错"
                             });
                         }
                     }
                     catch (err){
                         res.send({
-                            ActionType: "False",
+                            ActionType: "FALSE",
                             message:"数据更新出错"
                         });
                     }
@@ -157,7 +157,7 @@ exports.create =async (req, res) => {
             textContent = removeEmoji(textContent[0].pageContent)
             if(textContent.length>100000){
                 res.send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message:"当前文件内容字数太多，请联系管理员上传"
                 });
                 return
@@ -194,7 +194,7 @@ exports.create =async (req, res) => {
                         }
                         else {
                             res.send({
-                                ActionType: "False",
+                                ActionType: "FALSE",
                                 message:"数据更新出错"
                                 //
                             });
@@ -202,7 +202,7 @@ exports.create =async (req, res) => {
                     }
                     catch (err){
                         res.send({
-                            ActionType: "False",
+                            ActionType: "FALSE",
                             message:"数据更新出错"
                         });
                     }
@@ -322,7 +322,7 @@ exports.docDelete = async (req, res) => {
         else {
             if(data.length<1){
                 res.send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message:"未找到需要删除的内容"
                 });
                 return
@@ -353,7 +353,7 @@ exports.docDelete = async (req, res) => {
                     }
                     else {
                         res.send({
-                            ActionType: "False",
+                            ActionType: "FALSE",
                             message:"删除失败"
                         })
                     }
@@ -361,7 +361,7 @@ exports.docDelete = async (req, res) => {
                 catch (err){
                     console.log(err)
                     res.send({
-                        ActionType: "False",
+                        ActionType: "FALSE",
                         message:"删除失败"
                     })
                 }

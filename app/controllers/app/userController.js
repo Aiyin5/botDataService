@@ -70,7 +70,7 @@ exports.createNew = (req, res) => {
         console.log(arr.get(mail).time)
         if(arr.get(mail).randomNumbers!=emailCode || (curTime-arr.get(mail).time>600000)){
             res.status(200).send({
-                ActionType: "False",
+                ActionType: "FALSE",
                 message: "验证码错误",
             });
         }
@@ -116,7 +116,7 @@ exports.createNew = (req, res) => {
     }
     else {
         res.status(200).send({
-            ActionType: "False",
+            ActionType: "FALSE",
             message: "验证码错误",
         });
     }
@@ -177,7 +177,7 @@ exports.updateUrl =async (req, res) => {
     }
     if(dataRes.length > 0 && dataRes[0].bot_id!=req.body.bot_id) {
         res.status(200).send({
-            ActionType: "False",
+            ActionType: "FALSE",
             message: "域名重复,请换一个"
         })
         return
@@ -222,7 +222,7 @@ exports.botIdByUrl =async (req, res) => {
     }
     if(dataRes.length < 1 ) {
         res.status(200).send({
-            ActionType: "False",
+            ActionType: "FALSE",
             message: "没有该域名"
         })
         return
@@ -321,7 +321,7 @@ exports.findByWhere = (req, res) => {
         let arr = instance.getMap();
         if(!arr.has(where.email) || arr.get(where.email).randomNumbers!=emailCode || (curTime-arr.get(where.email).time>600000)){
             res.status(200).send({
-                ActionType: "False",
+                ActionType: "FALSE",
                 message: "验证码错误",
             });
         }
@@ -389,7 +389,7 @@ exports.captcha =async (req, res) => {
         let dataRes =await User.findEmail(where)
         if(dataRes.length > 0 && register===1){
             res.status(200).send({
-                ActionType: "False",
+                ActionType: "FALSE",
                 message: "邮箱重复"
             })
         }
@@ -449,7 +449,7 @@ exports.aicheck =async (req, res) => {
         let dataRes =await User.findEmail(where)
         if(dataRes.length > 0){
             res.status(200).send({
-                ActionType: "False",
+                ActionType: "FALSE",
                 message: "域名重复"
             })
         }
@@ -489,7 +489,7 @@ exports.emailCheck =async (req, res) => {
             let dataRes =await User.findEmail(where)
             if(dataRes.length > 0){
                 res.status(200).send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message: "邮箱重复"
                 })
             }
@@ -533,7 +533,7 @@ exports.imageUpload=async (req, res) => {
         }
         catch (err){
             res.status(200).send({
-                ActionType: "False",
+                ActionType: "FALSE",
                 message: "上传失败"
             })
         }
@@ -554,7 +554,7 @@ exports.imageUpdate=async (req, res) => {
             if(!image_url.includes('https://aiyin-avator-1316443200.cos.ap-shanghai.myqcloud.com/'))
             {
                 res.status(200).send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message: "更新失败，请联系管理员"
                 })
                 return
@@ -570,7 +570,7 @@ exports.imageUpdate=async (req, res) => {
         }
         catch (err){
             res.status(200).send({
-                ActionType: "False",
+                ActionType: "FALSE",
                 message: "更新失败"
             })
         }
@@ -605,7 +605,7 @@ exports.idCheck =async (req, res) => {
             }
             else{
                 res.send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message: "id不存在"
                 })
             }
@@ -645,7 +645,7 @@ exports.botInfo=async (req, res) => {
         }
         else{
             res.send({
-                ActionType: "False",
+                ActionType: "FALSE",
                 message: "email不存在或者bot_id不存在"
             })
         }

@@ -116,7 +116,7 @@ exports.addMultPreInfo =async (req, res) => {
     let conRes = await  Bot.newfind(condWhere)
     if(!condWhere){
         res.status(200).send({
-            ActionType: "False",
+            ActionType: "FALSE",
             message:"内部查询错误"
         });
         return
@@ -143,13 +143,13 @@ exports.addMultPreInfo =async (req, res) => {
                         });
                     } else {
                         res.send({
-                            ActionType: "False",
+                            ActionType: "FALSE",
                             message: "数据更新出错"
                         });
                     }
                 } catch (err) {
                     res.send({
-                        ActionType: "False",
+                        ActionType: "FALSE",
                         message: "数据更新出错"
                     });
                 }
@@ -158,7 +158,7 @@ exports.addMultPreInfo =async (req, res) => {
     }
     else {
         res.send({
-            ActionType: "False",
+            ActionType: "FALSE",
             message: "问题重复"
         });
     }
@@ -195,14 +195,14 @@ exports.deletPreInfo = (req, res) => {
                 }
                 else {
                     res.send({
-                        ActionType: "False",
+                        ActionType: "FALSE",
                         message:"数据更新出错"
                     });
                 }
             }
             catch (err){
                 res.send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message:"数据更新出错"
                 });
             }
@@ -241,14 +241,14 @@ exports.updatePreInfo = (req, res) => {
                 }
                 else {
                     res.send({
-                        ActionType: "False",
+                        ActionType: "FALSE",
                         message:"数据更新出错"
                     });
                 }
             }
             catch (err){
                 res.send({
-                    ActionType: "False",
+                    ActionType: "FALSE",
                     message:"数据更新出错"
                 });
             }
