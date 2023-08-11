@@ -20,7 +20,7 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 历史信息信息  page代表第几页，从1开始，pageSize代表每页的数量
+     *         description: 历史信息信息  page代表第几页，从1开始，pageSize代表每页的数量，comment_type:0为全部。1为点赞，2为点踩，默认为0
      *         required: true
      *         content:
      *           application/json:
@@ -32,6 +32,8 @@ module.exports = app => {
      *                 page:
      *                   type: number
      *                 pageSize:
+     *                   type: number
+     *                 comment_type:
      *                   type: number
      *      responses:
      *        200:
@@ -58,7 +60,43 @@ module.exports = app => {
     router.post("/logInfo", logs.findByPage);
 
 
-
+    /**,
+     * @swagger
+     * /app/log/commentInfo:
+     *    post:
+     *      tags:
+     *      - logInfoAip
+     *      summary: 根据机器人id和问题信息点赞或者点踩
+     *      requestBody:
+     *         description: question用户的问题,comment_type:1代表点赞，2代表点踩
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 question:
+     *                   type: string
+     *                 comment_type:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 请求错误
+     * */
+    router.post("/commentInfo", logs.commentUpdate);
 
     router.post("/create", logs.create);
 

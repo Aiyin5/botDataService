@@ -12,6 +12,7 @@ exports.create = (req, res) => {
         bot_id: req.body.bot_id,
         question: req.body.question,
         answer:req.body.answer,
+        comment_type:0,
         other:req.body.other
     });
 
@@ -30,7 +31,7 @@ exports.create = (req, res) => {
     });
 };
 
-exports.findByBotId = (req, res) =>{
+exports.findByBotId =async (req, res) =>{
     console.log("rv post logInfo findByBot")
     if (!req.body) {
         res.status(400).send({
@@ -45,7 +46,7 @@ exports.findByBotId = (req, res) =>{
         });
         return;
     }
-    Log.find(where, (err, data) => {
+    await Log.find(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -60,7 +61,7 @@ exports.findByBotId = (req, res) =>{
         }
     });
 };
-exports.findByPage = (req, res) =>{
+exports.findByPage = async (req, res) =>{
     console.log("rv post logInfo findByBot")
     if (!req.body) {
         res.status(400).send({
@@ -75,7 +76,16 @@ exports.findByPage = (req, res) =>{
         });
         return;
     }
-    Log.findByPage(where, (err, data) => {
+    if(!where.comment_type){
+        where.comment_type=0;
+    }
+    if(!where.page){
+        where.page=1;
+    }
+    if(!where.pageSize){
+        where.pageSize=10;
+    }
+    await Log.findByPage(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -90,3 +100,38 @@ exports.findByPage = (req, res) =>{
         }
     });
 };
+exports.commentUpdate = async (req, res) =>{
+    console.log("rv post logInfo commentUpdate")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+
+    if(!req.body.bot_id || !req.body.question || !req.body.comment_type){
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    const commData = {
+        "comment_type":req.body.comment_type
+    };
+    let where ={
+        "bot_id":req.body.bot_id,
+        "question":req.body.question
+    }
+    await Log.updateComment(commData,where, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        else {
+            res.send({
+                ActionType: "OK"
+            })
+        }
+    })
+}

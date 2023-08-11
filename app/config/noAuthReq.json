@@ -23,6 +23,7 @@
     "/app/notion/allNotion",
     "/app/user/image",
     "/app/user/botInfo",
-    "/app/user/botIdByUrl"
+    "/app/user/botIdByUrl",
+    "/app/log/commentInfo"
   ]
 }

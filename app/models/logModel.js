@@ -29,8 +29,10 @@ LogInfo.find = async (where,result) =>{
 }
 
 LogInfo.findByPage = async (Item,result)=>{
+
     let where ={
-        "bot_id":Item.bot_id
+        "bot_id":Item.bot_id,
+        "comment_type":Item.comment_type
     };
     let page = Item.page;
     let number = Item.pageSize;
@@ -45,6 +47,17 @@ LogInfo.findByPage = async (Item,result)=>{
     catch (err){
         console.log(err)
         result(null, err);
+    }
+}
+
+LogInfo.updateComment = async (commentData,where,result) =>{
+    try {
+        let res=await sql.update(tablename,commentData,where);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(err, null);
     }
 }
 module.exports = LogInfo;
