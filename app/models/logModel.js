@@ -29,11 +29,18 @@ LogInfo.find = async (where,result) =>{
 }
 
 LogInfo.findByPage = async (Item,result)=>{
-
-    let where ={
-        "bot_id":Item.bot_id,
-        "comment_type":Item.comment_type
-    };
+    let where ={}
+    if(!Item.comment_type || Item.comment_type===0){
+        where.bot_id=Item.bot_id;
+    }
+    else {
+        where.bot_id=Item.bot_id;
+        where.comment_type = Item.comment_type
+    }
+    // let where ={
+    //     "bot_id":Item.bot_id,
+    //     "comment_type":Item.comment_type
+    // };
     let page = Item.page;
     let number = Item.pageSize;
     let searchCondition={
