@@ -59,7 +59,7 @@ LogInfo.findByPage = async (Item,result)=>{
 
 LogInfo.updateComment = async (commentData,where,result) =>{
     try {
-        let res=await sql.update(tablename,commentData,where);
+        let res=await sql.updateFirst(tablename,commentData,where);
         result(null, res);
     }
     catch (err){
