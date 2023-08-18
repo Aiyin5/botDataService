@@ -370,6 +370,42 @@ exports.findByWhere = (req, res) => {
 
 };
 
+exports.UserLimit =async (req, res) => {
+    console.log("rv post UserLimit")
+    if (!req.body.bot_id) {
+        res.status(400).send({
+            message: "Email can not be empty!"
+        });
+        return;
+    }
+    const where = req.body
+    User.findLimt(where, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        /*else res.send(data);*/
+        else {
+            if(data.length==1){
+                res.send({
+                    ActionType: "OK",
+                    message: "success",
+                    data: data[0]
+                })
+            }
+            else {
+                res.send({
+                    ActionType: "OK",
+                    message: "false",
+                    data: "没有用户数据"
+                })
+            }
+
+        }
+    });
+}
+
 
 exports.captcha =async (req, res) => {
     console.log("rv post captcha")

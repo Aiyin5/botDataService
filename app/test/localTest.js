@@ -5,6 +5,7 @@
  const removeEmoji = require("../util/dataTransform");
  const sql = require("../models/db");
  const Bot = require("../models/botModel")
+ const Uesr = require("../models/userModel")
  const avatorCos = require("../util/avatorCos");
  let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
  const crypto = require('crypto');
@@ -65,4 +66,31 @@ async function test(){
      console.log(utf8Bytes)
 
  }
- test233()
+ //test233()
+
+ async function sdqlTest2() {
+     let curData;
+     await Uesr.findAll((err, data) => {
+         if (err) {
+             console.log(err)
+         } else {
+             curData = data
+             console.log(data)
+         }
+     });
+     for (let item of curData) {
+         console.log(item.bot_id)
+         let tepData = {
+             "bot_id": item.bot_id
+         }
+         await Uesr.addLimt(tepData, (err, data) => {
+             if (err) {
+                 console.log(err)
+             } else {
+                 console.log(data)
+             }
+         })
+     }
+ }
+
+ sdqlTest2()

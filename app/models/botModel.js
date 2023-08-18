@@ -59,7 +59,7 @@ Bot.addPreInfo = async (data,result)=>{
     }
     catch (err){
         console.log(err)
-        result(null, err);
+        result(err, null);
     }
 }
 Bot.addMultPreInfo = async (data,result)=>{

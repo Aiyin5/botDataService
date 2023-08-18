@@ -12,6 +12,7 @@ const User = function(user) {
     this.html_url=user.html_url;
 };
 const tablename="user_info";
+const tablename2="user_limit";
 User.create = async (newUser, result) => {
     try {
         let res=await sql.insert(tablename,newUser);
@@ -19,6 +20,7 @@ User.create = async (newUser, result) => {
     }
     catch (err){
         console.log(err)
+        result(err, null);
     }
 };
 User.find = async (where,result) =>{
@@ -28,7 +30,7 @@ User.find = async (where,result) =>{
     }
     catch (err){
         console.log(err)
-        result(null, err);
+        result(err, null);
     }
 }
 User.findEmail= async (where)=>{
@@ -51,4 +53,38 @@ User.updateByEmail= async (userData,where)=>{
         return null;
     }
 }
+
+User.findAll = async (result)=>{
+    try {
+        let res=await sql.select(tablename);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(err, null);
+    }
+}
+
+User.findLimt = async (where,result) =>{
+    try {
+        let res=await sql.selectByWhere(tablename2,where);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(err, null);
+    }
+}
+User.addLimt = async (data,result) =>{
+    try {
+        let res=await sql.insert(tablename2,data);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(err, null);
+    }
+}
+
+
 module.exports = User;

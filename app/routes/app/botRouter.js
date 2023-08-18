@@ -1,4 +1,3 @@
-const bots = require("../../controllers/app/botController");
 module.exports = app => {
     /**,
      *  components:
@@ -61,6 +60,55 @@ module.exports = app => {
      *          description: 没有权限
      * */
     router.post("/addStandardInfos", bots.addMultPreInfo);
+
+
+    /**,
+     * @swagger
+     * /app/bot/addStandardWithLog:
+     *    post:
+     *      tags:
+     *      - botApi
+     *      summary: 增加标准问答并进行日志修正记录
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 标准问答信息
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 prompt:
+     *                   type: string
+     *                 completion:
+     *                   type: string
+     *                 log_id:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/addStandardWithLog", bots.addPreInfoWithLog);
+
+
 
     // addMultPreInfo
     router.post("/addMultPreInfo", bots.addMultPreInfo);

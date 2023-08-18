@@ -600,5 +600,60 @@ module.exports = app => {
      * */
     router.post("/botIdByUrl", users.botIdByUrl);
 
+
+    /**,
+     * @swagger
+     * /app/user/UserLimit:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 根据bot_id获取用户的套餐使用情况
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description:   bot_id //机器人id
+     *         required: true
+     *         content:
+     *           application/json::
+     *             schema:
+     *               type: object
+     *               properties:
+     *                  bot_id:
+     *                    type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  message:
+     *                    type: string
+     *                  userLimt:
+     *                    type: object
+     *                    properties:
+     *                      user_type:
+     *                        type: number
+     *                      yuliao_count:
+     *                        type: number
+     *                      standard_count:
+     *                        type: number
+     *                      answer_count:
+     *                        type: number
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 请求参数出错
+     * */
+    router.post("/UserLimit", users.UserLimit);
+
+
     app.use('/app/user', router);
 };

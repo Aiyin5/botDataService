@@ -4,6 +4,7 @@ const JWT = require("../../util/JWT");
 const sql = require("../../models/db");
 const {VdURL} = require('../../config/config.json')
 const AxiosTool = require("../../util/axiosTool");
+const Log = require("../../models/logModel");
 const axiosIns=new AxiosTool(VdURL);
 
 exports.findById = (req, res) => {
@@ -141,6 +142,96 @@ exports.addMultPreInfo =async (req, res) => {
                         res.send({
                             ActionType: "OK",
                         });
+                    } else {
+                        res.send({
+                            ActionType: "FALSE",
+                            message: "数据更新出错"
+                        });
+                    }
+                } catch (err) {
+                    res.send({
+                        ActionType: "FALSE",
+                        message: "数据更新出错"
+                    });
+                }
+            }
+        });
+    }
+    else {
+        res.send({
+            ActionType: "FALSE",
+            message: "问题重复"
+        });
+    }
+}
+
+exports.addPreInfoWithLog =async (req, res) => {
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+    }
+    const botData = req.body;
+    const logId = req.body.log_id;
+    let logWhere ={
+        "id":logId
+    }
+    if (!botData.log_id || !botData.bot_id || !botData.prompt) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    let condWhere = {
+        "bot_id":botData.bot_id,
+        "prompt":botData.prompt
+    }
+    let conRes = await  Bot.newfind(condWhere)
+    if(!condWhere){
+        res.status(200).send({
+            ActionType: "FALSE",
+            message:"内部查询错误"
+        });
+        return
+    }
+    let botInfo = {
+        "bot_id":botData.bot_id,
+        "prompt":botData.prompt,
+        "completion":botData.completion
+    }
+    if (conRes.length === 0) {
+        await Bot.addPreInfo(botInfo, async (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while retrieving tutorials."
+                });
+            else {
+                try {
+                    let vdRes = await axiosIns.post("/addSt",
+                        {
+                            "id": data.insertId.toString(),
+                            "bot_id": botData.bot_id,
+                            "question": botData.prompt,
+                            "answer": botData.completion
+                        });
+                    if (vdRes.ActionType == "OK") {
+                        //logId update
+                        let logData={
+                            "fix_info":1
+                        }
+                        await Log.updateComment(logData,logWhere, (err, data) => {
+                            if (err)
+                                res.status(200).send({
+                                    ActionType: "FALSE",
+                                    message: "修正记录添加失败"
+                                });
+                            else {
+                                res.send({
+                                    ActionType: "OK"
+                                })
+                            }
+                        })
                     } else {
                         res.send({
                             ActionType: "FALSE",
