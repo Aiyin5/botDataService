@@ -86,5 +86,15 @@ User.addLimt = async (data,result) =>{
     }
 }
 
+User.updateLimit = async (data,where,result) =>{
+    try {
+        let res=await sql.increase(tablename2,data,where);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(err, null);
+    }
+}
 
 module.exports = User;

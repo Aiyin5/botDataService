@@ -51,7 +51,7 @@ module.exports = app => {
      *                      count:
      *                        type: number
      *                      content:
-     *                        type: array[{id:number//编号  bot_id:string //机器人id question:string //问题  answer:string//答案  create_date:number//创建时间}}]
+     *                        type: array[{id:number//编号  bot_id:string //机器人id question:string //问题  answer:string//答案  fix_info:number //修正记录 create_date:number//创建时间}}]
      *        500:
      *          description: Internal Error
      *        401:

@@ -131,6 +131,16 @@ class MysqlPool {
         return await this.query(sql);
     }
 
+    async increase(tableName, data, where) {
+        const columnName=data.columnName;
+        const increaseAmount=data.increaseAmount;
+        const whereConditions = Object.entries(where)
+            .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+            .join(' AND ');
+        const sql = `UPDATE ${tableName} SET ${columnName} = ${columnName} + ${increaseAmount} WHERE ${whereConditions}`;
+        return await this.query(sql);
+    }
+
     async updateFirst(tableName, data, where) {
         const setValues = Object.entries(data)
             .map(([key, value]) => `${key} = ${mysql.escape(value)}`)

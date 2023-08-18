@@ -1,4 +1,5 @@
 const sql = require("./db2.js");
+const User = require("./userModel");
 
 // constructor
 const LogInfo = function(log) {
@@ -11,10 +12,25 @@ const tablename="log_info";
 LogInfo.create = async (newLog, result) => {
     try {
         let res=await sql.insert(tablename,newLog);
-        result(null, res);
+        let where={
+            "bot_id":newLog.bot_id
+        }
+        let updateData={
+            "columnName":"answer_count",
+            "increaseAmount" :1
+        }
+        await User.updateLimit(updateData,where, (err, data)=>{
+            if(err){
+                result(err, null);
+            }
+            else {
+                result(null, data);
+            }
+        })
     }
     catch (err){
         console.log(err)
+        result(err, null);
     }
 };
 LogInfo.find = async (where,result) =>{
