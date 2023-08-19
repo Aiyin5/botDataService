@@ -1,5 +1,6 @@
 const sql = require("./db.js");
 const removeEmoji = require("../util/dataTransform");
+const User = require("./userModel");
 
 // constructor
 const Bot = function(bot) {
@@ -54,9 +55,26 @@ Bot.updateBot = async (data,result) =>{
 
 Bot.addPreInfo = async (data,result)=>{
     try {
+        data.prompt = removeEmoji(data.prompt);
+        data.completion = removeEmoji(data.completion);
         let res=await sql.insert(pre_table,data);
-        result(null, res);
+        let where={
+            "bot_id":data.bot_id
+        }
+        let updateData={
+            "columnName":"standard_count",
+            "increaseAmount" :1
+        }
+        await User.updateLimit(updateData,where, (err, data)=>{
+            if(err){
+                result(err, null);
+            }
+            else {
+                result(null, data);
+            }
+        })
     }
+
     catch (err){
         console.log(err)
         result(err, null);
@@ -70,7 +88,21 @@ Bot.addMultPreInfo = async (data,result)=>{
             item.completion = removeEmoji(item.completion);
              res=await sql.insert(pre_table,item);
         }
-        result(null, res);
+        let where={
+            "bot_id":data[0].bot_id
+        }
+        let updateData={
+            "columnName":"standard_count",
+            "increaseAmount" :1
+        }
+        await User.updateLimit(updateData,where, (err, data)=>{
+            if(err){
+                result(err, null);
+            }
+            else {
+                result(null, data);
+            }
+        })
     }
     catch (err){
         console.log(err)
