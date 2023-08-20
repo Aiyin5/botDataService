@@ -380,7 +380,7 @@ exports.UserLimit =async (req, res) => {
         return;
     }
     const where = req.body
-    User.findLimt(where, (err, data) => {
+    await  User.findLimt(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
