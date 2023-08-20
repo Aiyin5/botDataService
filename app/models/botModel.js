@@ -70,7 +70,7 @@ Bot.addPreInfo = async (data,result)=>{
                 result(err, null);
             }
             else {
-                result(null, data);
+                result(null, res);
             }
         })
     }
@@ -91,6 +91,7 @@ Bot.addMultPreInfo = async (data,result)=>{
         let where={
             "bot_id":data[0].bot_id
         }
+        let toData=res
         let updateData={
             "columnName":"standard_count",
             "increaseAmount" :1
@@ -100,7 +101,7 @@ Bot.addMultPreInfo = async (data,result)=>{
                 result(err, null);
             }
             else {
-                result(null, data);
+                result(null, toData);
             }
         })
     }

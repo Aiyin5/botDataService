@@ -99,6 +99,7 @@ exports.createNew = (req, res) => {
                             err.message || "Some error occurred while creating the User."
                     });
                 else {
+
                     const token = JWT.generate({
                         _botid:user.bot_id,
                         email: user.email,
