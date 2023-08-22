@@ -7,6 +7,7 @@ const instance = require("../../util/caInstance")
 const {SecretId,SecretKey,VdURL}= require("../../config/config.json");
 const avatorCos = require("../../util/avatorCos");
 const crypto = require("crypto");
+const Uesr = require("../../models/userModel");
 let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
 
 exports.create = (req, res) => {
@@ -53,7 +54,7 @@ exports.create = (req, res) => {
     });
 };
 
-exports.createNew = (req, res) => {
+exports.createNew = async (req, res) => {
     // Validate request
     if (!req.body) {
         res.status(400).send({
@@ -92,24 +93,43 @@ exports.createNew = (req, res) => {
                 html_url:html_url
             });
             // Save Tutorial in the database
-            User.create(user, (err, data) => {
+            await User.create(user, async (err, data) => {
                 if (err)
                     res.status(500).send({
                         message:
                             err.message || "Some error occurred while creating the User."
                     });
                 else {
+                    let tepData = {
+                        "bot_id": user.bot_id
+                    }
+                    await Uesr.addLimt(tepData, (err, data) => {
+                        if (err) {
+                            console.log(err)
+                            const token = JWT.generate({
+                                _botid:user.bot_id,
+                                email: user.email,
+                            }, "7d")
 
-                    const token = JWT.generate({
-                        _botid:user.bot_id,
-                        email: user.email,
-                    }, "2d")
+                            res.header("Authorization", token)
+                            res.send({
+                                ActionType: "OK",
+                                message:"success"
+                            });
+                        } else {
+                            const token = JWT.generate({
+                                _botid:user.bot_id,
+                                email: user.email,
+                            }, "7d")
 
-                    res.header("Authorization", token)
-                    res.send({
-                        ActionType: "OK",
-                        message:"success"
-                    });
+                            res.header("Authorization", token)
+                            res.send({
+                                ActionType: "OK",
+                                message:"success"
+                            });
+                        }
+                    })
+
                 }
             });
         }

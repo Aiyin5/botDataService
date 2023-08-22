@@ -65,7 +65,7 @@ app.use((req,res,next)=>{
       const newToken = JWT.generate({
         _botid:payload.bot_id,
         email: payload.email,
-      },"2d")
+      },"7d")
       res.header("Authorization",newToken)
       next()
     }else{
