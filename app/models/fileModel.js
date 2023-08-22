@@ -1,4 +1,5 @@
 const sql = require("./db.js");
+const User = require("./userModel");
 // constructor
 const newFile = function(file) {
     this.bot_id = file.bot_id;
@@ -9,8 +10,21 @@ const tablename="file_info";
 newFile.create = async (fileInfo, result) => {
     try {
         let res=await sql.insert(tablename,fileInfo);
-        console.log("end")
-        result(null, res);
+        let con_length = fileInfo.file_content.length;
+        let where={
+            "bot_id":fileInfo.bot_id
+        }
+        let updateData={
+            "columnName":"yuliao_count",
+            "increaseAmount" :con_length
+        }
+        await User.updateLimit(updateData,where, (err, data)=> {
+            if (err) {
+                result(err, null);
+            } else {
+                result(null, res);
+            }
+        })
     }
     catch (err){
         console.log(err)
