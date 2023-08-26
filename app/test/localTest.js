@@ -9,6 +9,7 @@
  const avatorCos = require("../util/avatorCos");
  let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
  const crypto = require('crypto');
+ const smsInstance = require("../util/smsTool");
 async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
@@ -68,6 +69,13 @@ async function test(){
  }
  //test233()
 
+ async function test23333(){
+     let curTime = Date.now();
+     const key = crypto.randomBytes(4).toString('hex');
+     let timest = curTime.toString()+key
+     console.log(timest)
+ }
+ //test23333()
  async function sdqlTest2() {
      let curData;
      await Uesr.findAll((err, data) => {
@@ -93,4 +101,14 @@ async function test(){
      }
  }
 
- sdqlTest2()
+ //sdqlTest2()
+
+
+ async function smsTest(){
+    let smsTool = new smsInstance();
+    // let res = await smsTool.sendRegister("18817830136","456");
+    // console.log(res);
+    let res2 = await smsTool.sendLogin("18817830136","789");
+    console.log(res2);
+ }
+ smsTest()
