@@ -27,10 +27,6 @@ module.exports = app => {
      *                   type: string
      *                 password:
      *                   type: string
-     *                 bot_id:
-     *                   type: string
-     *                 level:
-     *                   type: number
      *                 org_id:
      *                   type: string
      *                 email_check:
@@ -63,15 +59,16 @@ module.exports = app => {
      * */
     router.post("/registerNew", users.createNew);
 
+
     /**,
      * @swagger
      * /app/user/register:
      *    post:
      *      tags:
      *      - userApi
-     *      summary: 用户注册的老接口
+     *      summary: 用户注册，只能通过手机号注册
      *      requestBody:
-     *         description: 用户信息 机器人id 默认为"0" 用户的权限level 默认为2
+     *         description: 用户信息
      *         required: true
      *         content:
      *           application/json:
@@ -80,17 +77,13 @@ module.exports = app => {
      *               properties:
      *                 name:
      *                   type: string
-     *                 email:
+     *                 phone:
      *                   type: string
      *                 password:
      *                   type: string
-     *                 bot_id:
-     *                   type: string
-     *                 level:
-     *                   type: number
      *                 org_id:
      *                   type: string
-     *                 email_check:
+     *                 phone_check:
      *                   type: string
      *                 image_url:
      *                   type: string
@@ -118,7 +111,8 @@ module.exports = app => {
      *        402:
      *          description: 验证码错误
      * */
-    router.post("/register", users.create);
+    router.post("/register", users.createByPhone);
+
 
     /**,
      * @swagger
@@ -182,7 +176,67 @@ module.exports = app => {
      * */
     router.post("/login", users.findByWhere);
 
-
+    /**,
+     * @swagger
+     * /app/user/loginByPhone:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 用户登录
+     *      requestBody:
+     *         description: 用户信息 checkType登录方式为Password时代表账号密码登录，Captcha为验证码登录
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 check_type:
+     *                   type: string
+     *                 phone:
+     *                   type: string
+     *                 password:
+     *                   type: string
+     *                 phone_check:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                    example: OK
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      name:
+     *                        type: string
+     *                      phone:
+     *                        type: string
+     *                      org_id:
+     *                        type: string
+     *                      bot_id:
+     *                        type: string
+     *                      level:
+     *                        type: string
+     *                      image_url:
+     *                        type: string
+     *                      html_url:
+     *                        type: string
+     *          headers:
+     *            Authorization:
+     *              type: string
+     *              description: 用于其他接口验权
+     *        500:
+     *          description: Internal Error
+     *        400:
+     *          description: 邮箱或者密码正确
+     * */
+    router.post("/loginByPhone", users.findByPhone);
 
     router.post("/botUser", users.findByBot);
 
@@ -653,6 +707,47 @@ module.exports = app => {
      *          description: 请求参数出错
      * */
     router.post("/UserLimit", users.UserLimit);
+
+
+    /**,
+     * @swagger
+     * /app/user/phoneCaptcha:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: 验证码
+     *      requestBody:
+     *         description: register为1时表示注册
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 phone:
+     *                   type: string
+     *                 register:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                    example: OK
+     *                    description: OK证明验证码发送成功.
+     *        500:
+     *          description: InternalError
+     *        400:
+     *          description: 请求信息不全
+     *        401:
+     *          description: 手机号重复
+     * */
+    router.post("/phoneCaptcha", users.phoneCaptcha);
 
 
     app.use('/app/user', router);

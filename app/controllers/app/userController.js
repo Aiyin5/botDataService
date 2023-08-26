@@ -4,11 +4,15 @@ const random =require("string-random");
 const Email = require("../../util/sendmail");
 const {emailItem,pass} =require("../../config/config.json");
 const instance = require("../../util/caInstance")
+const phoneInstance = require("../../util/phoneInstance")
 const {SecretId,SecretKey,VdURL}= require("../../config/config.json");
 const avatorCos = require("../../util/avatorCos");
 const crypto = require("crypto");
 const Uesr = require("../../models/userModel");
 let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
+const smsInstance = require("../../util/smsTool");
+
+let smsIns  =new smsInstance()
 
 exports.create = (req, res) => {
     // Validate request
@@ -52,6 +56,94 @@ exports.create = (req, res) => {
             });
         }
     });
+};
+
+exports.createByPhone = async (req, res) => {
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+    }
+    let phone=req.body.phone;
+    let phoneCode=req.body.phone_check;
+    let curTime = Date.now();
+    let arr = phoneInstance.getMap();
+    if(arr.has(phone)){
+        console.log(arr.get(phone).randomNumbers)
+        console.log(arr.get(phone).time)
+        if(arr.get(phone).randomNumbers!=phoneCode || (curTime-arr.get(phone).time>300000)){
+            res.status(200).send({
+                ActionType: "FALSE",
+                message: "验证码错误",
+            });
+        }
+        else {
+            instance.deleteItem(phone);
+            if(arr.size>100){
+                instance.cleanItem()
+            }
+            const key = crypto.randomBytes(4).toString('hex');
+            let tep_bot = curTime.toString()+key
+            let html_url=tep_bot;
+            const user = new User({
+                name: req.body.name,
+                phone: req.body.phone,
+                password: req.body.password,
+                bot_id: tep_bot,
+                org_id: req.body.org_id,
+                level: 2,
+                image_url:req.body.image_url,
+                html_url:html_url
+            });
+            // Save Tutorial in the database
+            await User.create(user, async (err, data) => {
+                if (err)
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while creating the User."
+                    });
+                else {
+                    let tepData = {
+                        "bot_id": user.bot_id
+                    }
+                    await Uesr.addLimt(tepData, (err, data) => {
+                        if (err) {
+                            console.log(err)
+                            const token = JWT.generate({
+                                _botid:user.bot_id,
+                                phone: user.phone,
+                            }, "7d")
+
+                            res.header("Authorization", token)
+                            res.send({
+                                ActionType: "OK",
+                                message:"success"
+                            });
+                        } else {
+                            const token = JWT.generate({
+                                _botid:user.bot_id,
+                                phone: user.phone,
+                            }, "7d")
+
+                            res.header("Authorization", token)
+                            res.send({
+                                ActionType: "OK",
+                                message:"success"
+                            });
+                        }
+                    })
+
+                }
+            });
+        }
+
+    }
+    else {
+        res.status(200).send({
+            ActionType: "FALSE",
+            message: "验证码错误",
+        });
+    }
 };
 
 exports.createNew = async (req, res) => {
@@ -255,6 +347,131 @@ exports.botIdByUrl =async (req, res) => {
     })
 }
 
+exports.findByPhone = async (req, res) => {
+    console.log("rv post loginByPhone")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    const where = req.body;
+    if(!where.check_type){
+        where.check_type="Password";
+    }
+    if(where.check_type ==="Captcha" && (!where.phone_check ||!where.phone) ){
+        if(!where.phone_check){
+            res.status(200).send({
+                message: "验证码不能为空!"
+            });
+        }
+        else {
+            res.status(200).send({
+                message: "用户信息不能为空!"
+            });
+        }
+    }
+    else if(where.check_type ==="Password"){
+        let condition={
+            password:where.password,
+            phone:where.phone
+        }
+       await User.find(condition, (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while login."
+                });
+            /*else res.send(data);*/
+            else {
+                if (data.length === 0) {
+                    res.status(200).send({
+                        code: "-1",
+                        message: "用户名密码不匹配"
+                    })
+                } else {
+                    //生成token
+                    const token = JWT.generate({
+                        _botid:data[0].bot_id,
+                        phone: data[0].phone
+                    }, "7d")
+
+                    res.header("Authorization", token)
+                    res.send({
+                        ActionType: "OK",
+                        message: "success",
+                        data: {
+                            name: data[0].name,
+                            phone: data[0].phone,
+                            bot_id: data[0].bot_id,
+                            org_id: data[0].org_id,
+                            level: data[0].level,
+                            image_url:data[0].image_url,
+                            html_url:data[0].html_url
+                        }
+                    })
+                }
+            }
+        });
+    }
+    else {
+        let emailCode=where.phone_check;
+        let curTime = Date.now();
+        console.log(curTime)
+        let arr = phoneInstance.getMap();
+        if(!arr.has(where.phone) || arr.get(where.phone).randomNumbers!=emailCode || (curTime-arr.get(where.phone).time>600000)){
+            res.status(200).send({
+                ActionType: "FALSE",
+                message: "验证码错误",
+            });
+        }
+        else {
+            phoneInstance.deleteItem(where.phone);
+            let condition={
+                phone:where.phone
+            }
+            await User.find(condition, (err, data) => {
+                if (err)
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while login."
+                    });
+                /*else res.send(data);*/
+                else {
+                    if (data.length === 0) {
+                        res.status(200).send({
+                            code: "-1",
+                            error: "用户名密码不匹配"
+                        })
+                    } else {
+                        //生成token
+                        const token = JWT.generate({
+                            _botid:data[0].bot_id,
+                            phone: data[0].phone
+                        }, "7d")
+                        res.header("Authorization", token)
+                        res.send({
+                            ActionType: "OK",
+                            message: "success",
+                            data: {
+                                name: data[0].name,
+                                phone: data[0].phone,
+                                bot_id: data[0].bot_id,
+                                org_id: data[0].org_id,
+                                level: data[0].level,
+                                image_url:data[0].image_url,
+                                html_url:data[0].html_url
+                            }
+                        })
+                    }
+                }
+            });
+        }
+    }
+
+};
+
+
 exports.findByWhere = (req, res) => {
     console.log("rv post login")
     if (!req.body) {
@@ -315,7 +532,7 @@ exports.findByWhere = (req, res) => {
                     const token = JWT.generate({
                         _botid:data[0].bot_id,
                         email: data[0].email
-                    }, "2d")
+                    }, "7d")
 
                     res.header("Authorization", token)
                     res.send({
@@ -369,7 +586,7 @@ exports.findByWhere = (req, res) => {
                         const token = JWT.generate({
                             _botid:data[0].bot_id,
                             email: data[0].email
-                        }, "2d")
+                        }, "7d")
                         res.header("Authorization", token)
                         res.send({
                             ActionType: "OK",
@@ -380,7 +597,8 @@ exports.findByWhere = (req, res) => {
                                 bot_id: data[0].bot_id,
                                 org_id: data[0].org_id,
                                 level: data[0].level,
-                                image_url:data[0].image_url
+                                image_url:data[0].image_url,
+                                html_url:data[0].html_url
                             }
                         })
                     }
@@ -427,6 +645,76 @@ exports.UserLimit =async (req, res) => {
     });
 }
 
+exports.phoneCaptcha =async (req, res) => {
+    console.log("rv post phoneCaptcha")
+    if (!req.body) {
+        res.status(400).send({
+            message: "phone can not be empty!"
+        });
+        return;
+    }
+    console.log(req.body)
+    const phone = req.body.phone;
+    const register = req.body.register;
+    let where={
+        phone:phone
+    }
+    try {
+        let dataRes =await User.findEmail(where)
+        if(dataRes.length > 0 && register===1){
+            res.status(200).send({
+                ActionType: "FALSE",
+                message: "手机号重复"
+            })
+        }
+        else {
+            let num = Date.now().toString().slice(-6);
+            const usercodeinfo = {
+                randomNumbers: num, //生成的验证码
+                phone: phone,//用户邮箱
+                time: Date.now()//生成验证码的时间0
+            }
+            if(register === 1){
+                let res = await smsIns.sendRegister(phone,num)
+                if(!res){
+                    res.send({
+                        ActionType: "False",
+                        message: "短信发送失败"
+                    })
+                }
+            }
+            else
+            {
+                let res = await smsIns.sendLogin(phone,num)
+                if(!res){
+                    res.send({
+                        ActionType: "False",
+                        message: "短信发送失败"
+                    })
+                }
+            }
+            try {
+                phoneInstance.addItem(phone,usercodeinfo)
+                res.send({
+                    ActionType: "OK",
+                    message: "success"
+                })
+            }
+            catch (err){
+                console.log(err)
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while retrieving tutorials."
+                });
+            }
+        }
+    }
+    catch (err){
+        res.status(500).send({
+            Error: "Internal Error"
+        })
+    }
+}
 
 exports.captcha =async (req, res) => {
     console.log("rv post captcha")

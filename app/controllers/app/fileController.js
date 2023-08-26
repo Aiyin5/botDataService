@@ -219,7 +219,7 @@ exports.create =async (req, res) => {
     }
 };
 
-exports.findByFile = (req, res) =>{
+exports.findByFile = async (req, res) =>{
     console.log("rv post findByFile")
     if (!req.body) {
         res.status(400).send({
@@ -234,7 +234,7 @@ exports.findByFile = (req, res) =>{
         });
         return;
     }
-    File.find(where, (err, data) => {
+    await File.find(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -250,7 +250,7 @@ exports.findByFile = (req, res) =>{
     });
 }
 
-exports.allFile = (req, res) =>{
+exports.allFile = async (req, res) =>{
     console.log("rv post findByFile")
     if (!req.body) {
         res.status(400).send({
@@ -258,7 +258,7 @@ exports.allFile = (req, res) =>{
         });
         return;
     }
-    File.findAll( (err, data) => {
+    await File.findAll( (err, data) => {
         if (err)
             res.status(500).send({
                 message:

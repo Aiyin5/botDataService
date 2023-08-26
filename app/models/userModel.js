@@ -4,11 +4,12 @@ const sql = require("./db.js");
 const User = function(user) {
     this.name = user.name;
     this.email = user.email;
+    this.phone = user.phone;
     this.password = user.password;
     this.bot_id = user.bot_id;
     this.org_id = user.org_id;
     this.level = user.level;
-    this.image_url = user.image_url,
+    this.image_url = user.image_url;
     this.html_url=user.html_url;
 };
 const tablename="user_info";
