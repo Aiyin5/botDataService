@@ -811,6 +811,49 @@ exports.aicheck =async (req, res) => {
         })
     }
 }
+
+exports.phoneCheck =async (req, res) => {
+    console.log("rv post phoneCheck")
+    if (!req.body) {
+        res.status(400).send({
+            message: "phone can not be empty!"
+        });
+        return;
+    }
+    console.log(req.body)
+    if(!req.body.phone){
+        res.status(400).send({
+            Error: "phone不能为空"
+        })
+    }
+    else {
+        const phone = req.body.phone;
+        let where={
+            phone:phone
+        }
+        try {
+            let dataRes =await User.findEmail(where)
+            if(dataRes.length > 0){
+                res.status(200).send({
+                    ActionType: "FALSE",
+                    message: "phone重复"
+                })
+            }
+            else{
+                res.send({
+                    ActionType: "OK",
+                    message: "success"
+                })
+            }
+        }
+        catch (err){
+            res.status(500).send({
+                Error: "Internal Error"
+            })
+        }
+    }
+}
+
 exports.emailCheck =async (req, res) => {
     console.log("rv post emailCheck")
     if (!req.body) {

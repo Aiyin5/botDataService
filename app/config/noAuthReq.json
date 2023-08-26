@@ -26,6 +26,7 @@
     "/app/user/botIdByUrl",
     "/app/log/commentInfo",
     "/app/user/phoneCaptcha",
-    "/app/user/loginByPhone"
+    "/app/user/loginByPhone",
+    "/app/user/phoneCheck"
   ]
 }

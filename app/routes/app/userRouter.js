@@ -354,6 +354,42 @@ module.exports = app => {
      * */
     router.post("/emailCheck", users.emailCheck);
 
+    /**,
+     * @swagger
+     * /app/user/phoneCheck:
+     *    post:
+     *      tags:
+     *      - userApi
+     *      summary: phone唯一性检测
+     *      requestBody:
+     *         description: phone信息
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 phone:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                    example: OK
+     *                    description: OK证明域名可用.
+     *        500:
+     *          description: InternalError
+     *        400:
+     *          description: 请求信息不全
+     * */
+    router.post("/phoneCheck", users.phoneCheck);
+
 
     /**,
      * @swagger
