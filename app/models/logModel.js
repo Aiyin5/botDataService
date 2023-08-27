@@ -83,4 +83,14 @@ LogInfo.updateComment = async (commentData,where,result) =>{
         result(err, null);
     }
 }
+LogInfo.findLast = async (where,result) =>{
+    try {
+        let res=await sql.selectFirst(tablename,where);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(err, null);
+    }
+}
 module.exports = LogInfo;

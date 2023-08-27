@@ -10,6 +10,8 @@
  let cos = new avatorCos(SecretId,SecretKey,"aiyin-avator-1316443200","ap-shanghai");
  const crypto = require('crypto');
  const smsInstance = require("../util/smsTool");
+ const JWT = require("../util/JWT");
+ const Log = require("../models/logModel");
 async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
@@ -111,4 +113,28 @@ async function test(){
     let res2 = await smsTool.sendLogin("18817830136","789");
     console.log(res2);
  }
- smsTest()
+// smsTest()
+
+ async function lys(){
+     const commData = {
+         "comment_type":1
+     };
+     let where ={
+         "bot_id":"3",
+         "question":"测试问题3"
+     }
+     await Log.findLast(where, (err, data) => {
+         if (err){
+             console.log(err)
+         }
+             // res.status(500).send({
+             //     message:
+             //         err.message || "Some error occurred while retrieving tutorials."
+             // });
+         else {
+             console.log(data)
+             console.log(data[0].id)
+         }
+     })
+ }
+ lys()

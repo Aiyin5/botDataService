@@ -122,16 +122,36 @@ exports.commentUpdate = async (req, res) =>{
         "bot_id":req.body.bot_id,
         "question":req.body.question
     }
-    await Log.updateComment(commData,where, (err, data) => {
-        if (err)
+    await Log.findLast(where,async (err, data) => {
+        if(err){
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "Some error occurred while search."
             });
+        }
         else {
-            res.send({
-                ActionType: "OK"
+            if(data.length<1){
+                res.send({
+                    ActionType: "False",
+                    message: "未找到对应的日志信息"
+                })
+                return
+            }
+            let logId = data[0].id
+            await Log.updateComment(commData,where, (err, data) => {
+                if (err)
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while retrieving tutorials."
+                    });
+                else {
+                    res.send({
+                        ActionType: "OK",
+                        LogId:logId
+                    })
+                }
             })
         }
     })
+
 }

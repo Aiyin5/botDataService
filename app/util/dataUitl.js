@@ -151,6 +151,13 @@ class MysqlPool {
         const sql = `UPDATE ${tableName} SET ${setValues} WHERE ${whereConditions} ORDER BY id DESC limit 1`;
         return await this.query(sql);
     }
+    async selectFirst(tableName, where) {
+        const whereConditions = Object.entries(where)
+            .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+            .join(' AND ');
+        const sql = `SELECT * FROM ${tableName} WHERE ${whereConditions} ORDER BY id DESC limit 1`;
+        return await this.query(sql);
+    }
 
     async delete(tableName, where) {
         const whereConditions = Object.entries(where)
