@@ -1,6 +1,7 @@
 const Notion = require("../../models/notionModel.js");
 const notionApi =require("../../util/notion")
 const File = require("../../models/fileSysModel");
+const {limitCheck} = require("../../util/limitCheck");
 // Create and Save a new Tutorial
 exports.create =async (req, res) => {
     console.log("rec notion create")
@@ -10,7 +11,15 @@ exports.create =async (req, res) => {
             message: "Content can not be empty!"
         });
     }
-    console.log(req.body)
+    let limit_res = await limitCheck(req.body.bot_id)
+    if(!limit_res.action){
+        res.status(200).send({
+            ActionType: "FALSE",
+            message:"超出套餐容量，请升级套餐"
+        });
+        return
+    }
+    //console.log(req.body)
     console.log("start")
     let subNum=2;
     if(req.body.subPage){

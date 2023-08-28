@@ -745,6 +745,9 @@ module.exports = app => {
     router.post("/UserLimit", users.UserLimit);
 
 
+    router.post("/limitInside", users.UserLimit);
+
+
     /**,
      * @swagger
      * /app/user/phoneCaptcha:

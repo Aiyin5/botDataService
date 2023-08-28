@@ -101,6 +101,10 @@ newFile.findByPage = async (where,result) =>{
 }
 newFile.deleteFileInfo = async (data,result)=>{
     try {
+        // let dataSelect = await sql.selectByWhere(tablename,data);
+        // if(dataSelect.length != 1){
+        //
+        // }
         let res1 = await sql.delete(tablename,data);
         result(null, res1);
     }

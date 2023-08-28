@@ -1047,13 +1047,12 @@ exports.botInfo=async (req, res) => {
 
 exports.botInfoUpdate=async (req, res) => {
     console.log("rv post user botInfoUpdate")
-    if (!req.body.email) {
+    if (!req.body.bot_id) {
         res.status(400).send({
-            message: "Email can not be empty!"
+            message: "bot_id can not be empty!"
         });
         return;
     }
-    let email = req.body.email
     let bot_id = req.body.bot_id
     if(!req.body.welcomes){
 
@@ -1067,7 +1066,6 @@ exports.botInfoUpdate=async (req, res) => {
         bgImg_url:req.body.bgImg_url
     }
     let where={
-        email:email,
         bot_id:bot_id
     }
     try {

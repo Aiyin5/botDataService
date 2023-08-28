@@ -13,6 +13,7 @@
  const JWT = require("../util/JWT");
  const Log = require("../models/logModel");
  const LogInfo = require("../models/logModel");
+ const {limitCheck} = require("../util/limitCheck");
 async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
@@ -173,3 +174,9 @@ async function test(){
      })
  }
  //commentUpdate()
+
+ async function limitCheck2(){
+    let res = await limitCheck("qjkdhu@126.com")
+    console.log(res)
+ }
+ limitCheck2()

@@ -5,6 +5,7 @@ const sql = require("../../models/db");
 const {VdURL} = require('../../config/config.json')
 const AxiosTool = require("../../util/axiosTool");
 const Log = require("../../models/logModel");
+const {limitCheck} = require("../../util/limitCheck");
 const axiosIns=new AxiosTool(VdURL);
 
 exports.findById = (req, res) => {
@@ -182,6 +183,14 @@ exports.addPreInfoWithLog =async (req, res) => {
         });
         return;
     }
+    let limit_res = await limitCheck(botData.bot_id)
+    if(!limit_res.action){
+        res.status(200).send({
+            ActionType: "FALSE",
+            message:"超出套餐容量，请升级套餐"
+        });
+        return
+    }
     let condWhere = {
         "bot_id":botData.bot_id,
         "prompt":botData.prompt
@@ -301,7 +310,7 @@ exports.deletPreInfo = (req, res) => {
     });
 }
 
-exports.updatePreInfo = (req, res) => {
+exports.updatePreInfo = async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -309,7 +318,7 @@ exports.updatePreInfo = (req, res) => {
     }
     const botData = req.body;
     console.log(botData)
-    Bot.updatePreInfo(botData, async (err, data) => {
+    await Bot.updatePreInfo(botData, async (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -369,8 +378,8 @@ exports.getPreInfo = (req, res) => {
     });
 }
 
-exports.getPreInfoAll = (req, res) => {
-    Bot.getPreInfoAll((err, data) => {
+exports.getPreInfoAll = async (req, res) => {
+    await Bot.getPreInfoAll((err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -384,14 +393,14 @@ exports.getPreInfoAll = (req, res) => {
         }
     });
 }
-exports.getPreInfoByPage = (req, res) => {
+exports.getPreInfoByPage = async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
     }
     const where = req.body;
-    Bot.getPreInfoByPage(where, (err, data) => {
+    await Bot.getPreInfoByPage(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -405,7 +414,7 @@ exports.getPreInfoByPage = (req, res) => {
         }
     });
 }
-exports.searchStandardInfo = (req, res) => {
+exports.searchStandardInfo = async (req, res) => {
     if(!req.body.bot_id || !req.body.content) {
         res.status(400).send({
             message: "Content and bot_id can not be empty!"
@@ -413,7 +422,7 @@ exports.searchStandardInfo = (req, res) => {
     }
     else {
         const where = req.body;
-        Bot.searchStandardInfo(where, (err, data) => {
+       await Bot.searchStandardInfo(where, (err, data) => {
             if (err)
                 res.status(500).send({
                     message:

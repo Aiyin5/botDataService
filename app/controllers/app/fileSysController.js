@@ -1,6 +1,7 @@
 const File = require("../../models/fileSysModel.js");
 const {VdURL} = require('../../config/config.json')
 const AxiosTool = require("../../util/axiosTool");
+const {limitCheck} = require("../../util/limitCheck");
 const axiosIns=new AxiosTool(VdURL);
 // Create and Save a new Tutorial
 function removeEmoji (content) {
@@ -25,6 +26,7 @@ exports.create = async (req, res) => {
             message: "Content can not be empty!"
         });
     }
+    let user_type = 0;
     if(!req.body.bot_id || !req.body.doc_name){
         res.status(400).send({
             message: "doc_name can not be empty!"
@@ -32,6 +34,15 @@ exports.create = async (req, res) => {
         return
     }
     else {
+        let limit_res = await limitCheck(req.body.bot_id)
+        user_type = limit_res.type
+        if(!limit_res.action){
+            res.status(200).send({
+                ActionType: "FALSE",
+                message:"超出套餐容量，请升级套餐"
+            });
+            return
+        }
         let conWhere={
             "bot_id":req.body.bot_id,
             "doc_name":req.body.doc_name
@@ -55,6 +66,30 @@ exports.create = async (req, res) => {
         }
     }
     let content = removeEmoji(req.body.content)
+    if(user_type === 0 && content.length > 10000){
+        res.send({
+            ActionType: "FALSE",
+            message:"超过套餐内容，请更新套餐"
+        });
+        return
+    }
+    else if(user_type === 1 && content.length > 30000){
+        res.send({
+            ActionType: "FALSE",
+            message:"超过套餐内容，请更新套餐"
+        });
+        return
+    }
+    else {
+
+    }
+    if(content.length > 100000){
+        res.send({
+            ActionType: "FALSE",
+            message:"单个数据内容太大，请联系管理员"
+        });
+        return
+    }
     //console.log(req.body.content)
     const file = new File({
         bot_id: req.body.bot_id,

@@ -76,6 +76,7 @@ User.findLimt = async (where,result) =>{
         result(err, null);
     }
 }
+
 User.addLimt = async (data,result) =>{
     try {
         let res=await sql.insert(tablename2,data);

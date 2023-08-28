@@ -9,6 +9,7 @@ const fs = require("fs");
 const {PDFLoader} = require("langchain/document_loaders/fs/pdf"); //引入查看zip文件的包
 const AxiosTool = require("../../util/axiosTool");
 const sql = require("../../models/db");
+const {limitCheck} = require("../../util/limitCheck");
 const axiosIns=new AxiosTool(VdURL);
 function removeEmoji (content) {
     let conByte = new TextEncoder("utf-8").encode(content);
@@ -45,6 +46,7 @@ exports.create =async (req, res) => {
         });
         return
     }
+    let user_type = 0
     if(!req.body.bot_id || !req.body.file_name){
         res.status(400).send({
             message: "Content can not be empty!"
@@ -52,6 +54,17 @@ exports.create =async (req, res) => {
         return
     }
     else {
+        let limit_res = await limitCheck(req.body.bot_id)
+        user_type = limit_res.type
+        if(!limit_res.action){
+            res.status(200).send({
+                ActionType: "FALSE",
+                message:"超出套餐容量，请升级套餐"
+            });
+            return
+        }
+
+
         let conWhere={
             "bot_id":req.body.bot_id,
             "file_name":req.body.file_name
@@ -83,6 +96,23 @@ exports.create =async (req, res) => {
             );
             let textContent =  await loader.load();
             textContent = removeEmoji(textContent[0].pageContent)
+            if(user_type === 0 && textContent.length > 10000){
+                res.send({
+                    ActionType: "FALSE",
+                    message:"超过套餐内容，请更新套餐"
+                });
+                return
+            }
+            else if(user_type === 1 && textContent.length > 30000){
+                res.send({
+                    ActionType: "FALSE",
+                    message:"超过套餐内容，请更新套餐"
+                });
+                return
+            }
+            else {
+
+            }
             if(textContent.length>100000){
                 res.send({
                     ActionType: "FALSE",
@@ -155,6 +185,23 @@ exports.create =async (req, res) => {
                 });
             let textContent =  await loader.load();
             textContent = removeEmoji(textContent[0].pageContent)
+            if(user_type === 0 && textContent.length > 10000){
+                res.send({
+                    ActionType: "FALSE",
+                    message:"超过套餐内容，请更新套餐"
+                });
+                return
+            }
+            else if(user_type === 1 && textContent.length > 30000){
+                res.send({
+                    ActionType: "FALSE",
+                    message:"超过套餐内容，请更新套餐"
+                });
+                return
+            }
+            else {
+
+            }
             if(textContent.length>100000){
                 res.send({
                     ActionType: "FALSE",
@@ -338,7 +385,7 @@ exports.docDelete = async (req, res) => {
                     if(vdRes.ActionType=="OK"){
                         let bot_file_name =  req.body.bot_id+data[0].file_name;
                         await cos.deleteObject(bot_file_name)
-                        File.deleteFileInfo(where, (err, data) => {
+                        await File.deleteFileInfo(where, (err, data) => {
                             if (err)
                                 res.status(500).send({
                                     message:
