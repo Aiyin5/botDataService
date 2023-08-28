@@ -12,6 +12,7 @@
  const smsInstance = require("../util/smsTool");
  const JWT = require("../util/JWT");
  const Log = require("../models/logModel");
+ const LogInfo = require("../models/logModel");
 async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
@@ -137,4 +138,38 @@ async function test(){
          }
      })
  }
- lys()
+ //lys()
+
+ async function commentUpdate(){
+     await LogInfo.findAll(async (err, data) => {
+         if(err){
+             console.log(err)
+         }
+         else {
+             //console.log(data)
+             for (let item of data){
+                 //console.log(item)
+                 if(item.answer.includes('抱歉') || item.answer.includes('sorry') || item.answer.includes('无法回答') ){
+                     console.log(item)
+                     if(item.bot_id){
+                         let logData={
+                             "comment_type":3
+                         }
+                         let logWhere ={
+                             "id":item.id
+                         }
+                         await LogInfo.updateComment(logData,logWhere,(err, data)=>{
+                                if(err){
+                                    console.log(err)
+                                }
+                                else {
+                                    console.log(data)
+                                }
+                         })
+                     }
+                 }
+             }
+         }
+     })
+ }
+ //commentUpdate()

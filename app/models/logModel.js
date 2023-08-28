@@ -7,6 +7,7 @@ const LogInfo = function(log) {
     this.question = log.question;
     this.answer = log.answer;
     this.other = log.other;
+    this.comment_type = log.comment_type;
 };
 const tablename="log_info";
 LogInfo.create = async (newLog, result) => {
@@ -36,6 +37,17 @@ LogInfo.create = async (newLog, result) => {
 LogInfo.find = async (where,result) =>{
     try {
         let res=await sql.selectByWhere(tablename,where);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
+
+LogInfo.findAll = async (result) =>{
+    try {
+        let res=await sql.select(tablename);
         result(null, res);
     }
     catch (err){

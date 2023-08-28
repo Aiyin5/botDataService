@@ -7,12 +7,18 @@ exports.create = (req, res) => {
             message: "Content can not be empty!"
         });
     }
-    // Create a Tutorial
+    let comment_type = 0;
+    if(!req.body.comment_type){
+        comment_type = 0
+    }
+    else {
+        comment_type = req.body.comment_type
+    }
     const log = new Log({
         bot_id: req.body.bot_id,
         question: req.body.question,
         answer:req.body.answer,
-        comment_type:0,
+        comment_type:comment_type,
         other:req.body.other
     });
 
