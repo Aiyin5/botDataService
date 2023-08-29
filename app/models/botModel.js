@@ -132,7 +132,7 @@ Bot.deletePreInfo = async (data,result)=>{
     try {
         let res = await sql.delete(pre_table,data);
         let where={
-            "bot_id":data[0].bot_id
+            "bot_id":data.bot_id
         }
         let toData=res
         let updateData={
