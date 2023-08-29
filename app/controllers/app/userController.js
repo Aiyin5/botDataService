@@ -1081,9 +1081,11 @@ exports.botInfoUpdate=async (req, res) => {
                     message: "数据存储失败，请检查是否有特殊字符"
                 })
             }
-            res.send({
-                ActionType: "OK"
-            })
+            else {
+                res.send({
+                    ActionType: "OK"
+                })
+            }
     }
     catch (err){
         res.status(500).send({
