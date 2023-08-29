@@ -25,7 +25,7 @@ exports.findById = (req, res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "内部服务器错误"
             });
         else {
             if (data.length === 0) {
@@ -61,7 +61,7 @@ exports.updateBot = (req, res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "内部服务器错误"
             });
         else {
             res.send({
@@ -128,7 +128,7 @@ exports.addMultPreInfo =async (req, res) => {
             if (err)
                 res.status(500).send({
                     message:
-                        err.message || "Some error occurred while retrieving tutorials."
+                        err.message || "内部服务器错误"
                 });
             else {
                 try {
@@ -184,7 +184,7 @@ exports.addPreInfoWithLog =async (req, res) => {
         return;
     }
     let limit_res = await limitCheck(botData.bot_id)
-    if(!limit_res.action){
+    if(!limit_res.st_action){
         res.status(200).send({
             ActionType: "FALSE",
             message:"超出套餐容量，请升级套餐"
@@ -213,7 +213,7 @@ exports.addPreInfoWithLog =async (req, res) => {
             if (err)
                 res.status(500).send({
                     message:
-                        err.message || "Some error occurred while retrieving tutorials."
+                        err.message || "内部服务器错误"
                 });
             else {
                 try {
@@ -265,18 +265,18 @@ exports.addPreInfoWithLog =async (req, res) => {
 }
 
 
-exports.deletPreInfo = (req, res) => {
+exports.deletePreInfo = async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
     }
     const where = req.body;
-    Bot.deletPreInfo(where, async (err, data) => {
+    await Bot.deletePreInfo(where, async (err, data) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "内部服务器错误"
             });
         else {
             try {
@@ -322,7 +322,7 @@ exports.updatePreInfo = async (req, res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "内部服务器错误"
             });
         else {
             try {
@@ -367,7 +367,7 @@ exports.getPreInfo = (req, res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "内部服务器错误"
             });
         else {
             res.send({
@@ -383,7 +383,7 @@ exports.getPreInfoAll = async (req, res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "内部服务器错误"
             });
         else {
             res.send({
@@ -404,7 +404,7 @@ exports.getPreInfoByPage = async (req, res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "内部服务器错误."
             });
         else {
             res.send({

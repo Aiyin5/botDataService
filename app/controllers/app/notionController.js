@@ -12,7 +12,7 @@ exports.create =async (req, res) => {
         });
     }
     let limit_res = await limitCheck(req.body.bot_id)
-    if(!limit_res.action){
+    if(!limit_res.yuliao_action){
         res.status(200).send({
             ActionType: "FALSE",
             message:"超出套餐容量，请升级套餐"

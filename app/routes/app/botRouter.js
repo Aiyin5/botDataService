@@ -153,10 +153,10 @@ module.exports = app => {
      *        401:
      *          description: 没有权限
      * */
-    router.post("/deleteStandardInfo", bots.deletPreInfo);
+    router.post("/deleteStandardInfo", bots.deletePreInfo);
 
     // deletPreInfo
-    router.post("/deletPreInfo", bots.deletPreInfo);
+    router.post("/deletPreInfo", bots.deletePreInfo);
 
 
     /**,

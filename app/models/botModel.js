@@ -128,10 +128,25 @@ Bot.addMultPreInfo2 = async (data)=>{
         return err
     }
 }
-Bot.deletPreInfo = async (data,result)=>{
+Bot.deletePreInfo = async (data,result)=>{
     try {
         let res = await sql.delete(pre_table,data);
-        result(null, res);
+        let where={
+            "bot_id":data[0].bot_id
+        }
+        let toData=res
+        let updateData={
+            "columnName":"standard_count",
+            "increaseAmount" :-1
+        }
+        await User.updateLimit(updateData,where, (err, data)=>{
+            if(err){
+                result(err, null);
+            }
+            else {
+                result(null, toData);
+            }
+        })
     }
     catch (err){
         console.log(err)

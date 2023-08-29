@@ -56,15 +56,13 @@ exports.create =async (req, res) => {
     else {
         let limit_res = await limitCheck(req.body.bot_id)
         user_type = limit_res.type
-        if(!limit_res.action){
+        if(!limit_res.yuliao_action){
             res.status(200).send({
                 ActionType: "FALSE",
                 message:"超出套餐容量，请升级套餐"
             });
             return
         }
-
-
         let conWhere={
             "bot_id":req.body.bot_id,
             "file_name":req.body.file_name
