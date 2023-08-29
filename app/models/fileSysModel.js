@@ -103,17 +103,26 @@ File.findByPage = async (where,result) =>{
         result(null, err);
     }
 }
-File.deleteFileInfo = async (data,result)=>{
+File.deleteFileInfo = async (data,limitInfo,result)=>{
     try {
         let doc_name = data.doc_name;
         let res1 = await sql.delete(tablename,data);
         //delete doc vector
         let where={
-            "bot_id":data.bot_id,
-            "doc_name":doc_name
+            "bot_id":limitInfo.bot_id
         }
-        //let res2 = await sql.delete(vectorName,where);
-        result(null, res1);
+        let updateData={
+            "columnName":"yuliao_count",
+            "increaseAmount" :0-limitInfo.doc_length
+        }
+        await User.updateLimit(updateData,where, (err, data)=>{
+            if(err){
+                result(err, null);
+            }
+            else {
+                result(null, res1);
+            }
+        })
     }
     catch (err){
         console.log(err)

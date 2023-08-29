@@ -297,7 +297,7 @@ exports.findByFilePage = (req, res) =>{
         }
     });
 }
-exports.deleteFileInfo = (req, res) => {
+exports.deleteFileInfo =async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -306,7 +306,7 @@ exports.deleteFileInfo = (req, res) => {
     const where = req.body;
     //console.log(where)
     try {
-        File.find(where, async (err, data) => {
+        await File.find(where, async (err, data) => {
             if (err)
                 res.status(500).send({
                     message:
@@ -330,7 +330,12 @@ exports.deleteFileInfo = (req, res) => {
                         });
 
                     if(vdRes.ActionType=="OK"){
-                        File.deleteFileInfo(where, (err, data) => {
+                        let doc_len = data[0].content.length
+                        let limitInfo={
+                            "bot_id": data[0].bot_id,
+                            "doc_length":doc_len
+                        }
+                        await File.deleteFileInfo(where,limitInfo, (err, data) => {
                             if (err)
                                 res.status(500).send({
                                     message:

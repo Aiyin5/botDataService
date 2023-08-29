@@ -99,14 +99,25 @@ newFile.findByPage = async (where,result) =>{
         result(null, err);
     }
 }
-newFile.deleteFileInfo = async (data,result)=>{
+newFile.deleteFileInfo = async (data,limitInfo,result)=>{
+
     try {
-        // let dataSelect = await sql.selectByWhere(tablename,data);
-        // if(dataSelect.length != 1){
-        //
-        // }
         let res1 = await sql.delete(tablename,data);
-        result(null, res1);
+        let where={
+            "bot_id":limitInfo.bot_id
+        }
+        let updateData={
+            "columnName":"yuliao_count",
+            "increaseAmount" :0-limitInfo.doc_length
+        }
+        await User.updateLimit(updateData,where, (err, data)=>{
+            if(err){
+                result(err, null);
+            }
+            else {
+                result(null, res1);
+            }
+        })
     }
     catch (err){
         console.log(err)

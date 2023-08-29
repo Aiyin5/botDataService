@@ -383,7 +383,12 @@ exports.docDelete = async (req, res) => {
                     if(vdRes.ActionType=="OK"){
                         let bot_file_name =  req.body.bot_id+data[0].file_name;
                         await cos.deleteObject(bot_file_name)
-                        await File.deleteFileInfo(where, (err, data) => {
+                        let doc_len = data[0].file_content.length
+                        let limitInfo={
+                            "bot_id": data[0].bot_id,
+                            "doc_length":doc_len
+                        }
+                        await File.deleteFileInfo(where,limitInfo,(err, data) => {
                             if (err)
                                 res.status(500).send({
                                     message:
