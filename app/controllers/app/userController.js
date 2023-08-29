@@ -1024,7 +1024,7 @@ exports.botInfo=async (req, res) => {
             res.send({
                 ActionType: "OK",
                 name:dataRes[0].name,
-                welcomes:dataRes[0].welcomes,
+                welcomes:dataRes[0].welcomes?decodeURIComponent(dataRes[0].welcomes):"[]",
                 image_url:dataRes[0].image_url,
                 faq_contents:dataRes[0].faq_contents,
                 contact:dataRes[0].contact,
@@ -1059,8 +1059,7 @@ exports.botInfoUpdate=async (req, res) => {
 
     }
     else {
-        welcomes = req.body.welcomes
-        welcomes = Buffer.from(welcomes, "utf8");
+        welcomes =  encodeURIComponent(req.body.welcomes);
     }
     let upData={
         name:req.body.name,

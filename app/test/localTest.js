@@ -176,7 +176,10 @@ async function test(){
  //commentUpdate()
 
  async function limitCheck2(){
-    let res = await limitCheck("qjkdhu@126.com")
-    console.log(res)
+    let welcomes = "👏🏻";
+    welcomes =  encodeURIComponent(welcomes);
+    console.log(welcomes);
+    welcomes =  decodeURIComponent(welcomes);
+    console.log(welcomes);
  }
  limitCheck2()
