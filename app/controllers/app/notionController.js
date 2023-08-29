@@ -15,7 +15,7 @@ exports.create =async (req, res) => {
     if(!limit_res.yuliao_action){
         res.status(200).send({
             ActionType: "FALSE",
-            message:"超出套餐容量，请升级套餐"
+            message:"超过当前版本容量，请升级版本"
         });
         return
     }

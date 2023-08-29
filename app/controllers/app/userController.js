@@ -1054,12 +1054,17 @@ exports.botInfoUpdate=async (req, res) => {
         return;
     }
     let bot_id = req.body.bot_id
-    if(!req.body.welcomes){
+    let welcomes = ""
+    if(!req.body.welcomes || req.body.welcomes===""){
 
+    }
+    else {
+        welcomes = req.body.welcomes
+        welcomes = Buffer.from(welcomes, "utf8");
     }
     let upData={
         name:req.body.name,
-        welcomes:req.body.welcomes,
+        welcomes:welcomes,
         image_url:req.body.image_url,
         faq_contents:req.body.faq_contents,
         contact:req.body.contact,
@@ -1070,6 +1075,12 @@ exports.botInfoUpdate=async (req, res) => {
     }
     try {
             let dataRes =await User.updateByEmail(upData,where)
+            if(!dataRes){
+                res.send({
+                    ActionType: "False",
+                    message: "数据存储失败，请检查是否有特殊字符"
+                })
+            }
             res.send({
                 ActionType: "OK"
             })
