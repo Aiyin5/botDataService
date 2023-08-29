@@ -823,7 +823,7 @@ exports.phoneCheck =async (req, res) => {
     console.log(req.body)
     if(!req.body.phone){
         res.status(400).send({
-            Error: "phone不能为空"
+            Error: "手机号不能为空"
         })
     }
     else {
@@ -836,7 +836,7 @@ exports.phoneCheck =async (req, res) => {
             if(dataRes.length > 0){
                 res.status(200).send({
                     ActionType: "FALSE",
-                    message: "phone重复"
+                    message: "该手机号已被注册"
                 })
             }
             else{
