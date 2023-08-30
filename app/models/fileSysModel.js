@@ -70,7 +70,6 @@ File.update = async (where,result) =>{
     let condition={
         "id":where.id
     }
-
     try {
         let data1 = await sql.selectByWhere(tablename,where);
         if(data1.length!=1){
@@ -95,7 +94,21 @@ File.update = async (where,result) =>{
                 }
             }
             let res=await sql.update(tablename,where,condition);
-            result(null, res);
+            let whereCon={
+                "bot_id":data1[0].bot_id
+            }
+            let updateData={
+                "columnName":"yuliao_count",
+                "increaseAmount" :doc_len2-doc_len
+            }
+            await User.updateLimit(updateData,whereCon, (err, data)=>{
+                if(err){
+                    result(err, null);
+                }
+                else {
+                    result(null, res);
+                }
+            })
         }
     }
     catch (err){
