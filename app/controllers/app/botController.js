@@ -115,6 +115,14 @@ exports.addMultPreInfo =async (req, res) => {
         "bot_id":botData[0].bot_id,
         "prompt":botData[0].prompt
     }
+    let limit_res = await limitCheck(botData[0].bot_id)
+    if(!limit_res.st_action){
+        res.status(200).send({
+            ActionType: "FALSE",
+            message:"超过当前版本容量，请升级版本"
+        });
+        return
+    }
     let conRes = await  Bot.newfind(condWhere)
     if(!condWhere){
         res.status(200).send({
