@@ -155,6 +155,7 @@ exports.update= async (req, res) =>{
                     return
                 }
                 else {
+                    console.log(err)
                     res.status(500).send({
                         message:
                             err.message || "Some error occurred while retrieving tutorials."

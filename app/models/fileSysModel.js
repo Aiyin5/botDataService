@@ -71,7 +71,7 @@ File.update = async (where,result) =>{
         "id":where.id
     }
     try {
-        let data1 = await sql.selectByWhere(tablename,where);
+        let data1 = await sql.selectByWhere(tablename,condition);
         if(data1.length!=1){
             result("查询出错，请联系管理员",null);
         }
