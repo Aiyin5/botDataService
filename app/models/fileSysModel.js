@@ -1,6 +1,7 @@
 const sql = require("./db.js");
 const vectorIns = require("../util/vectorIns")
 const User = require("./userModel");
+const {limitCheck, limitCheckByLen} = require("../util/limitCheck");
 // constructor
 const File = function(file) {
     this.bot_id = file.bot_id;
@@ -71,12 +72,35 @@ File.update = async (where,result) =>{
     }
 
     try {
-        let res=await sql.update(tablename,where,condition);
-        result(null, res);
+        let data1 = await sql.selectByWhere(tablename,where);
+        if(data1.length!=1){
+            result("查询出错，请联系管理员",null);
+        }
+        else {
+
+            let trimmedStr1 = data1[0].content.replace(/\s/g, ""); // 使用正则表达式去除空格
+            let doc_len = trimmedStr1.length;
+            let trimmedStr2 = where.content.replace(/\s/g, ""); // 使用正则表达式去除空格
+            let doc_len2 = trimmedStr2.length;
+            if(doc_len2>doc_len)
+            {
+                let limit_res = await limitCheckByLen(data1[0].bot_id,doc_len2-doc_len)
+                if(!limit_res.yuliao_action){
+                    let err={
+                        action:"OK",
+                        message:"超过当前版本容量，请升级版本"
+                    }
+                    result(err, null);
+                    return
+                }
+            }
+            let res=await sql.update(tablename,where,condition);
+            result(null, res);
+        }
     }
     catch (err){
         console.log(err)
-        result(null, err);
+        result(err, null);
     }
 }
 

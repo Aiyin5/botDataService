@@ -147,10 +147,19 @@ exports.update= async (req, res) =>{
     else {
         await File.update(where, async (err, data) => {
             if (err){
-                res.status(500).send({
-                    message:
-                        err.message || "Some error occurred while retrieving tutorials."
-                });
+                if(err.action==="OK"){
+                    res.status(200).send({
+                        ActionType: "FALSE",
+                        message:err.message
+                    });
+                    return
+                }
+                else {
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while retrieving tutorials."
+                    });
+                }
             }
             else {
                 try {
