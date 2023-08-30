@@ -356,10 +356,10 @@ exports.findByPhone = async (req, res) => {
         return;
     }
     const where = req.body;
-    if(!where.check_type){
-        where.check_type="Password";
+    if(!where.checkType){
+        where.checkType="Password";
     }
-    if(where.check_type ==="Captcha" && (!where.phone_check ||!where.phone) ){
+    if(where.checkType ==="Captcha" && (!where.phone_check ||!where.phone) ){
         if(!where.phone_check){
             res.status(200).send({
                 message: "验证码不能为空!"
@@ -373,7 +373,7 @@ exports.findByPhone = async (req, res) => {
             return
         }
     }
-    else if(where.check_type ==="Password"){
+    else if(where.checkType ==="Password"){
         let condition={
             password:where.password,
             phone:where.phone
