@@ -78,9 +78,9 @@ exports.createByPhone = async (req, res) => {
             });
         }
         else {
-            instance.deleteItem(phone);
+            phoneInstance.deleteItem(phone);
             if(arr.size>100){
-                instance.cleanItem()
+                phoneInstance.cleanItem()
             }
             const key = crypto.randomBytes(4).toString('hex');
             let tep_bot = curTime.toString()+key
@@ -364,11 +364,13 @@ exports.findByPhone = async (req, res) => {
             res.status(200).send({
                 message: "验证码不能为空!"
             });
+            return
         }
         else {
             res.status(200).send({
                 message: "用户信息不能为空!"
             });
+            return
         }
     }
     else if(where.check_type ==="Password"){
@@ -377,11 +379,13 @@ exports.findByPhone = async (req, res) => {
             phone:where.phone
         }
        await User.find(condition, (err, data) => {
-            if (err)
+            if (err){
                 res.status(500).send({
                     message:
                         err.message || "Some error occurred while login."
                 });
+                return;
+            }
             /*else res.send(data);*/
             else {
                 if (data.length === 0) {
@@ -389,6 +393,7 @@ exports.findByPhone = async (req, res) => {
                         code: "-1",
                         message: "用户名密码不匹配"
                     })
+                    return
                 } else {
                     //生成token
                     const token = JWT.generate({
@@ -424,6 +429,7 @@ exports.findByPhone = async (req, res) => {
                 ActionType: "FALSE",
                 message: "验证码错误",
             });
+            return
         }
         else {
             phoneInstance.deleteItem(where.phone);
@@ -432,18 +438,23 @@ exports.findByPhone = async (req, res) => {
             }
             await User.find(condition, (err, data) => {
                 if (err)
+                {
                     res.status(500).send({
                         message:
                             err.message || "Some error occurred while login."
                     });
+                    return
+                }
                 /*else res.send(data);*/
                 else {
                     if (data.length === 0) {
                         res.status(200).send({
                             code: "-1",
-                            error: "用户名密码不匹配"
+                            error: "手机号未注册，请注册"
                         })
-                    } else {
+                        return
+                    }
+                    else {
                         //生成token
                         const token = JWT.generate({
                             _botid:data[0].bot_id,

@@ -383,7 +383,8 @@ exports.docDelete = async (req, res) => {
                     if(vdRes.ActionType=="OK"){
                         let bot_file_name =  req.body.bot_id+data[0].file_name;
                         await cos.deleteObject(bot_file_name)
-                        let doc_len = data[0].file_content.length
+                        let trimmedStr = data[0].file_content.replace(/\s/g, ""); // 使用正则表达式去除空格
+                        let doc_len = trimmedStr.length;
                         let limitInfo={
                             "bot_id": data[0].bot_id,
                             "doc_length":doc_len

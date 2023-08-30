@@ -24,19 +24,23 @@ exports.limitCheck = async (bot_id)=>{
                 ans.type = data[0].user_type;
                 if(data[0].user_type === 0){
                     //console.log("type 0")
-                    if(data[0].yuliao_count> 10000 && data[0].standard_count> 30 ){
+                    if(data[0].yuliao_count>= 10000 && data[0].standard_count>= 30 ){
+                        ans.yuliao_action=false
+                        ans.st_action=false
                         ans.action =  false
                     }
-                    if(data[0].standard_count> 30){
+                    if(data[0].standard_count>= 30){
                         ans.st_action=false
                     }
-                    if(data[0].yuliao_count> 10000){
+                    if(data[0].yuliao_count>= 10000){
                         ans.yuliao_action=false
                     }
                 }
                 else if(data[0].user_type === 1){
                     //console.log("type 1")
                     if(data[0].yuliao_count> 50000 && data[0].standard_count> 999){
+                        ans.yuliao_action=false
+                        ans.st_action=false
                         ans.action =  false
                     }
                     if(data[0].standard_count> 999){
@@ -60,9 +64,15 @@ exports.limitCheck = async (bot_id)=>{
                         ans.yuliao_action=false
                     }
                 }
+                else {
+                    console.log("find more type err")
+                    ans.action =  false;
+                    ans.st_action =  false;
+                    ans.yuliao_action=false
+                }
             }
             else {
-                //console.log("type err")
+                console.log("find more data err")
                 ans.action =  false;
                 ans.st_action =  false;
                 ans.yuliao_action=false

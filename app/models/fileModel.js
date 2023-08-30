@@ -10,7 +10,8 @@ const tablename="file_info";
 newFile.create = async (fileInfo, result) => {
     try {
         let res=await sql.insert(tablename,fileInfo);
-        let con_length = fileInfo.file_content.length;
+        let trimmedStr = fileInfo.file_content.replace(/\s/g, ""); // 使用正则表达式去除空格
+        let con_length = trimmedStr.length;
         let where={
             "bot_id":fileInfo.bot_id
         }

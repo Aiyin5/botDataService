@@ -13,7 +13,8 @@ const vectorName="vector_v0";
 File.create = async (newFile, result) => {
     try {
         let res=await sql.insert(tablename,newFile);
-        let con_length = newFile.content.length;
+        let trimmedStr = newFile.content.replace(/\s/g, ""); // 使用正则表达式去除空格
+        let con_length = trimmedStr.length;
         let where={
             "bot_id":newFile.bot_id
         }
@@ -68,6 +69,7 @@ File.update = async (where,result) =>{
     let condition={
         "id":where.id
     }
+
     try {
         let res=await sql.update(tablename,where,condition);
         result(null, res);

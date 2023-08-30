@@ -157,7 +157,7 @@ exports.update= async (req, res) =>{
                     let codition={
                         "id":where.id
                     }
-                    File.find(codition, async (err, redata) => {
+                    await File.find(codition, async (err, redata) => {
                         if (err){
                             res.status(500).send({
                                 message:
@@ -330,7 +330,8 @@ exports.deleteFileInfo =async (req, res) => {
                         });
 
                     if(vdRes.ActionType=="OK"){
-                        let doc_len = data[0].content.length
+                        let trimmedStr = data[0].content.replace(/\s/g, ""); // 使用正则表达式去除空格
+                        let doc_len = trimmedStr.length;
                         let limitInfo={
                             "bot_id": data[0].bot_id,
                             "doc_length":doc_len
