@@ -483,7 +483,7 @@ exports.findByPhone = async (req, res) => {
 };
 
 
-exports.findByWhere = (req, res) => {
+exports.findByWhere = async (req, res) => {
     console.log("rv post login")
     if (!req.body) {
         res.status(400).send({
@@ -525,7 +525,7 @@ exports.findByWhere = (req, res) => {
             password:where.password,
             email:where.email
         }
-        User.find(condition, (err, data) => {
+        await User.find(condition, (err, data) => {
             if (err)
                 res.status(500).send({
                     message:
@@ -690,7 +690,7 @@ exports.phoneCaptcha =async (req, res) => {
                 if(!res){
                     res.send({
                         ActionType: "False",
-                        message: "短信发送失败"
+                        message: "短信发送失败,请确认手机号"
                     })
                 }
             }
