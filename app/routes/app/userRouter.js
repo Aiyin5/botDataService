@@ -519,7 +519,7 @@ module.exports = app => {
      *      - userApi
      *      summary: 获取机器人的基本信息
      *      requestBody:
-     *         description: 用户基本信息  email //用户邮箱   bot_id //机器人id
+     *         description: 用户基本信息    bot_id //机器人id
      *         required: true
      *         content:
      *           application/json::
@@ -548,6 +548,8 @@ module.exports = app => {
      *                    type: string
      *                  faq_contents:
      *                    type: string
+     *                  model_type:
+     *                    type: number
      *                  welcomes:
      *                    type: string
      *        500:
@@ -571,7 +573,7 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 用户基本信息和机器人基本信息 email //用户邮箱   bot_id //机器人id  image_url //头像链接 name //昵称 bgImg_url//背景图像  contact//二维码链接  faq_contents//常见问题  welcomes//欢迎语
+     *         description: 用户基本信息和机器人基本信息 email //用户邮箱   bot_id //机器人id  image_url //头像链接 name //昵称 bgImg_url//背景图像 model_type//模型类型 contact//二维码链接  faq_contents//常见问题  welcomes//欢迎语
      *         required: true
      *         content:
      *           application/json::
@@ -586,6 +588,8 @@ module.exports = app => {
      *                    type: string
      *                  contact:
      *                    type: string
+     *                  model_type:
+     *                    type: number
      *                  faq_contents:
      *                    type: string
      *                  welcomes:

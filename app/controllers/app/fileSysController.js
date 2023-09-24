@@ -65,7 +65,7 @@ exports.create = async (req, res) => {
             }
         }
     }
-    let content = removeEmoji(req.body.content)
+    let content = removeEmoji(req.body.doc_name+req.body.content)
     if(user_type === 0 && content.length > 10000){
         res.send({
             ActionType: "FALSE",

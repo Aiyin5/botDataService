@@ -35,6 +35,8 @@ module.exports = app => {
      *                   type: number
      *                 comment_type:
      *                   type: number
+     *                 answer_type:
+     *                   type: number
      *      responses:
      *        200:
      *          description: successful operation
@@ -58,6 +60,56 @@ module.exports = app => {
      *          description: 没有权限
      * */
     router.post("/logInfo", logs.findByPage);
+
+
+    /**,
+     * @swagger
+     * /app/log/logInfoById:
+     *    post:
+     *      tags:
+     *      - logInfoAip
+     *      summary: 根据机器人id和uuid获取历史问答信息
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description: 历史信息信息
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 uuid:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id question:string //问题  answer:string//答案  fix_info:number //修正记录 create_date:number//创建时间}}]
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/logInfoById", logs.logInfoById);
 
 
     /**,

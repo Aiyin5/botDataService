@@ -1039,7 +1039,8 @@ exports.botInfo=async (req, res) => {
                 image_url:dataRes[0].image_url,
                 faq_contents:dataRes[0].faq_contents,
                 contact:dataRes[0].contact,
-                bgImg_url:dataRes[0].bgImg_url
+                bgImg_url:dataRes[0].bgImg_url,
+                model_type:dataRes[0].model_type
             })
         }
         else{
@@ -1078,7 +1079,9 @@ exports.botInfoUpdate=async (req, res) => {
         image_url:req.body.image_url,
         faq_contents:req.body.faq_contents,
         contact:req.body.contact,
-        bgImg_url:req.body.bgImg_url
+        bgImg_url:req.body.bgImg_url,
+
+        model_type:req.body.model_type
     }
     let where={
         bot_id:bot_id

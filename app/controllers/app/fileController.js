@@ -93,7 +93,7 @@ exports.create =async (req, res) => {
                 req.file.path
             );
             let textContent =  await loader.load();
-            textContent = removeEmoji(textContent[0].pageContent)
+            textContent = removeEmoji(req.body.file_name+textContent[0].pageContent)
             if(user_type === 0 && textContent.length > 10000){
                 res.send({
                     ActionType: "FALSE",
@@ -182,7 +182,7 @@ exports.create =async (req, res) => {
                     splitPages: false,
                 });
             let textContent =  await loader.load();
-            textContent = removeEmoji(textContent[0].pageContent)
+            textContent = removeEmoji(req.body.file_name+textContent[0].pageContent)
             if(user_type === 0 && textContent.length > 10000){
                 res.send({
                     ActionType: "FALSE",

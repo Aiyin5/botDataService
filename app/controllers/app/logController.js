@@ -67,6 +67,38 @@ exports.findByBotId =async (req, res) =>{
         }
     });
 };
+exports.logInfoById = async (req, res) =>{
+    console.log("rv post logInfo findByBot")
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    const where = req.body;
+    if(!where.bot_id || !where.uuid){
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return;
+    }
+    where.page=1;
+    where.pageSize=5;
+    await Log.findByUid(where, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        /*else res.send(data);*/
+        else {
+            res.send({
+                ActionType: "OK",
+                data: data
+            })
+        }
+    });
+}
 exports.findByPage = async (req, res) =>{
     console.log("rv post logInfo findByBot")
     if (!req.body) {

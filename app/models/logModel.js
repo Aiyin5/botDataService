@@ -55,15 +55,39 @@ LogInfo.findAll = async (result) =>{
         result(null, err);
     }
 }
-
+LogInfo.findByUid = async (Item,result)=>{
+    let where ={}
+    where.bot_id=Item.bot_id;
+    where.uuid = Item.uuid;
+    let page = Item.page;
+    let number = Item.pageSize;
+    let searchCondition={
+        "flag":false,
+        "word":""
+    };
+    try {
+        let res = await sql.selectByPage(tablename,where,page,number,searchCondition);
+        result(null, res);
+    }
+    catch (err){
+        console.log(err)
+        result(null, err);
+    }
+}
 LogInfo.findByPage = async (Item,result)=>{
     let where ={}
     if(!Item.comment_type || Item.comment_type===0){
         where.bot_id=Item.bot_id;
+        if(Item.answer_type){
+            where.answer_type = Item.answer_type
+        }
     }
     else {
         where.bot_id=Item.bot_id;
         where.comment_type = Item.comment_type
+        if(Item.answer_type){
+            where.answer_type = Item.answer_type
+        }
     }
     // let where ={
     //     "bot_id":Item.bot_id,
