@@ -8,6 +8,7 @@ const LogInfo = function(log) {
     this.answer = log.answer;
     this.other = log.other;
     this.comment_type = log.comment_type;
+    this.uuid = log.uuid;
 };
 const tablename="log_info";
 LogInfo.create = async (newLog, result) => {

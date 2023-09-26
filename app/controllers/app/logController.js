@@ -19,6 +19,7 @@ exports.create = (req, res) => {
         question: req.body.question,
         answer:req.body.answer,
         comment_type:comment_type,
+        uuid:req.body.uuid,
         other:req.body.other
     });
 
