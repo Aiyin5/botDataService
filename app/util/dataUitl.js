@@ -66,6 +66,19 @@ class MysqlPool {
         data.content= await this.query(sql2);
         return data;
     }
+    async selectByPageId(tableName,where,page,number,log_id) {
+        let start = (page - 1) * number;
+        let whereConditions = Object.entries(where)
+            .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+            .join(' AND ');
+        whereConditions = whereConditions+" AND id<"+log_id
+        const sql2 = `SELECT * FROM ${tableName} WHERE ${whereConditions} ORDER BY id DESC limit ${number}`;
+        console.log(sql2)
+        let data={};
+        data.content= await this.query(sql2);
+        data.count =data.content.length
+        return data;
+    }
     async fileByPage(tableName,where,page,number,searchCondition) {
         let start = (page - 1) * number;
         let whereConditions = Object.entries(where)

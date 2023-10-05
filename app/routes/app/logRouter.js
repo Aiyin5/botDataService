@@ -87,7 +87,7 @@ module.exports = app => {
      *                   type: string
      *                 uuid:
      *                   type: string
-     *                 log_id:
+     *                 id:
      *                   type: string
      *      responses:
      *        200:

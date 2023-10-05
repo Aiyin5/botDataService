@@ -77,14 +77,12 @@ exports.logInfoById = async (req, res) =>{
         return;
     }
     const where = req.body;
-    if(!where.bot_id || !where.uuid){
+    if(!where.bot_id || !where.id){
         res.status(400).send({
             message: "Content can not be empty!"
         });
         return;
     }
-    where.page=1;
-    where.pageSize=5;
     await Log.findByUid(where, (err, data) => {
         if (err)
             res.status(500).send({

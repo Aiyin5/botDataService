@@ -60,14 +60,8 @@ LogInfo.findByUid = async (Item,result)=>{
     let where ={}
     where.bot_id=Item.bot_id;
     where.uuid = Item.uuid;
-    let page = Item.page;
-    let number = Item.pageSize;
-    let searchCondition={
-        "flag":false,
-        "word":""
-    };
     try {
-        let res = await sql.selectByPage(tablename,where,page,number,searchCondition);
+        let res = await sql.selectByPageId(tablename,where,1,5,Item.id);
         result(null, res);
     }
     catch (err){

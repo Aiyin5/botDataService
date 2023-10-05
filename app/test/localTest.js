@@ -3,7 +3,7 @@
  const cosInstance = require("../util/cosFunction")
  const {SecretId,SecretKey}= require("../config/config.json");
  const removeEmoji = require("../util/dataTransform");
- const sql = require("../models/db");
+ const sql = require("../models/db2");
  const Bot = require("../models/botModel")
  const Uesr = require("../models/userModel")
  const avatorCos = require("../util/avatorCos");
@@ -14,6 +14,7 @@
  const Log = require("../models/logModel");
  const LogInfo = require("../models/logModel");
  const {limitCheck} = require("../util/limitCheck");
+ const {selectByPageId} = require("../util/dataUitl")
 async function test(){
 //     const loader = new DocxLoader(
 //         "../config/刃长和刃部跳动测量规范.docx"
@@ -176,10 +177,12 @@ async function test(){
  //commentUpdate()
 
  async function limitCheck2(){
-    let welcomes = "👏🏻";
-    welcomes =  encodeURIComponent(welcomes);
-    console.log(welcomes);
-    welcomes =  decodeURIComponent(welcomes);
-    console.log(welcomes);
+     const tableName="log_info";
+     let where={
+         uuid:"",
+         bot_id:"1"
+     }
+     let data = await sql.selectByPageId(tableName,where,1,5,100)
+     console.log(data)
  }
  limitCheck2()
