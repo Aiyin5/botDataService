@@ -67,6 +67,7 @@ class MysqlPool {
         return data;
     }
     async selectByPageId(tableName,where,page,number,log_id) {
+        log_id=log_id-1;
         let start = (page - 1) * number;
         let whereConditions = Object.entries(where)
             .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
