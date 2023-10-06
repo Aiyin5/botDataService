@@ -1,6 +1,6 @@
 const Log = require("../../models/logModel.js");
 // Create and Save a new Tutorial
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Validate request
     if (!req.body) {
         res.status(400).send({
@@ -8,23 +8,26 @@ exports.create = (req, res) => {
         });
     }
     let comment_type = 0;
+    let answer_type = 0;
     if(!req.body.comment_type){
         comment_type = 0
     }
     else {
-        comment_type = req.body.comment_type
+        comment_type = req.body.comment_type;
+        answer_type = req.body.answer_type
     }
     const log = new Log({
         bot_id: req.body.bot_id,
         question: req.body.question,
         answer:req.body.answer,
         comment_type:comment_type,
+        answer_type:answer_type,
         uuid:req.body.uuid,
         other:req.body.other
     });
 
     // Save Tutorial in the database
-    Log.create(log, (err, data) => {
+    await Log.create(log, (err, data) => {
         if (err)
             res.status(500).send({
                 message:

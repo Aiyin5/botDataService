@@ -17,6 +17,9 @@ LogInfo.create = async (newLog, result) => {
         let where={
             "bot_id":newLog.bot_id
         }
+        if(newLog.bot_id === newLog.uuid){
+            return
+        }
         let updateData={
             "columnName":"answer_count",
             "increaseAmount" :1
