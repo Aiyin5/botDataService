@@ -16,6 +16,9 @@ exports.create = async (req, res) => {
         comment_type = req.body.comment_type;
         answer_type = req.body.answer_type
     }
+    if(req.body.answer_type){
+        answer_type = req.body.answer_type
+    }
     const log = new Log({
         bot_id: req.body.bot_id,
         question: req.body.question,
