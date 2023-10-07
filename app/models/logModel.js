@@ -18,12 +18,21 @@ LogInfo.create = async (newLog, result) => {
         let where={
             "bot_id":newLog.bot_id
         }
-        if(newLog.bot_id === newLog.uuid){
-            return
-        }
         let updateData={
             "columnName":"answer_count",
             "increaseAmount" :1
+        }
+        let userType=0;
+        await User.findLimt(where, (err, data)=>{
+                if (data){
+                    userType=data[0].user_type;
+                }
+                else {
+                    userType=0;
+                }
+        })
+        if(newLog.bot_id === newLog.uuid && userType>0){
+            return
         }
         await User.updateLimit(updateData,where, (err, data)=>{
             if(err){
