@@ -33,6 +33,7 @@ LogInfo.create = async (newLog, result) => {
         })
         if(newLog.bot_id === newLog.uuid && userType>0){
             result(null, 0);
+            return
         }
         await User.updateLimit(updateData,where, (err, data)=>{
             if(err){
