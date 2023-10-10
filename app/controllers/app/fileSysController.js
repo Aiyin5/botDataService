@@ -65,7 +65,7 @@ exports.create = async (req, res) => {
             }
         }
     }
-    let content = removeEmoji(req.body.doc_name+req.body.content)
+    let content = removeEmoji(req.body.content)
     if(user_type === 0 && content.length > 10000){
         res.send({
             ActionType: "FALSE",
@@ -98,7 +98,6 @@ exports.create = async (req, res) => {
         content: content
     });
 
-    // Save Tutorial in the database
     await File.create(file, async (err, data) => {
         if (err)
             res.status(500).send({
@@ -107,6 +106,7 @@ exports.create = async (req, res) => {
             });
         else {
             try {
+                content = req.body.doc_name + content;
                let vdRes= await axiosIns.post("/addVector",
                     {
                         "bot_id": req.body.bot_id,
@@ -253,7 +253,7 @@ exports.findByFile = async (req, res) =>{
     });
 }
 
-exports.allFile = (req, res) =>{
+exports.allFile = async (req, res) =>{
     console.log("rv post allFile")
     if (!req.body) {
         res.status(400).send({
@@ -261,7 +261,7 @@ exports.allFile = (req, res) =>{
         });
         return;
     }
-    File.findAll( (err, data) => {
+   await File.findAll( (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -276,7 +276,7 @@ exports.allFile = (req, res) =>{
         }
     });
 }
-exports.findByFilePage = (req, res) =>{
+exports.findByFilePage = async (req, res) =>{
     console.log("rv post findByFilePage")
     if (!req.body) {
         res.status(400).send({
@@ -292,7 +292,7 @@ exports.findByFilePage = (req, res) =>{
         });
         return;
     }
-    File.findByPage(where, (err, data) => {
+   await File.findByPage(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:

@@ -14,7 +14,7 @@ const smsInstance = require("../../util/smsTool");
 
 let smsIns  =new smsInstance()
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Validate request
     if (!req.body) {
         res.status(400).send({
@@ -37,7 +37,7 @@ exports.create = (req, res) => {
     });
 
     // Save Tutorial in the database
-    User.create(user, (err, data) => {
+   await User.create(user, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -235,7 +235,7 @@ exports.createNew = async (req, res) => {
     }
 };
 
-exports.findByBot = (req, res) =>{
+exports.findByBot = async (req, res) =>{
     console.log("rv post findByBot")
     if (!req.body) {
         res.status(400).send({
@@ -251,7 +251,7 @@ exports.findByBot = (req, res) =>{
         });
         return;
     }
-    User.find(where, (err, data) => {
+   await User.find(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:

@@ -8,7 +8,7 @@ const Log = require("../../models/logModel");
 const {limitCheck} = require("../../util/limitCheck");
 const axiosIns=new AxiosTool(VdURL);
 
-exports.findById = (req, res) => {
+exports.findById = async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -21,7 +21,7 @@ exports.findById = (req, res) => {
         });
         return;
     }
-    Bot.find(where, (err, data) => {
+    await Bot.find(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -44,7 +44,7 @@ exports.findById = (req, res) => {
 }
 
 
-exports.updateBot = (req, res) => {
+exports.updateBot =async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -57,7 +57,7 @@ exports.updateBot = (req, res) => {
         });
         return;
     }
-    Bot.updateBot(botInfo, (err, data) => {
+   await Bot.updateBot(botInfo, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -71,7 +71,7 @@ exports.updateBot = (req, res) => {
     });
 }
 
-exports.addPreInfo = (req, res) => {
+exports.addPreInfo = async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -84,7 +84,7 @@ exports.addPreInfo = (req, res) => {
         });
         return;
     }
-    Bot.addPreInfo(botData, (err, data) => {
+   await Bot.addPreInfo(botData, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -364,14 +364,14 @@ exports.updatePreInfo = async (req, res) => {
     });
 }
 
-exports.getPreInfo = (req, res) => {
+exports.getPreInfo = async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
     }
     const where = req.body;
-    Bot.getPreInfo(where, (err, data) => {
+   await Bot.getPreInfo(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:

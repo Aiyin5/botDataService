@@ -93,7 +93,7 @@ exports.create =async (req, res) => {
                 req.file.path
             );
             let textContent =  await loader.load();
-            textContent = removeEmoji(req.body.file_name+textContent[0].pageContent)
+            textContent = removeEmoji(textContent[0].pageContent)
             if(user_type === 0 && textContent.length > 10000){
                 res.send({
                     ActionType: "FALSE",
@@ -136,6 +136,7 @@ exports.create =async (req, res) => {
                     });
                 }
                 else {
+                    textContent = req.body.file_name+textContent
                     try {
                         let vdRes= await axiosIns.post("/addVector",
                             {
@@ -182,7 +183,7 @@ exports.create =async (req, res) => {
                     splitPages: false,
                 });
             let textContent =  await loader.load();
-            textContent = removeEmoji(req.body.file_name+textContent[0].pageContent)
+            textContent = removeEmoji(textContent[0].pageContent)
             if(user_type === 0 && textContent.length > 10000){
                 res.send({
                     ActionType: "FALSE",
@@ -225,6 +226,7 @@ exports.create =async (req, res) => {
                 }
                 else {
                     try {
+                        textContent = req.body.file_name+textContent
                         let vdRes= await axiosIns.post("/addVector",
                             {
                                 "bot_id": req.body.bot_id,
@@ -318,7 +320,7 @@ exports.allFile = async (req, res) =>{
         }
     });
 }
-exports.docsInfo = (req, res) =>{
+exports.docsInfo = async (req, res) =>{
     console.log("rv post docsInfo")
     if (!req.body) {
         res.status(400).send({
@@ -334,7 +336,7 @@ exports.docsInfo = (req, res) =>{
         });
         return;
     }
-    File.findByPage(where, (err, data) => {
+   await File.findByPage(where, (err, data) => {
         if (err)
             res.status(500).send({
                 message:
@@ -357,7 +359,7 @@ exports.docDelete = async (req, res) => {
         return
     }
     const where = req.body;
-    File.find(where, async (err, data) => {
+   await File.find(where, async (err, data) => {
         if (err)
             res.status(500).send({
                 message:
