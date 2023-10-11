@@ -136,7 +136,7 @@ exports.create =async (req, res) => {
                     });
                 }
                 else {
-                    textContent = req.body.file_name+textContent
+                    //textContent = req.body.file_name+textContent
                     try {
                         let vdRes= await axiosIns.post("/addVector",
                             {
@@ -226,7 +226,7 @@ exports.create =async (req, res) => {
                 }
                 else {
                     try {
-                        textContent = req.body.file_name+textContent
+                        //textContent = req.body.file_name+textContent
                         let vdRes= await axiosIns.post("/addVector",
                             {
                                 "bot_id": req.body.bot_id,

@@ -180,7 +180,7 @@ exports.update= async (req, res) =>{
                                 {
                                     "bot_id": redata[0].bot_id,
                                     "doc_name":req.body.doc_name,
-                                    "doc_data":req.body.content
+                                    "doc_data":req.body.doc_name+req.body.content
                                 });
                             if(vdRes.ActionType=="OK"){
                                 res.send({
