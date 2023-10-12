@@ -143,81 +143,72 @@ exports.update= async (req, res) =>{
         res.status(400).send({
             message: "id can not be empty!"
         });
+        return
     }
-    else {
-        await File.update(where, async (err, data) => {
-            if (err){
-                if(err.action==="OK"){
-                    res.status(200).send({
-                        ActionType: "FALSE",
-                        message:err.message
-                    });
-                    return
-                }
-                else {
-                    console.log(err)
+    try {
+        let codition = {
+            "id": where.id
+        }
+        await File.find(codition, async (err, redata) => {
+            if (err) {
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred."
+                });
+                return
+            }
+            await File.update(where, async (err, data) => {
+                if (err) {
                     res.status(500).send({
                         message:
                             err.message || "Some error occurred while retrieving tutorials."
                     });
+                    return
                 }
-            }
-            else {
                 try {
-                    let codition={
-                        "id":where.id
+                    let vdRes1 = await axiosIns.post("/deleteVector",
+                        {
+                            "bot_id": redata[0].bot_id,
+                            "doc_name": redata[0].doc_name,
+                            "doc_data": redata[0].content
+                        });
+                    let vdRes = await axiosIns.post("/addVector",
+                        {
+                            "bot_id": redata[0].bot_id,
+                            "doc_name": req.body.doc_name,
+                            "doc_data": req.body.doc_name + req.body.content
+                        });
+                    if (vdRes.ActionType == "OK") {
+                        res.send({
+                            ActionType: "OK",
+                        });
+                    } else {
+                        res.send({
+                            ActionType: "FALSE",
+                            message: "数据更新出错"
+                        });
                     }
-                    await File.find(codition, async (err, redata) => {
-                        if (err){
-                            res.status(500).send({
-                                message:
-                                    err.message || "Some error occurred while retrieving tutorials."
-                            });
-                            return
-                        }
-                        try {
-                            let vdRes= await axiosIns.post("/updateVector",
-                                {
-                                    "bot_id": redata[0].bot_id,
-                                    "doc_name":req.body.doc_name,
-                                    "doc_data":req.body.doc_name+req.body.content
-                                });
-                            if(vdRes.ActionType=="OK"){
-                                res.send({
-                                    ActionType: "OK",
-                                });
-                            }
-                            else {
-                                res.send({
-                                    ActionType: "FALSE",
-                                    message:"数据更新出错"
-                                });
-                            }
-                        }
-                        catch (err){
-                            if(req.body.content.length >8000){
-                                res.send({
-                                    ActionType: "OK",
-                                    message:"文字太长，后台处理中"
-                                });
-                            }
-                            else {
-                                res.send({
-                                    ActionType: "FALSE",
-                                    message:"数据更新出错"
-                                });
-                            }
-                        }
-
-                    })
+                } catch (err) {
+                    if (req.body.content.length > 8000) {
+                        res.send({
+                            ActionType: "OK",
+                            message: "文字太长，后台处理中"
+                        });
+                    } else {
+                        res.send({
+                            ActionType: "FALSE",
+                            message: "数据更新出错"
+                        });
+                    }
                 }
-                catch (err){
-                    res.send({
-                        ActionType: "FALSE",
-                        message:"数据更新出错"
-                    });
-                }
-            }
+            })
+        })
+    }
+    catch (err){
+        console.log(err)
+        res.send({
+            ActionType: "FALSE",
+            message: "数据更新出错"
         });
     }
 }
