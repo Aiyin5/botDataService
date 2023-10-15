@@ -112,10 +112,10 @@ exports.limitCheckByLen = async (bot_id,len)=>{
                         ans.st_action=false
                         ans.action =  false
                     }
-                    if(data[0].standard_count>= 30){
+                    if(data[0].standard_count> 30){
                         ans.st_action=false
                     }
-                    if(data[0].yuliao_count + len >= 10000){
+                    if(data[0].yuliao_count + len > 10000){
                         ans.yuliao_action=false
                     }
                 }
