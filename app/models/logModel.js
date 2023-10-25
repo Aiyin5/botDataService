@@ -98,6 +98,9 @@ LogInfo.findByPage = async (Item,result)=>{
             where.answer_type = Item.answer_type
         }
     }
+    if(Item.uuid){
+        where.uuid = Item.uuid;
+    }
     // let where ={
     //     "bot_id":Item.bot_id,
     //     "comment_type":Item.comment_type
