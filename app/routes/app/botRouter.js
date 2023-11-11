@@ -322,7 +322,7 @@ module.exports = app => {
 
     /**
      * @swagger
-     * /app/bot/modifiedInfo/{log_id}:
+     * /app/bot/modifiedInfo:
      *    delete:
      *      tags:
      *      - botApi
@@ -356,7 +356,7 @@ module.exports = app => {
      *        500:
      *          description: Internal Error
      * */
-    router.delete("/modifiedInfo/:log_id", bots.deleteModifiedInfo);
+    router.delete("/modifiedInfo", bots.deleteModifiedInfo);
 
 
     /**,
