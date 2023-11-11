@@ -318,7 +318,7 @@ module.exports = app => {
      *        401:
      *          description: 没有权限
      * */
-    router.post("/cuserModifiedInfo", bots.getPreInfoByPage);
+    router.post("/cuserModifiedInfo", bots.modifiedInfo);
 
 
     /**,
