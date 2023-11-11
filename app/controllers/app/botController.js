@@ -43,7 +43,7 @@ exports.addModifiedInfo = async (req, res) => {
 }
 
 exports.deleteModifiedInfo = async (req, res) => {
-    if (!req.body || !req.params.log_id) {
+    if (!req.params || !req.params.log_id) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
