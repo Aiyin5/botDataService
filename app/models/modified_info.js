@@ -32,7 +32,7 @@ ModifiedInfo.deleteModifiedInfo = async (where, result) => {
 
 ModifiedInfo.getModifiedInfo = async (where, result) => {
     let condition = {
-        id:where.id
+        bot_id:where.bot_id
     }
     let page = 1;
     if(where.page){
