@@ -320,6 +320,44 @@ module.exports = app => {
      * */
     router.post("/cuserModifiedInfo", bots.modifiedInfo);
 
+    /**
+     * @swagger
+     * /app/bot/modifiedInfo/{log_id}:
+     *    delete:
+     *      tags:
+     *      - botApi
+     *      summary: 删除modifiedInfo
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description:
+     *         required: false
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 log_id:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     * */
+    router.delete("/modifiedInfo/:log_id", bots.deleteModifiedInfo);
+
 
     /**,
      * @swagger
@@ -364,43 +402,6 @@ module.exports = app => {
     router.post("/modifiedInfo", bots.addModifiedInfo);
 
 
-    /**,
-     * @swagger
-     * /app/bot/modifiedInfo:
-     *    delete:
-     *      tags:
-     *      - botApi
-     *      summary: 删除modifiedInfo
-     *      parameters:
-     *      - in: header
-     *        name: Authorization
-     *        schema:
-     *          type: string
-     *        required: true
-     *      requestBody:
-     *         description:
-     *         required: true
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 log_id:
-     *                   type: number
-     *      responses:
-     *        200:
-     *          description: successful operation
-     *          content:
-     *            application/json:
-     *              schema:
-     *                type: object
-     *                properties:
-     *                  ActionType:
-     *                    type: string
-     *        500:
-     *          description: Internal Error
-     * */
-    router.delete("/modifiedInfo", bots.deleteModifiedInfo);
 
     /**,
      * @swagger
@@ -453,7 +454,7 @@ module.exports = app => {
      *        401:
      *          description: 没有权限
      * */
-    router.get("/searchStandardInfo", bots.modifiedInfo);
+    router.post("/searchStandardInfo", bots.getPreInfoByPage);
 
     // addUnstInfo
     router.post("/addUnstInfo", bots.addUnstInfo);
