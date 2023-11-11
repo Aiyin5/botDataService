@@ -312,7 +312,7 @@ module.exports = app => {
      *                      count:
      *                        type: number
      *                      content:
-     *                        type: array[{id:number//编号  bot_id:string //机器人id prompt:string //问题  completion:string //回答  modifiedAnswer:string//原始问题 fix_info:number//修正标志 create_time:number//创建时间}}]
+     *                        type: array[{id:number//编号  bot_id:string //机器人id prompt:string //问题  completion:string //回答  modified_answer:string//原始问题 fix_info:number//修正标志 create_time:number//创建时间}}]
      *        500:
      *          description: Internal Error
      *        401:
@@ -384,7 +384,7 @@ module.exports = app => {
      *                   type: string
      *                 log_id:
      *                   type: number
-     *                 modifiedAnswer:
+     *                 modified_answer:
      *                   type: string
      *      responses:
      *        200:

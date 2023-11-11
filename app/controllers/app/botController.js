@@ -90,7 +90,8 @@ exports.modifiedInfo = async (req, res) => {
         }
         else {
             res.send({
-                ActionType: "OK"
+                ActionType: "OK",
+                data:data
             })
         }
     })
