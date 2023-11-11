@@ -366,8 +366,8 @@ module.exports = app => {
 
     /**,
      * @swagger
-     * /app/bot/deleteModifiedInfo:
-     *    post:
+     * /app/bot/modifiedInfo:
+     *    delete:
      *      tags:
      *      - botApi
      *      summary: 删除modifiedInfo
@@ -385,7 +385,7 @@ module.exports = app => {
      *             schema:
      *               type: object
      *               properties:
-     *                 id:
+     *                 log_id:
      *                   type: number
      *      responses:
      *        200:
@@ -400,7 +400,7 @@ module.exports = app => {
      *        500:
      *          description: Internal Error
      * */
-    router.post("/deleteModifiedInfo", bots.deleteModifiedInfo);
+    router.delete("/modifiedInfo", bots.deleteModifiedInfo);
 
     /**,
      * @swagger
