@@ -9,7 +9,7 @@ const ModifiedInfo = function(Info) {
     this.log_id = Info.log_id;
     this.fix_info = Info.fix_info;
 };
-const modified_table ="modified_info";
+const modified_table ="modify_info";
 
 ModifiedInfo.create_modified_table  = async (newInfo, result) => {
     try {
@@ -51,6 +51,7 @@ ModifiedInfo.getModifiedInfo = async (where, result) => {
         result(null, res);
     }
     catch (err){
+        console.log(err)
         result(err, null);
     }
 }

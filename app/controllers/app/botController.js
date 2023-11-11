@@ -69,6 +69,7 @@ exports.deleteModifiedInfo = async (req, res) => {
 }
 
 exports.modifiedInfo = async (req, res) => {
+    console.log("rcv modifiedInfo")
     if (!req.body || !req.body.bot_id) {
         res.status(400).send({
             message: "Content can not be empty!"
