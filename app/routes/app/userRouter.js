@@ -552,6 +552,8 @@ module.exports = app => {
      *                    type: number
      *                  welcomes:
      *                    type: string
+     *                  is_cuser_modify:
+     *                    type: number
      *        500:
      *          description: Internal Error
      *        400:
@@ -573,7 +575,7 @@ module.exports = app => {
      *          type: string
      *        required: true
      *      requestBody:
-     *         description: 用户基本信息和机器人基本信息 email //用户邮箱   bot_id //机器人id  image_url //头像链接 name //昵称 bgImg_url//背景图像 model_type//模型类型 contact//二维码链接  faq_contents//常见问题  welcomes//欢迎语
+     *         description: 用户基本信息和机器人基本信息 email //用户邮箱   bot_id //机器人id  image_url //头像链接 name //昵称 bgImg_url//背景图像 model_type//模型类型 contact//二维码链接  faq_contents//常见问题  welcomes//欢迎语 is_cuser_modify//0 没权限  1有权限
      *         required: true
      *         content:
      *           application/json::
@@ -594,6 +596,8 @@ module.exports = app => {
      *                    type: string
      *                  welcomes:
      *                    type: string
+     *                  is_cuser_modify:
+     *                    type: number
      *      responses:
      *        200:
      *          description: successful operation

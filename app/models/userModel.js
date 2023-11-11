@@ -11,6 +11,7 @@ const User = function(user) {
     this.level = user.level;
     this.image_url = user.image_url;
     this.html_url=user.html_url;
+    this.is_cuser_modify=user.is_cuser_modify;
 };
 const tablename="user_info";
 const tablename2="user_limit";

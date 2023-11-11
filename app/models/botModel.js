@@ -10,9 +10,13 @@ const Bot = function(bot) {
     this.type = bot.type;
     this.avator = bot.avator;
 };
+
+
 const bot_table="bot_config";
 const pre_table="pre_config";
 const unst_table="unst_config";
+
+
 Bot.create = async (newBot, result) => {
     try {
         let res=await sql.insert(bot_table,newBot);

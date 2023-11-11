@@ -104,6 +104,24 @@ class MysqlPool {
     }
 
 
+    async modifiedInfoByPageOrder(tableName,where,page,pagerSize,orderFlag) {
+        let start = (page - 1) * pagerSize;
+        let whereConditions = Object.entries(where)
+            .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+            .join(' AND ');
+        const sql1=`SELECT COUNT(1) FROM ${tableName} WHERE ${whereConditions}`;
+        let sql2 = `SELECT * FROM ${tableName} WHERE ${whereConditions} ORDER BY id DESC limit ${start},${pagerSize}`;
+        if(orderFlag){
+            sql2 = `SELECT * FROM ${tableName} WHERE ${whereConditions} ORDER BY id limit ${start},${pagerSize}`;
+        }
+        let data={};
+        let co=await this.query(sql1);
+        data.count = co[0]['COUNT(1)'];
+        data.content= await this.query(sql2);
+        return data;
+    }
+
+
     async fileInfoByPage(tableName,where,page,number,searchCondition) {
         let start = (page - 1) * number;
         let whereConditions = Object.entries(where)

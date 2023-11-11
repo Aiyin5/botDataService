@@ -93,7 +93,8 @@ exports.createByPhone = async (req, res) => {
                 org_id: req.body.org_id,
                 level: 2,
                 image_url:req.body.image_url,
-                html_url:html_url
+                html_url:html_url,
+                is_cuser_modify: 0
             });
             // Save Tutorial in the database
             await User.create(user, async (err, data) => {
@@ -1040,7 +1041,8 @@ exports.botInfo=async (req, res) => {
                 faq_contents:dataRes[0].faq_contents,
                 contact:dataRes[0].contact,
                 bgImg_url:dataRes[0].bgImg_url,
-                model_type:dataRes[0].model_type
+                model_type:dataRes[0].model_type,
+                is_cuser_modify:dataRes[0].is_cuser_modify
             })
         }
         else{
@@ -1080,8 +1082,8 @@ exports.botInfoUpdate=async (req, res) => {
         faq_contents:req.body.faq_contents,
         contact:req.body.contact,
         bgImg_url:req.body.bgImg_url,
-
-        model_type:req.body.model_type
+        model_type:req.body.model_type,
+        is_cuser_modify:req.body.is_cuser_modify?req.body.is_cuser_modify:0
     }
     let where={
         bot_id:bot_id

@@ -1,4 +1,5 @@
 const Bot = require("../../models/botModel")
+const ModifiedInfo = require("../../models/modified_info")
 const User = require("../../models/userModel");
 const JWT = require("../../util/JWT");
 const sql = require("../../models/db");
@@ -8,11 +9,98 @@ const Log = require("../../models/logModel");
 const {limitCheck} = require("../../util/limitCheck");
 const axiosIns=new AxiosTool(VdURL);
 
+exports.addModifiedInfo = async (req, res) => {
+    if (!req.body || !req.body.bot_id || !req.body.modified_answer || !req.body.log_id) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return
+    }
+    const Info = new ModifiedInfo(
+        {
+            bot_id:req.body.bot_id,
+            modified_answer:req.body.modified_answer,
+            log_id:req.body.log_id,
+            uuid:req.body.uuid?req.body.uuid:"",
+            prompt:req.body.prompt?req.body.prompt:"",
+            completion:req.body.completion?req.body.completion:"",
+            fix_info: req.body.fix_info?req.body.fix_info:0
+        }
+    )
+    await ModifiedInfo.create_modified_table(Info, (err, data) => {
+        if(err){
+            res.status(500).send({
+                ActionType: "False",
+                message: "Internal  error!"
+            });
+        }
+        else {
+            res.send({
+                ActionType: "OK"
+            })
+        }
+    })
+}
+
+exports.deleteModifiedInfo = async (req, res) => {
+    if (!req.body || !req.body.id) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return
+    }
+    const where = {
+        id:req.body.id
+    }
+    await ModifiedInfo.deleteModifiedInfo(where, (err, data) => {
+        if(err){
+            res.status(500).send({
+                ActionType: "False",
+                message: "Internal  error!"
+            });
+        }
+        else {
+            res.send({
+                ActionType: "OK"
+            })
+        }
+    })
+}
+
+exports.modifiedInfo = async (req, res) => {
+    if (!req.body || !req.body.bot_id) {
+        res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        return
+    }
+    const where ={
+        bot_id:req.body.bot_id,
+        page:req.body.page,
+        number:req.body.pageSize,
+        orderFlag:req.body.orderFlag
+    }
+    await ModifiedInfo.getModifiedInfo(where, (err, data) => {
+        if(err){
+            res.status(500).send({
+                ActionType: "False",
+                message: "Internal  error!"
+            });
+        }
+        else {
+            res.send({
+                ActionType: "OK"
+            })
+        }
+    })
+}
+
 exports.findById = async (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
+        return
     }
     const where = req.body;
     if(!where.bot_id){

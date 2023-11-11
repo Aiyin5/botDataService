@@ -1,3 +1,4 @@
+const bots = require("../../controllers/app/botController");
 module.exports = app => {
     /**,
      *  components:
@@ -268,6 +269,141 @@ module.exports = app => {
 
     /**,
      * @swagger
+     * /app/bot/cuserModifiedInfo:
+     *    post:
+     *      tags:
+     *      - botApi
+     *      summary: 获取modify数据
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description:
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 page:
+     *                   type: number
+     *                 pageSize:
+     *                   type: number
+     *                 orderFlag:
+     *                   type: boolean
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *                  data:
+     *                    type: object
+     *                    properties:
+     *                      count:
+     *                        type: number
+     *                      content:
+     *                        type: array[{id:number//编号  bot_id:string //机器人id prompt:string //问题  completion:string //回答  modifiedAnswer:string//原始问题 fix_info:number//修正标志 create_time:number//创建时间}}]
+     *        500:
+     *          description: Internal Error
+     *        401:
+     *          description: 没有权限
+     * */
+    router.post("/cuserModifiedInfo", bots.getPreInfoByPage);
+
+
+    /**,
+     * @swagger
+     * /app/bot/modifiedInfo:
+     *    post:
+     *      tags:
+     *      - botApi
+     *      summary: 新增modifiedInfo
+     *      requestBody:
+     *         description:
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 bot_id:
+     *                   type: string
+     *                 uuid:
+     *                   type: string
+     *                 prompt:
+     *                   type: string
+     *                 completion:
+     *                   type: string
+     *                 log_id:
+     *                   type: number
+     *                 modifiedAnswer:
+     *                   type: string
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     * */
+    router.post("/modifiedInfo", bots.addModifiedInfo);
+
+
+    /**,
+     * @swagger
+     * /app/bot/deleteModifiedInfo:
+     *    post:
+     *      tags:
+     *      - botApi
+     *      summary: 删除modifiedInfo
+     *      parameters:
+     *      - in: header
+     *        name: Authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      requestBody:
+     *         description:
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 id:
+     *                   type: number
+     *      responses:
+     *        200:
+     *          description: successful operation
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  ActionType:
+     *                    type: string
+     *        500:
+     *          description: Internal Error
+     * */
+    router.post("/deleteModifiedInfo", bots.deleteModifiedInfo);
+
+    /**,
+     * @swagger
      * /app/bot/searchStandardInfo:
      *    post:
      *      tags:
@@ -317,7 +453,7 @@ module.exports = app => {
      *        401:
      *          description: 没有权限
      * */
-    router.post("/searchStandardInfo", bots.getPreInfoByPage);
+    router.get("/searchStandardInfo", bots.modifiedInfo);
 
     // addUnstInfo
     router.post("/addUnstInfo", bots.addUnstInfo);
