@@ -28,6 +28,7 @@
     "/app/user/phoneCaptcha",
     "/app/user/loginByPhone",
     "/app/user/phoneCheck",
-    "/app/user/limitInside"
+    "/app/user/limitInside",
+    "/app/bot/modifiedInfo"
   ]
 }
