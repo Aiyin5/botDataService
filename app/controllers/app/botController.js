@@ -51,7 +51,7 @@ exports.deleteModifiedInfo = async (req, res) => {
         return
     }
     const where = {
-        id:req.params.log_id
+        id:req.body.log_id
     }
     await ModifiedInfo.deleteModifiedInfo(where, (err, data) => {
         if(err){
